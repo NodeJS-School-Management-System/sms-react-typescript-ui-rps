@@ -29,7 +29,6 @@ import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 export const Profile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("nonteachingstaffId");
-  const PublicFolder = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER;
 
   const [nonteachingstaff, setNonteachingstaff] = useState<any>({});
 
@@ -133,7 +132,7 @@ export const Profile = () => {
                       borderRadius="50%"
                       objectFit="contain"
                       height={40}
-                      src={`${PublicFolder}${nonteachingstaff.profileimage}`}
+                      src={`${nonteachingstaff.profileimage}`}
                     />
                     <Box>
                       <Text

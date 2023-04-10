@@ -31,7 +31,6 @@ export const Profile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("teacherId");
   const isAdmin = localStorage.getItem("isAdmin");
-  const PublicFolder = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER;
 
   const [teacher, setTeacher] = useState<any>({});
 
@@ -138,7 +137,7 @@ export const Profile = () => {
                       height={40}
                       src={
                         teacher.profileimage
-                          ? `${PublicFolder}${teacher.profileimage}`
+                          ? `${teacher.profileimage}`
                           : "https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg"
                       }
                     />

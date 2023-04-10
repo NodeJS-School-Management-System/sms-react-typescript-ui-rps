@@ -28,7 +28,6 @@ import { myAPIClient } from "../../../../components/auth/axiosInstance";
 
 export const ClassProfile = ({ classroom }: any) => {
   const token = localStorage.getItem("token");
-  const PublicFolder = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER;
 
   // const {
   //   theme: { primaryColor },
@@ -143,7 +142,7 @@ export const ClassProfile = ({ classroom }: any) => {
                       height={40}
                       src={
                         teacher
-                          ? `${PublicFolder}${teacher.profileimage}`
+                          ? `${teacher.profileimage}`
                           : "https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg"
                       }
                     />

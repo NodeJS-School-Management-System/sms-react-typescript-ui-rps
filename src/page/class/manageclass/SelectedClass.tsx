@@ -116,9 +116,6 @@ export const SelectedClass = () => {
                       objectFit="contain"
                       height={40}
                       src={
-                        // classroom.profileimage
-                        // ? `${PublicFolder}${classroom.profileimage}`
-                        // :
                         "https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg"
                       }
                     />

@@ -2,7 +2,6 @@ import {
   AttachMoney,
   CalendarMonth,
   Class,
-  CurrencyBitcoin,
   LocalLibrary,
   Note,
   School,
@@ -24,8 +23,6 @@ import {
 import { Home } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { FaAngleRight, FaPlay } from "react-icons/fa";
-import { ImUsers } from "react-icons/im";
-import { MdClass } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { myAPIClient } from "../../components/auth/axiosInstance";
 import useTheme from "../../theme/useTheme";

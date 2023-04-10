@@ -29,7 +29,6 @@ import { myAPIClient } from "../../auth/axiosInstance";
 export const Profile = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("studentId");
-  const PublicFolder = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER;
 
   const [student, setStudent] = useState<any>({});
 
@@ -136,7 +135,7 @@ export const Profile = () => {
                       borderRadius="50%"
                       objectFit="contain"
                       height={40}
-                      src={`${PublicFolder}${student.profileimage}`}
+                      src={`${student.profileimage}`}
                     />
                     <Box>
                       <Text
@@ -182,7 +181,7 @@ export const Profile = () => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>DOB </Text>
+                    <Text>DOB</Text>
                     <Text color={"#2e5984"}> {student.dateofbirth} </Text>
                   </Flex>
                   <Button

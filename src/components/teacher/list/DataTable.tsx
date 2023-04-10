@@ -7,7 +7,7 @@ import {
   getCoreRowModel,
   ColumnDef,
   SortingState,
-  getSortedRowModel
+  getSortedRowModel,
 } from "@tanstack/react-table";
 
 export type DataTableProps<Data extends object> = {
@@ -17,7 +17,7 @@ export type DataTableProps<Data extends object> = {
 
 export function DataTable<Data extends object>({
   data,
-  columns
+  columns,
 }: DataTableProps<Data>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
@@ -27,20 +27,20 @@ export function DataTable<Data extends object>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
-      sorting
-    }
+      sorting,
+    },
   });
 
   return (
-    <Table variant='striped'>
+    <Table variant="striped">
       <Thead>
-        {table.getHeaderGroups().map((headerGroup) => (
+        {table.getHeaderGroups().map((headerGroup: any) => (
           <Tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
               const meta: any = header.column.columnDef.meta;
               return (
                 <Th
-                  fontWeight={'bold'}
+                  fontWeight={"bold"}
                   fontSize={16}
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
@@ -66,9 +66,9 @@ export function DataTable<Data extends object>({
         ))}
       </Thead>
       <Tbody>
-        {table.getRowModel().rows.map((row) => (
+        {table.getRowModel().rows.map((row: any) => (
           <Tr key={row.id}>
-            {row.getVisibleCells().map((cell) => {
+            {row.getVisibleCells().map((cell: Any) => {
               const meta: any = cell.column.columnDef.meta;
               return (
                 <Td key={cell.id} isNumeric={meta?.isNumeric}>
