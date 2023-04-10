@@ -24,16 +24,25 @@ const Footer = () => {
         <a
           href="https://github.com/Ashik-AD"
           target={"_blank"}
+          rel="noreferrer"
           className="text-primary"
         >
           Quadral Technologies
         </a>
       </Text>
       <Box display="flex" space={0.6}>
-        <a href="https://github.com/Ashik-AD" target={"_blank"}>
+        <a
+          href="https://github.com/Ashik-AD"
+          target={"_blank"}
+          rel="noreferrer"
+        >
           <LinkedIn />
         </a>
-        <a href="https://linkedin.com/in/ashikdhimal" target={"_blank"}>
+        <a
+          href="https://linkedin.com/in/ashikdhimal"
+          target={"_blank"}
+          rel="noreferrer"
+        >
           <Twitter />{" "}
         </a>
       </Box>
