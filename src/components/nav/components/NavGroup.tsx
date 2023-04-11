@@ -22,7 +22,6 @@ const NavGroup: FC<Props> = ({
       }
     }
   }, [pathname]);
-
   useEffect(() => {
     let current = navItemContainer?.current;
     if (current) {
@@ -60,17 +59,15 @@ const NavGroup: FC<Props> = ({
             const key = useId();
             if (item?.childrens) {
               return (
-                <>
-                  <NavGroup
-                    {...item}
-                    navData={{
-                      parent: item.parent,
-                      childrens: item?.childrens,
-                    }}
-                    key={key}
-                    onChildClick={onChildClick}
-                  />
-                </>
+                <NavGroup
+                  {...item}
+                  navData={{
+                    parent: item.parent,
+                    childrens: item?.childrens,
+                  }}
+                  key={key}
+                  onChildClick={onChildClick}
+                />
               );
             }
             return (

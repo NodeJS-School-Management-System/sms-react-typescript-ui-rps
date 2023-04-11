@@ -14,7 +14,7 @@ const MobileMenu: FC<Props> = ({ handleNavClick, isVisible }) => {
   const handleClick = (eve: React.MouseEvent<HTMLElement>) => {
     eve.stopPropagation();
   };
-  const renderNavList = navList.map((item) => {
+  const renderNavList = navList.map((item: any) => {
     if (item.childrens) {
       return (
         <NavGroup
@@ -26,7 +26,7 @@ const MobileMenu: FC<Props> = ({ handleNavClick, isVisible }) => {
     }
     return (
       <NavItem
-        {...item}
+        // {...item}
         key={item.path}
         onClick={handleNavClick}
         label={item.label!}

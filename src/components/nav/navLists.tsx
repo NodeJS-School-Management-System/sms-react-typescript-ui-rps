@@ -26,12 +26,9 @@ const formatGroupButton = (
   rootPath: string
 ) => ({ title, icon, rootPath });
 
-const isAdmin = localStorage.getItem("isAdmin");
 const isStudent: any = localStorage.getItem("isStudent");
 const isTeacher: any = localStorage.getItem("isTeacher");
 const isMember: any = localStorage.getItem("isMember");
-
-console.log(isStudent);
 
 const navList: NavOptions[] = [
   {

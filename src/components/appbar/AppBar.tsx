@@ -10,7 +10,6 @@ import HorizontalNav from "../nav/horizontal/HorizontalNav";
 import Notification from "../notification/Notification";
 import MenuSideNav from "./components/MenuSideNav";
 import ProfileDropdown from "./components/ProfileDropdown";
-// import SearchIcon from "./components/SearchIcon";
 
 const AppBar = () => {
   const {

@@ -1,4 +1,3 @@
-import { Icon } from "@iconify/react";
 import { LinkedIn, Twitter } from "@mui/icons-material";
 import styled from "styled-components";
 import useTheme from "../../theme/useTheme";
@@ -31,18 +30,10 @@ const Footer = () => {
         </a>
       </Text>
       <Box display="flex" space={0.6}>
-        <a
-          href="https://github.com/Ashik-AD"
-          target={"_blank"}
-          rel="noreferrer"
-        >
+        <a href="#" target={"_blank"} rel="noreferrer">
           <LinkedIn />
         </a>
-        <a
-          href="https://linkedin.com/in/ashikdhimal"
-          target={"_blank"}
-          rel="noreferrer"
-        >
+        <a href="#" target={"_blank"} rel="noreferrer">
           <Twitter />{" "}
         </a>
       </Box>
