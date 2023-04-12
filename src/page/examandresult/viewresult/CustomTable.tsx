@@ -12,24 +12,28 @@ const CustomTable = ({ list, exam, clas, subject }: any) => {
     >
       <div style={{ overflowX: "auto", width: "90%" }}>
         <table>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Mathematics Marks</th>
-            <th>English Marks</th>
-            <th>Science Marks</th>
-          </tr>
-          {list.map((listItem: any) => (
-            <tr key={listItem._id}>
-              <td>{listItem.firstname}</td>
-              <td>{listItem.lastname}</td>
-              {/* {listItem?.marks?.map((mark: any) => ( */}
-              <td>{listItem.marks[0]?.Mathematics}</td>
-              <td>{listItem.marks[1]?.English}</td>
-              <td>{listItem.marks[2]?.Science}</td>
-              {/* ))} */}
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Mathematics Marks</th>
+              <th>English Marks</th>
+              <th>Science Marks</th>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {list.map((listItem: any) => (
+              <tr key={listItem._id}>
+                <td>{listItem.firstname}</td>
+                <td>{listItem.lastname}</td>
+                {/* {listItem?.marks?.map((mark: any) => ( */}
+                <td>{listItem.marks[0]?.Mathematics}</td>
+                <td>{listItem.marks[1]?.English}</td>
+                <td>{listItem.marks[2]?.Science}</td>
+                {/* ))} */}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>

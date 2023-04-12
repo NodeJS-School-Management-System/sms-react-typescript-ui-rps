@@ -123,7 +123,7 @@ export const ViewResult = () => {
         console.log(err);
       }
     };
-    getResults();
+    clas && getResults();
   }, [clas]);
 
   // *******************************************************************************
@@ -384,8 +384,9 @@ export const ViewResult = () => {
                     Print Report
                   </Button>
 
-                  {results.map((result) => (
+                  {results.map((result: any) => (
                     <ReportModal
+                      key={result._id}
                       onOpen={onOpen}
                       onClose={onClose}
                       isOpen={isOpen}

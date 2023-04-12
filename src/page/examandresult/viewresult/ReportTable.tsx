@@ -38,7 +38,7 @@ const ReportTable = ({ result }: any) => {
     >
       <div style={{ overflowX: "auto", width: "100%" }}>
         <table className="w3-table w3-bordered">
-          <>
+          <thead>
             <tr>
               {exams?.map((exam: any) => (
                 <>
@@ -49,7 +49,9 @@ const ReportTable = ({ result }: any) => {
                 </>
               ))}
             </tr>
+          </thead>
 
+          <tbody>
             <tr>
               <th>Subject</th>
               <th>Marks</th>
@@ -210,7 +212,7 @@ const ReportTable = ({ result }: any) => {
               <td>92</td>
               <td></td>
             </tr>
-          </>
+          </tbody>
         </table>
       </div>
     </div>

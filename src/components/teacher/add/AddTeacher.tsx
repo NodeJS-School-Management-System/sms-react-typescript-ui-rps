@@ -585,7 +585,9 @@ export const AddTeacher = () => {
                   onChange={(e) => setClas(e.target.value)}
                 >
                   {classes.map((c: any) => (
-                    <option value={c.className}>{c.className}</option>
+                    <option key={c.classroomId} value={c.className}>
+                      {c.className}
+                    </option>
                   ))}
                 </Select>
               </InputGroup>
@@ -601,7 +603,9 @@ export const AddTeacher = () => {
                   onChange={(e) => setSubject(e.target.value)}
                 >
                   {subjects.map((s: any) => (
-                    <option value={s.subjectName}>{s.subjectName}</option>
+                    <option key={s.subjectId} value={s.subjectName}>
+                      {s.subjectName}
+                    </option>
                   ))}
                 </Select>
               </InputGroup>

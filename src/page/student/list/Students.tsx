@@ -22,7 +22,6 @@ export const Students = () => {
   const token = localStorage.getItem("token");
 
   const [studentlist, setStudentlist] = useState([]);
-  const [selectedClass, setSelectedClass] = useState("");
   const [clas, setClas] = useState("");
   const [query, setQuery] = useState("");
 
@@ -213,7 +212,9 @@ export const Students = () => {
                   size={"lg"}
                 >
                   {classes.map((c: any) => (
-                    <option value={c.className}>{c.className}</option>
+                    <option key={c.classroomId} value={c.className}>
+                      {c.className}
+                    </option>
                   ))}
                 </Select>
               </Flex>

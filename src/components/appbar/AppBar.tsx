@@ -36,8 +36,8 @@ const AppBar = () => {
         changeBarBg(event);
       });
     }
-    window.removeEventListener("scroll", changeBarBg);
-    return () => void window.removeEventListener("scroll", changeBarBg);
+    // window.removeEventListener("scroll", changeBarBg);
+    return () => window.removeEventListener("scroll", changeBarBg);
   }, [contentRef, layout]);
 
   return (
