@@ -49,7 +49,7 @@ const CRM = () => {
     getExams();
   }, []);
 
-  // GET ALL STUDENTS IN SCHOOL*********************************************************************
+  // GET ALL STUDENTS IN SCHOOL*******************************************************************
   const [studentlist, setStudentlist] = useState([]);
   useEffect(() => {
     const getStudents = async () => {
