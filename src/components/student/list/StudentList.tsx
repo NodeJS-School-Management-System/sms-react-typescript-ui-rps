@@ -22,9 +22,10 @@ type TableDataProps = {
   action?: Element;
 };
 
-const columnHelper = createColumnHelper<TableDataProps>();
 
 export const StudentList = ({ list }: any) => {
+  const columnHelper = createColumnHelper<TableDataProps>();
+
   const PublicFolder = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER;
 
   const columns = [
@@ -80,6 +81,7 @@ export const StudentList = ({ list }: any) => {
       header: "Action",
     }),
   ];
+
   return (
     <Box overflowX={{ base: "auto", md: "auto", lg: "hidden" }}>
       <DataTable columns={columns} data={list} />
