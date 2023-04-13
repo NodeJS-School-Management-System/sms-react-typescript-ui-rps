@@ -66,6 +66,7 @@ export const ManageLibrary = () => {
           token: `Bearer ${token}`
         }
       })
+      console.log(res.data)
       setTitle('')
       setAuthor('')
       setClas('')
@@ -77,7 +78,7 @@ export const ManageLibrary = () => {
 
 
   // Get all library books
-  const [books, setBooks] = useState([])
+  // const [books, setBooks] = useState([])
   useEffect(() => {
     const getBooks = async () => {
       const res = await myAPIClient.get('/library', {
@@ -85,7 +86,8 @@ export const ManageLibrary = () => {
           token: `Bearer ${token}`
         }
       })
-      setBooks(res.data)
+      console.log(res.data)
+      // setBooks(res.data)
     }
     getBooks()
   }, [])

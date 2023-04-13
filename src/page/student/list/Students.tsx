@@ -15,7 +15,7 @@ import { ImUsers } from "react-icons/im";
 import { MdClass } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
-import { StudentList } from "../../../components/student/list/StudentList";
+import { StudentList } from "./StudentList";
 import useTheme from "../../../theme/useTheme";
 
 export const Students = () => {
@@ -76,14 +76,6 @@ export const Students = () => {
     };
     clas && getStudents();
   }, [clas]);
-
-  // // Filter students by query(live typing in the input field)
-  // const keys = ["firstname, lastname", "username"];
-  // const filterStudents = (students) => {
-  //   return students?.filter((student) => {
-  //     return keys.some((key) => student[key]?.toLowerCase().includes(query));
-  //   });
-  // };
 
   const {
     theme: { primaryColor },

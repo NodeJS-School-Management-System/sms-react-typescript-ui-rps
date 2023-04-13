@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { FaAngleRight } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import CustomTable from "./CustomTable";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 

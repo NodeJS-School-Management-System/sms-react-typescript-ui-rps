@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, chakra } from "@chakra-ui/react";
-import { North } from "@mui/icons-material";
+// import { North } from "@mui/icons-material";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   useReactTable,

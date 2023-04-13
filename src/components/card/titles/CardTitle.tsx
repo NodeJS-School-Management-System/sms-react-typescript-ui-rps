@@ -1,7 +1,6 @@
 import { FC, ReactNode, CSSProperties } from "react";
-import { IconButton, Text } from "../../../ui";
+import { Text } from "../../../ui";
 import CardHeaderTitle from "./styled";
-import { MoreVert } from "@mui/icons-material";
 import Box from "../../box/Box";
 
 const CardTitle: FC<Props> = (props) => {

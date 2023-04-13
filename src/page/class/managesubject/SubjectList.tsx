@@ -1,93 +1,47 @@
-import { Box, Image, Flex, IconButton, useDisclosure } from "@chakra-ui/react";
-import { createColumnHelper } from "@tanstack/react-table";
-import { DataTable } from "./DataTable";
-import DeleteIcon from "@mui/icons-material/Delete";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-// import { DeleteClassModal } from "./DeleteClassModal";
-// import ViewClassModal from "./ViewClassModal";
-import { useState, useCallback, useMemo } from "react";
-
-type TableDataProps = {
-  classNumeral: string;
-  className: string;
-  classTeacher?: string;
-  action?: Element;
-};
-
-const columnHelper = createColumnHelper<TableDataProps>();
-
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+} from "@chakra-ui/react";
 export const SubjectList = ({ list }: any) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [selectedId, setSelectedId] = useState<any>("");
-
-  const handleClick = useCallback((id) => {
-    setSelectedId(id);
-    onOpen();
-  }, []);
-
-  const columns = [
-    columnHelper.accessor("subjectName", {
-      cell: (info) => info.getValue(),
-      header: "Subject Name",
-    }),
-    columnHelper.accessor("subjectAbbrev", {
-      cell: (info) => info.getValue(),
-      header: "Subject Shorthand",
-    }),
-    columnHelper.accessor("className", {
-      cell: (info) => info.getValue() || "N/A",
-      header: "Class Name",
-    }),
-    columnHelper.accessor("subjectTeacher", {
-      cell: (info) => info.getValue() || "N/A",
-      header: "Class Teacher",
-    }),
-    columnHelper.accessor("subjectId", {
-      cell: (info) => (
-        <Flex gap={2}>
-          <IconButton
-            colorScheme="red"
-            aria-label="Delete from database"
-            icon={<DeleteIcon />}
-            // onClick={() => handleClick()}
-          />
-          <IconButton
-            colorScheme="blue"
-            data-id={info.getValue()}
-            // onClick={() => handleClick(info.getValue())}
-            aria-label="View from database"
-            icon={<RemoveRedEyeIcon />}
-          />
-        </Flex>
-      ),
-      header: "Action",
-    }),
-  ];
   return (
-    <Box overflowX={{ base: "auto", md: "auto", lg: "hidden" }}>
-      <DataTable columns={columns} data={list} />
-      {/* <>
-         <DeleteClassModal
-              isOpen={isOpen}
-              onOpen={onOpen}
-              onClose={onClose}
-            /> 
-        {useMemo(() => {
-          if (!isOpen) {
-            return null;
-          } else {
-            return (
-              <ViewClassModal
-                selectedId={selectedId}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-              />
-            );
-          }
-        })}
-      </> */}
-    </Box>
+    <TableContainer>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Ticket No.</Th>
+            <Th>Leaving From</Th>
+            <Th>Date Booked</Th>
+            <Th>Time Booked</Th>
+            <Th>No. of Passengers</Th>
+            <Th>Phone</Th>
+            <Th>Bus</Th>
+            <Th>Payment Status</Th>
+            <Th>Transaction Reference</Th>
+            <Th>Action</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((customer: any) => (
+            <Tr key={customer}>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>test</Td>
+              <Td>DELETE</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
 };

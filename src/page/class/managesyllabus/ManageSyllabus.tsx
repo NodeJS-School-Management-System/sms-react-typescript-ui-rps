@@ -8,7 +8,7 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { Delete, Download } from "@mui/icons-material";
+// import { Delete, Download } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";

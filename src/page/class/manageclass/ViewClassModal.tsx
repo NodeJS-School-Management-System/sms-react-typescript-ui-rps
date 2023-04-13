@@ -8,7 +8,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { ClassProfile } from "./SingleClass/ClassProfile";
-import axios from "axios";
+// import axios from "axios";
 import { useEffect, useState, memo } from "react";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 

@@ -4,7 +4,7 @@ import "./styles/modal/Modal.css";
 
 import useTheme from "./theme/useTheme";
 import GlobalStyle from "./global.styled";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import AppRoutes from "./routes/AppRoutes";
 const App = () => {
   const {

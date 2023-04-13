@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 // import { Members } from "../../components/nonteachingstaff/list/Members";
 import { NTStaffMembers } from "./list/NTStaffMembers";
-import { Profile } from "../../components/nonteachingstaff/profile/Profile";
+import { Profile } from "./profile/Profile";
 import PageNotFound from "../404/PageNotFound";
 import { AddNTStaff } from "./add/AddNTStaff";
 const NTStaffMember = () => {

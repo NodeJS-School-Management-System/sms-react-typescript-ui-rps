@@ -1,6 +1,3 @@
-
 export const AddStudent = () => {
-  return (
-    <div>AddStudent</div>
-  )
-}
+  return <div>scsd</div>;
+};

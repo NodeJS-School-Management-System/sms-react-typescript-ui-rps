@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import { AddTeacher } from "../../components/teacher/add/AddTeacher";
+import { AddTeacher } from "./add/AddTeacher";
 import { Teachers } from "./list/Teachers";
 import PageNotFound from "../404/PageNotFound";
-import { Profile } from "../../components/teacher/profile/Profile";
+import { Profile } from "./profile/Profile";
 
 const Teacher = () => {
   return (

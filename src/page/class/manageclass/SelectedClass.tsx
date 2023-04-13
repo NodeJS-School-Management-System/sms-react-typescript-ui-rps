@@ -14,22 +14,22 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import {
-  Home,
+  // Home,
   LocationOn,
-  PersonAddAlt1,
-  PersonOutline,
+  // PersonAddAlt1,
+  // PersonOutline,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { FaAngleRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+// import { FaAngleRight } from "react-icons/fa";
+// import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
-import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
+// import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 
 export const SelectedClass = () => {
   const token = localStorage.getItem("token");
   const id = "14472ffe564c4925b29f4c5255384f96";
-  const PublicFolder = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER;
+  // const PublicFolder = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER;
 
   const [classroom, setClassroom] = useState<any>({});
 

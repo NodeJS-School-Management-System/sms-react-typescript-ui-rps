@@ -38,13 +38,13 @@ export const NTStaffMembers = () => {
   }, []);
 
   // Filter teachers with search
-  const [query, setQuery] = useState("");
-  const keys = ["firstname", "lastname", "class"];
-  const filterTeachers = (teachers) => {
-    return teachers?.filter((teacher) => {
-      return keys?.some((key) => teacher[key]?.toLowerCase().includes(query));
-    });
-  };
+  // const [query, setQuery] = useState("");
+  // const keys = ["firstname", "lastname", "class"];
+  // const filterTeachers = (teachers:any) => {
+  //   return teachers?.filter((teacher:any) => {
+  //     // return keys?.some((key) => teacher[key]?.toLowerCase().includes(query));
+  //   });
+  // };
 
   return (
     <>

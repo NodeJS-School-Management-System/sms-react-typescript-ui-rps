@@ -8,7 +8,7 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-export const NTStaffList = ({ list }: any) => {
+export const StudentList = ({ list, query }: any) => {
   return (
     <TableContainer>
       <Table variant="simple">

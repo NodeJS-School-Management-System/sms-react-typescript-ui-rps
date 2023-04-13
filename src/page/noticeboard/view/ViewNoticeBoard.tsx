@@ -11,7 +11,7 @@ export const ViewNoticeBoard = () => {
   const [title, setTitle] = useState("")
   const [info, setInfo] = useState("")
 
-  const [notices, setNotices] = useState();
+  // const [notices, setNotices] = useState();
   useEffect(() => {
     const getNotices = async () => {
       try {
@@ -20,8 +20,8 @@ export const ViewNoticeBoard = () => {
             token: `Bearer ${token}`
           }
         })
-        setNotices(res.data)
-        // console.log(res.data);
+        // setNotices(res.data)
+        console.log(res.data);
              
       } catch (err){
         console.log(err);

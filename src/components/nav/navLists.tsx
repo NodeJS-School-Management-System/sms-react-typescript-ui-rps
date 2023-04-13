@@ -26,9 +26,9 @@ const formatGroupButton = (
   rootPath: string
 ) => ({ title, icon, rootPath });
 
-const isStudent: any = localStorage.getItem("isStudent");
-const isTeacher: any = localStorage.getItem("isTeacher");
-const isMember: any = localStorage.getItem("isMember");
+// const isStudent: any = localStorage.getItem("isStudent");
+// const isTeacher: any = localStorage.getItem("isTeacher");
+// const isMember: any = localStorage.getItem("isMember");
 
 const navList: NavOptions[] = [
   {
@@ -44,7 +44,7 @@ const navList: NavOptions[] = [
       format("List", "/student/list/"),
       format("Add", "/student/add/"),
       // format("Profile", "/student/profile/"),
-      isStudent && format("Profile", "/student/profile/"),
+      // isStudent && format("Profile", "/student/profile/"),
     ],
   },
   {
@@ -52,7 +52,7 @@ const navList: NavOptions[] = [
     childrens: [
       format("List", "/teacher/list/"),
       format("Add", "/teacher/add/"),
-      isTeacher && format("Profile", "/teacher/profile/"),
+      // isTeacher && format("Profile", "/teacher/profile/"),
     ],
   },
   {
@@ -64,7 +64,7 @@ const navList: NavOptions[] = [
     childrens: [
       format("List", "/nonteachingstaff/list/"),
       format("Add", "/nonteachingstaff/add/"),
-      isMember && format("Profile", "/nonteachingstaff/profile/"),
+      // isMember && format("Profile", "/nonteachingstaff/profile/"),
     ],
   },
   {

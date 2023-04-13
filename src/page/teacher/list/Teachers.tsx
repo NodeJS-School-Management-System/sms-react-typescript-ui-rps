@@ -11,7 +11,7 @@ import {
 import { Diversity3, Home } from "@mui/icons-material";
 import { FaAngleRight, FaPlay } from "react-icons/fa";
 import { ImUsers, ImMan, ImWoman } from "react-icons/im";
-import { MdClass } from "react-icons/md";
+// import { MdClass } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import { useState, useEffect } from "react";
@@ -22,8 +22,8 @@ export const Teachers = () => {
   const token = localStorage.getItem("token");
 
   const [teacherslist, setTeacherslist] = useState([]);
-  const [selectedClass, setSelectedClass] = useState("");
-  const [male, setMale] = useState(0);
+  // const [selectedClass, setSelectedClass] = useState("");
+  // const [male, setMale] = useState(0);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -36,6 +36,7 @@ export const Teachers = () => {
         });
         setTeacherslist(res.data);
         console.log(res.data);
+        // setMale(0);
       } catch (err) {
         console.log(err);
       }
@@ -44,26 +45,19 @@ export const Teachers = () => {
     getTeachers();
   }, []);
 
-  // // Filter male/female teachers
-  // const filterMaleIndex = (index) => {
-  //   return index === "Male";
-  // };
-
-  // const filterMale = (teachers) => {
-  //   return teachers.filter(filterMaleIndex);
-  // };
-
-  const filterMale = (teachers) => {
-    return teachers.filter((teacher) => {
+  const filterMale = (teachers: any) => {
+    return teachers.filter((teacher: any) => {
       return teacher.gender.toLowerCase().includes("male");
     });
   };
 
   // Filter teachers with search
   const keys = ["firstname", "lastname", "class"];
-  const filterTeachers = (teachers) => {
-    return teachers?.filter((teacher) => {
-      return keys?.some((key) => teacher[key]?.toLowerCase().includes(query));
+  const filterTeachers = (teachers: any) => {
+    return teachers?.filter((teacher: any) => {
+      return keys?.some((key: any) =>
+        teacher[key]?.toLowerCase().includes(query)
+      );
     });
   };
 

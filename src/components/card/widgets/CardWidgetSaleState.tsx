@@ -2,9 +2,8 @@ import { Text } from "../../../ui";
 import Box from "../../box/Box";
 import Card from "../Card";
 import CustomCardTitle from "../titles/CustomCardTitle";
-import StatisticAreaChart from "../../charts/apex/statistics/StatisticAreaChart";
 
-const series: ApexAxisChartSeries = [{ data: [83, 122, 165, 140, 190] }];
+// const series: ApexAxisChartSeries = [{ data: [83, 122, 165, 140, 190] }];
 
 const CardWidgetSaleState = () => {
   return (
@@ -17,9 +16,7 @@ const CardWidgetSaleState = () => {
           </Text>
         }
       />
-      <Box>
-        <StatisticAreaChart data={series} height={315} />
-      </Box>
+      <Box>{/* <StatisticAreaChart data={series} height={315} /> */}</Box>
     </Card>
   );
 };

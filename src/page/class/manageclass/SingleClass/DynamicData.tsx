@@ -24,7 +24,7 @@ import {
 import { BiEnvelope } from "react-icons/bi";
 // import useTheme from "../../../theme/useTheme";
 // import { myAPIClient } from "../../auth/axiosInstance";
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
 import { myAPIClient } from "../../../../components/auth/axiosInstance";
 export const HomeComp = () => {

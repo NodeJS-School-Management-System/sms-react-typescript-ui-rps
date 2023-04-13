@@ -43,7 +43,7 @@ export const ManageExam = () => {
   };
 
   // Get all exams
-  const [exams, setExams] = useState([]);
+  // const [exams, setExams] = useState([]);
   useEffect(() => {
     const getExams = async () => {
       try {
@@ -52,7 +52,8 @@ export const ManageExam = () => {
             token: `Bearer ${token}`,
           },
         });
-        setExams(res.data);
+        console.log(res.data)
+        // setExams(res.data);
       } catch (err) {
         console.log(err);
       }

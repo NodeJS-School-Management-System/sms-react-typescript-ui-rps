@@ -30,7 +30,7 @@ import useTheme from "../../theme/useTheme";
 const CRM = () => {
   const token = localStorage.getItem("token");
 
-  // GET ALL EXAMS *****************************************************************************
+  // GET ALL EXAMS *******************************************************************************
   const [exams, setExams] = useState([]);
   useEffect(() => {
     const getExams = async () => {

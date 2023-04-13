@@ -103,7 +103,7 @@ const addAccountDetails = async () => {
 }
 
 // Get all accounts
-const [accounts, setAccounts] = useState([])
+// const [accounts, setAccounts] = useState([])
 useEffect(() => {
   const getAccounts = async () => {
     try {

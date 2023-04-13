@@ -1,17 +1,16 @@
 import {
   Box,
   Text,
-  Center,
   Flex,
   WrapItem,
-  Button,
-  Image,
+  // Button,
+  // Image,
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
-  Heading,
+  // Heading,
 } from "@chakra-ui/react";
 import { FaAngleRight } from "react-icons/fa";
 import useTheme from "../../../theme/useTheme";

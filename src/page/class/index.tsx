@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import PageNotFound from "../404/PageNotFound";
 import { ManageClass } from "./manageclass/ManageClass";
-import { ViewClass } from "./manageclass/ViewClass";
+// import { ViewClass } from "./manageclass/ViewClass";
 import { ManageSubject } from "./managesubject/ManageSubject";
 import { ManageSyllabus } from "./managesyllabus/ManageSyllabus";
 
