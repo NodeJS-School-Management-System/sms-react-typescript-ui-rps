@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
         }
       }
       if (!token || token === null) {
-        navigate("/auth/login");
+        navigate("/auth/loginuser");
       }
     }
   }, [isAuthenticated, token, pathname, navigate]);
