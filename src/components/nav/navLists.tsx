@@ -14,6 +14,7 @@ import {
   AttachMoney,
   Upcoming,
   Email,
+  StoreMallDirectory,
 } from "@mui/icons-material";
 
 const format = (label: string, path: string, icon?: ReactNode): NavItemType => {
@@ -109,6 +110,17 @@ const navList: NavOptions[] = [
     childrens: [
       format("Manage Fees", "/accountingsection/managefees/"),
       format("Fees Payment", "/accountingsection/feespayment/"),
+    ],
+  },
+  {
+    parent: formatGroupButton(
+      "Store Manager",
+      <StoreMallDirectory />,
+      "/storemanager/"
+    ),
+    childrens: [
+      format("Manage Store", "/storemanager/managestore/"),
+      format("View Store Items", "/storemanager/viewstoreitems/"),
     ],
   },
   {
