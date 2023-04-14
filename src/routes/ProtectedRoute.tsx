@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
         navigate("/auth/loginuser");
       }
     }
-  }, [isAuthenticated, token, pathname, navigate]);
+  }, [token]);
   if (typeof isAuthenticated !== "boolean") {
     return <></>;
   }
