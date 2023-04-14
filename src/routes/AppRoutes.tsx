@@ -25,7 +25,7 @@ const AppRoutes = () => {
         path="/auth/loginuser/"
         element={
           <Suspense fallback={<PageLoading />}>
-            <CustomLogin />
+            <UserLogin />
           </Suspense>
         }
       />
@@ -34,7 +34,7 @@ const AppRoutes = () => {
         path="/auth/login/"
         element={
           <Suspense fallback={<PageLoading />}>
-            <UserLogin />
+            <CustomLogin />
           </Suspense>
         }
       />
