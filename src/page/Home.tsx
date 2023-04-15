@@ -9,6 +9,7 @@ import { Flex } from "../components/layout";
 import AppLayout from "../components/layout/AppLayout";
 import PageLoading from "../components/loading/PageLoading";
 import Nav from "../components/nav/Nav";
+import StoreManager from "./storemanager";
 const PageNotFound = lazy(() => import("./404/PageNotFound"));
 // const Analytics = lazy(() => import("./analytics"));
 const CRM = lazy(() => import("./crm/CRM"));
@@ -49,6 +50,7 @@ const Home = () => {
                 path="/accountingsection/*"
                 element={<AccountingSection />}
               />
+              <Route path="/storemanager/*" element={<StoreManager />} />
               <Route path="/library/*" element={<Library />} />
               <Route path="/examsection/*" element={<ExamSection />} />
               <Route path="/examandresult/*" element={<ExamAndResult />} />

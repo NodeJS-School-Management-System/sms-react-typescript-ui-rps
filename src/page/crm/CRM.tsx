@@ -607,9 +607,9 @@ const CRM = () => {
                 flexDirection={"column"}
                 bg={"#eee"}
               >
-                <Link to="/noticeboard/view/">
+                <Link to="/storemanager/managestore/">
                   <Heading ml={3} fontSize={20}>
-                    Notice Board
+                    Store Manager
                   </Heading>
                 </Link>
               </Flex>

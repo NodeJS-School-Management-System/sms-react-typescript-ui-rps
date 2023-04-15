@@ -1,16 +1,15 @@
 import { Routes, Route } from "react-router-dom";
 import PageNotFound from "../404/PageNotFound";
-import { FeesPayment } from "./feespayment/FeesPayment";
-import { ManageFees } from "./managefees/ManageFees";
-const AccountingSection = () => {
-
+import ManageStore from "./managestore/ManageStore";
+import ViewStoreItems from "./viewstoreitems/ViewStoreItems";
+const StoreManager = () => {
   return (
     <Routes>
-      <Route path="/feespayment/" element={<FeesPayment />} />
-      <Route path="/managefees/" element={<ManageFees />} />
+      <Route path="/managestore/" element={<ManageStore />} />
+      <Route path="/viewstoreitems/" element={<ViewStoreItems />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };
 
-export default AccountingSection;
+export default StoreManager;
