@@ -120,7 +120,7 @@ const navList: NavOptions[] = [
     ),
     childrens: [
       format("Manage Store", "/storemanager/managestore/"),
-      format("View Store Items", "/storemanager/viewstoreitems/"),
+      // format("View Store Items", "/storemanager/viewstoreitems/"),
     ],
   },
   {

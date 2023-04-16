@@ -1,13 +1,4 @@
 import {
-  AttachMoney,
-  CalendarMonth,
-  Class,
-  LocalLibrary,
-  Note,
-  School,
-  SupervisedUserCircle,
-} from "@mui/icons-material";
-import {
   Box,
   Text,
   Center,
@@ -26,6 +17,8 @@ import { FaAngleRight, FaPlay } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { myAPIClient } from "../../components/auth/axiosInstance";
 import useTheme from "../../theme/useTheme";
+import AnalyticsBox from "../../components/uicomponents/AnalyticsBox";
+import { homeAnalyticsRowOne, homeAnalyticsRowTwo } from "../../api/fakeAPI";
 
 const CRM = () => {
   const token = localStorage.getItem("token");
@@ -47,7 +40,7 @@ const CRM = () => {
     };
 
     getExams();
-  }, []);
+  }, [exams]);
 
   // GET ALL STUDENTS IN SCHOOL*******************************************************************
   const [studentlist, setStudentlist] = useState([]);
@@ -66,7 +59,7 @@ const CRM = () => {
     };
 
     getStudents();
-  }, []);
+  }, [studentlist]);
 
   // ****************************************************************************************
 
@@ -87,7 +80,7 @@ const CRM = () => {
     };
 
     getTeachers();
-  }, []);
+  }, [teachers]);
 
   // ****************************************************************************************
 
@@ -107,7 +100,7 @@ const CRM = () => {
       }
     };
     getClasses();
-  }, []);
+  }, [classes]);
 
   // ****************************************************************************************
 
@@ -196,109 +189,11 @@ const CRM = () => {
             </Center>
           </WrapItem>
 
-          <WrapItem
-            boxShadow={"base"}
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
-              <Flex
-                bgColor={"teal"}
-                w={"30%"}
-                h={"100%"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <School style={{ color: "white", fontSize: 60 }} />
-              </Flex>
-              <Flex
-                p={3}
-                w={"70%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
-                  Total Students
-                </Text>
-                <Heading as="h2">{studentlist.length}</Heading>
-              </Flex>
-            </Center>
-          </WrapItem>
-
-          {/* Teachers ********************* */}
-          <WrapItem
-            boxShadow={"base"}
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
-              <Flex
-                bgColor={primaryColor.name}
-                w={"30%"}
-                h={"100%"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <SupervisedUserCircle
-                  style={{ color: "white", fontSize: 60 }}
-                />
-              </Flex>
-              <Flex
-                p={3}
-                w={"70%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
-                  Total Teachers
-                </Text>
-                <Heading as="h2">{teachers.length}</Heading>
-              </Flex>
-            </Center>
-          </WrapItem>
-
-          {/* Classes ***************************************** */}
-          <WrapItem
-            boxShadow={"base"}
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
-              <Flex
-                bgColor={"tomato"}
-                w={"30%"}
-                h={"100%"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Class style={{ color: "white", fontSize: 60 }} />
-              </Flex>
-              <Flex
-                p={3}
-                w={"70%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
-                  Classes
-                </Text>
-                <Heading as="h2">{classes.length}</Heading>
-              </Flex>
-            </Center>
-          </WrapItem>
+          {homeAnalyticsRowOne.map((item: any) => (
+            <AnalyticsBox item={item} />
+          ))}
         </Flex>
+
         <Flex
           boxShadow="base"
           p={4}
@@ -307,142 +202,9 @@ const CRM = () => {
           gap={3}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
-          {/* Attendence *************************************/}
-          <WrapItem
-            boxShadow={"base"}
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
-              <Flex
-                bgColor={"teal"}
-                w={"30%"}
-                h={"100%"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <CalendarMonth style={{ color: "white", fontSize: 60 }} />
-              </Flex>
-              <Flex
-                p={3}
-                w={"70%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
-                  Today's Attendence
-                </Text>
-                <Heading as="h2">{studentlist.length}</Heading>
-              </Flex>
-            </Center>
-          </WrapItem>
-
-          {/* Exams **************************************** */}
-          <WrapItem
-            boxShadow={"base"}
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
-              <Flex
-                bgColor={primaryColor.name}
-                w={"30%"}
-                h={"100%"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Note style={{ color: "white", fontSize: 60 }} />
-              </Flex>
-              <Flex
-                p={3}
-                w={"70%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
-                  Exams
-                </Text>
-                <Heading as="h2">{exams.length}</Heading>
-              </Flex>
-            </Center>
-          </WrapItem>
-
-          {/* Attendence ********************************************** */}
-          <WrapItem
-            boxShadow={"base"}
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
-              <Flex
-                bgColor={"teal"}
-                w={"30%"}
-                h={"100%"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <LocalLibrary style={{ color: "white", fontSize: 60 }} />
-              </Flex>
-              <Flex
-                p={3}
-                w={"70%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
-                  STUDY MATERIALS
-                </Text>
-                <Heading as="h2">8</Heading>
-              </Flex>
-            </Center>
-          </WrapItem>
-
-          <WrapItem
-            boxShadow={"base"}
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
-              <Flex
-                bgColor={"teal"}
-                w={"30%"}
-                h={"100%"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <AttachMoney style={{ color: "white", fontSize: 60 }} />
-              </Flex>
-              <Flex
-                p={3}
-                w={"70%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
-                  FEES COLLECTED
-                </Text>
-                <Box fontSize={30} fontWeight={500}>
-                  34,000,000/=
-                </Box>
-              </Flex>
-            </Center>
-          </WrapItem>
+          {homeAnalyticsRowTwo.map((item: any) => (
+            <AnalyticsBox item={item} />
+          ))}
         </Flex>
 
         <Flex boxShadow={"lg"}>
