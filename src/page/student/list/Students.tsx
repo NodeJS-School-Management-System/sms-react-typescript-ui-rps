@@ -21,12 +21,37 @@ import useTheme from "../../../theme/useTheme";
 export const Students = () => {
   const token = localStorage.getItem("token");
 
+  // DELETE STUDENT FROM STORE **********************************************************
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteStudent = async (studentId: any) => {
+    setIsDeleting(true);
+    try {
+      const res = await myAPIClient.delete(`students/${studentId}`, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setIsDeleting(false);
+    } catch (err) {
+      console.log(err);
+      setIsDeleting(false);
+    }
+  };
+
   const [studentlist, setStudentlist] = useState([]);
   const [clas, setClas] = useState("");
   const [query, setQuery] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
+  // UPDATE LIST DISPLAYED BY PAGINATION NUMBER
+  // const [listNum, setListNum] = useState<any>(undefined);
+  // Filter students to display here
+
+  // GET ALL STUDENTS******************************************************************************
   useEffect(() => {
     const getStudents = async () => {
+      setIsFetching(true);
       try {
         const res = await myAPIClient.get("/students", {
           headers: {
@@ -34,15 +59,19 @@ export const Students = () => {
           },
         });
         setStudentlist(res.data);
+        setIsFetching(false);
       } catch (err) {
         console.log(err);
+        setIsFetching(false);
       }
     };
 
     getStudents();
-  }, [clas]);
+  }, [clas, isDeleting]);
 
-  // Get all classNames
+  //*******************************************************************************************/
+
+  // GET ALL CLASSNAMES*************************************************************************
   const [classes, setClasses] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
@@ -60,7 +89,7 @@ export const Students = () => {
     getClasses();
   }, [clas]);
 
-  // Filter students by classname
+  // Filter students by classname************************************************************
   useEffect(() => {
     const getStudents = async () => {
       try {
@@ -131,7 +160,7 @@ export const Students = () => {
           >
             <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
               <Flex
-                bgColor={"#2e5984"}
+                bgColor={"purple"}
                 color={"white"}
                 w={"30%"}
                 h={"100%"}
@@ -171,7 +200,7 @@ export const Students = () => {
           >
             <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
               <Flex
-                bgColor={"#2e5984"}
+                bgColor={"#465565"}
                 color="white"
                 w={"30%"}
                 h={"100%"}
@@ -204,8 +233,8 @@ export const Students = () => {
                   size={"lg"}
                 >
                   {classes.map((c: any) => (
-                    <option key={c.classroomId} value={c.className}>
-                      {c.className}
+                    <option key={c.classroomId} value={c.classNumeral}>
+                      {c.classNumeral}
                     </option>
                   ))}
                 </Select>
@@ -309,14 +338,14 @@ export const Students = () => {
           my={3}
         >
           <Flex pt={5} align={"center"} justify="center" direction={"column"}>
-            <Text
+            <Box
               fontSize={25}
-              mt="4"
+              mt={10}
               fontWeight={"bold"}
               color={primaryColor.color}
             >
               List of Students
-            </Text>
+            </Box>
             <Flex
               p={3}
               px={0}
@@ -387,12 +416,21 @@ export const Students = () => {
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
           <StudentList
+            deleteStudent={deleteStudent}
+            isFetching={isFetching}
             list={
               query
                 ? studentlist.filter(
                     (student: any) =>
                       student.firstname.toLowerCase().includes(query) ||
-                      student.lastname.toLowerCase().includes(query)
+                      student.lastname.toLowerCase().includes(query) ||
+                      student.parentname.toLowerCase().includes(query) ||
+                      student.parentcontact.toLowerCase().includes(query) ||
+                      student.clas.toLowerCase().includes(query) ||
+                      student.gender.toLowerCase().includes(query) ||
+                      student.username.toLowerCase().includes(query) ||
+                      student.address.toLowerCase().includes(query) ||
+                      student.contact.toLowerCase().includes(query)
                   )
                 : studentlist
             }

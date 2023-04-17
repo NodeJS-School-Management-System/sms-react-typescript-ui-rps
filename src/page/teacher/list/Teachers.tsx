@@ -11,7 +11,6 @@ import {
 import { Diversity3, Home } from "@mui/icons-material";
 import { FaAngleRight, FaPlay } from "react-icons/fa";
 import { ImUsers, ImMan, ImWoman } from "react-icons/im";
-// import { MdClass } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import { useState, useEffect } from "react";
@@ -21,13 +20,33 @@ import useTheme from "../../../theme/useTheme";
 export const Teachers = () => {
   const token = localStorage.getItem("token");
 
-  const [teacherslist, setTeacherslist] = useState([]);
-  // const [selectedClass, setSelectedClass] = useState("");
-  // const [male, setMale] = useState(0);
   const [query, setQuery] = useState("");
 
+  // DELETE TEACHER ************************************************************************
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteTeacher = async (teacherId: any) => {
+    setIsDeleting(true);
+    try {
+      const res = await myAPIClient.delete(`teachers/${teacherId}`, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setIsDeleting(false);
+    } catch (err) {
+      console.log(err);
+      setIsDeleting(false);
+    }
+  };
+
+  const [isFetching, setIsFetching] = useState(false);
+
+  // GET TEACHERS LIST **************************************************************************
+  const [teacherslist, setTeacherslist] = useState([]);
   useEffect(() => {
     const getTeachers = async () => {
+      setIsFetching(true);
       try {
         const res = await myAPIClient.get("/teachers", {
           headers: {
@@ -36,23 +55,46 @@ export const Teachers = () => {
         });
         setTeacherslist(res.data);
         console.log(res.data);
+        setIsFetching(false);
+
         // setMale(0);
       } catch (err) {
         console.log(err);
+        setIsFetching(false);
       }
     };
 
     getTeachers();
-  }, []);
+  }, [isDeleting]);
 
-  const filterMale = (teachers: any) => {
-    return teachers.filter((teacher: any) => {
-      return teacher.gender.toLowerCase().includes("male");
-    });
-  };
+  // ***********************************************************************************************
+
+  // FILTER MALES FROM TEACHERS LIST****************************************************************
+  const maleCount = teacherslist.reduce((count: any, user: any) => {
+    if (user.gender === "Male") {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+
+  // FILTER FEMALES FROM TEACHERS LIST****************************************************************
+  const femaleCount = teacherslist.reduce((count: any, user: any) => {
+    if (user.gender === "Female") {
+      return count + 1;
+    }
+    return count;
+  }, 0);
 
   // Filter teachers with search
-  const keys = ["firstname", "lastname", "class"];
+  const keys = [
+    "firstname",
+    "lastname",
+    "class",
+    "gender",
+    "dateofbirth",
+    "contact",
+    "address",
+  ];
   const filterTeachers = (teachers: any) => {
     return teachers?.filter((teacher: any) => {
       return keys?.some((key: any) =>
@@ -173,7 +215,7 @@ export const Teachers = () => {
                 <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
                   Male
                 </Text>
-                <Heading as="h2">{filterMale(teacherslist).length}</Heading>
+                <Heading as="h2">{maleCount}</Heading>
               </Flex>
             </Center>
           </WrapItem>
@@ -205,7 +247,7 @@ export const Teachers = () => {
                 <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
                   Female
                 </Text>
-                <Heading as="h2">{teacherslist.length}</Heading>
+                <Heading as="h2">{femaleCount}</Heading>
               </Flex>
             </Center>
           </WrapItem>
@@ -345,6 +387,9 @@ export const Teachers = () => {
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
           <TeacherList
+            deleteTeacher={deleteTeacher}
+            isDeleting={isDeleting}
+            isFetching={isFetching}
             list={query ? filterTeachers(teacherslist) : teacherslist}
           />
         </Flex>

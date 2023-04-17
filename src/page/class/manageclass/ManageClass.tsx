@@ -21,19 +21,35 @@ import { myAPIClient } from "../../../components/auth/axiosInstance";
 export const ManageClass = () => {
   const token = localStorage.getItem("token");
 
-  // const [isLoading, setIsLoading] = useState(false);
+  // DELETE CLASS FROM DB ***************************************************************
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteClass = async (classroomId: any) => {
+    setIsDeleting(true);
+    try {
+      const res = await myAPIClient.delete(`classroom/${classroomId}`, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setIsDeleting(false);
+    } catch (err) {
+      console.log(err);
+      setIsDeleting(false);
+    }
+  };
+  // ************************************************************************************
+
   // const [error, setError] = useState(false);
   // const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [classNumeral, setClassNumeral] = useState("");
   const [className, setClassName] = useState("");
   const [classUpdate, setClassUpdate] = useState("");
   const [classTeacher, setClassTeacher] = useState("");
 
-  const [classlist, setClasslist] = useState([]);
-
+  // Get all teachers ***********************************************************************
   const [teacher, setTeacher] = useState([]);
-
-  // Get all teachers
   useEffect(() => {
     const getTeachers = async () => {
       try {
@@ -50,9 +66,12 @@ export const ManageClass = () => {
     getTeachers();
   }, []);
 
-  // Get all classes registered *************************************
+  // Get all classes registered *************************************************************
+  const [classlist, setClasslist] = useState([]);
+
   useEffect(() => {
     const getClasses = async () => {
+      setIsLoading(true);
       try {
         const res = await myAPIClient.get("/classroom", {
           headers: {
@@ -61,12 +80,14 @@ export const ManageClass = () => {
         });
         setClasslist(res.data);
         console.log(classlist);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
+        setIsLoading(false);
       }
     };
     getClasses();
-  }, []);
+  }, [isDeleting]);
 
   // Add a new classroom
   const addClass = async () => {
@@ -401,7 +422,11 @@ export const ManageClass = () => {
               w="90%"
               h="100%"
             >
-              <ClassList list={classlist} />
+              <ClassList
+                isLoading={isLoading}
+                deleteClass={deleteClass}
+                list={classlist}
+              />
             </Box>
           </WrapItem>
         </Flex>

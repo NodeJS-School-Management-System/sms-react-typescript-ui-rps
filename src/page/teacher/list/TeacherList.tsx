@@ -7,43 +7,115 @@ import {
   Td,
   TableCaption,
   TableContainer,
+  IconButton,
+  Image,
+  Spinner,
+  Box,
+  Flex,
+  useDisclosure,
 } from "@chakra-ui/react";
-export const TeacherList = ({ list }: any) => {
+import { useState } from "react";
+import { BiTrashAlt } from "react-icons/bi";
+// import { BiTrash } from "react-icons/bi";
+import { BsEye } from "react-icons/bs";
+import TeacherProfile from "./TeacherProfile";
+// import StudentProfile from "./StudentProfile";
+export const TeacherList = ({
+  list,
+  query,
+  deleteTeacher,
+  isDeleting,
+  isFetching,
+}: any) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [clickedId, setClickedId] = useState("");
+
+  const openModal = (id: any) => {
+    setClickedId(id);
+    onOpen();
+  };
+
   return (
-    <TableContainer>
-      <Table variant="simple">
-        <TableCaption>Today's Analytics</TableCaption>
-        <Thead>
-          <Tr>
-            <Th>Ticket No.</Th>
-            <Th>Leaving From</Th>
-            <Th>Date Booked</Th>
-            <Th>Time Booked</Th>
-            <Th>No. of Passengers</Th>
-            <Th>Phone</Th>
-            <Th>Bus</Th>
-            <Th>Payment Status</Th>
-            <Th>Transaction Reference</Th>
-            <Th>Action</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((customer: any) => (
-            <Tr key={customer}>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>test</Td>
-              <Td>DELETE</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <>
+      {isDeleting || isFetching ? (
+        <Flex align="center" m="auto" mt={5} justify="center">
+          <Spinner style={{ margin: "auto" }} color="teal" />
+        </Flex>
+      ) : (
+        <TableContainer>
+          <Table variant="simple">
+            <TableCaption>Teacher's List</TableCaption>
+            <Thead>
+              <Tr>
+                <Th fontSize={14}>Full Name</Th>
+                <Th fontSize={14}>Profile Image</Th>
+                <Th fontSize={14}>Class</Th>
+                <Th fontSize={14}>Stream</Th>
+                <Th fontSize={14}>Date of Birth</Th>
+                <Th fontSize={14}>Contact</Th>
+                <Th fontSize={14}>Address</Th>
+                <Th fontSize={14} m="auto" textAlign={"center"}>
+                  Action
+                </Th>
+              </Tr>
+            </Thead>
+
+            <Tbody>
+              {list &&
+                list.map((user: any) => (
+                  <Tr key={user.teacherId}>
+                    <Td>
+                      {user.firstname} {user.lastname}
+                    </Td>
+                    <Td textAlign={"center"} margin="auto" p={0}>
+                      <Image
+                        w={45}
+                        margin="auto"
+                        h={45}
+                        objectFit="cover"
+                        borderRadius={"50%"}
+                        src={user.profileimage}
+                      />
+                    </Td>
+                    <Td>{user.class}</Td>
+                    <Td>{user.stream ? user.stream : "N/A"}</Td>
+                    <Td>{user.dateofbirth}</Td>
+                    {/* <Td>{user.parentname}</Td> */}
+                    <Td>{user.contact}</Td>
+                    <Td>{user.address}</Td>
+                    <Td>
+                      <Td display={"flex"} gap={2}>
+                        <IconButton
+                          colorScheme="red"
+                          aria-label="Delete database"
+                          onClick={() => deleteTeacher(user.teacherId)}
+                          icon={<BiTrashAlt />}
+                        />
+                        <IconButton
+                          colorScheme="blue"
+                          onClick={() => openModal(user.teacherId)}
+                          aria-label="Edit database"
+                          icon={<BsEye />}
+                        />
+                        <Box>
+                          {isOpen ? (
+                            <TeacherProfile
+                              id={clickedId}
+                              user={user}
+                              onOpen={onOpen}
+                              onClose={onClose}
+                              isOpen={isOpen}
+                            />
+                          ) : null}
+                        </Box>
+                      </Td>
+                    </Td>
+                  </Tr>
+                ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      )}
+    </>
   );
 };
