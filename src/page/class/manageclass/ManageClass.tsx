@@ -40,8 +40,7 @@ export const ManageClass = () => {
   };
   // ************************************************************************************
 
-  // const [error, setError] = useState(false);
-  // const [success, setSuccess] = useState(false);
+  
   const [isLoading, setIsLoading] = useState(false);
   const [classNumeral, setClassNumeral] = useState("");
   const [className, setClassName] = useState("");
@@ -404,6 +403,9 @@ export const ManageClass = () => {
               </Box>
             </Center>
           </WrapItem>
+
+
+
 
           <WrapItem
             flexDirection={"column"}

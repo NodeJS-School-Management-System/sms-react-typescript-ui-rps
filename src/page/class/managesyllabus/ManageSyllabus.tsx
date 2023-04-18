@@ -7,24 +7,83 @@ import {
   WrapItem,
   Button,
   Select,
+  Heading,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
-// import { Delete, Download } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { Class, ClassOutlined, Home } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import useTheme from "../../../theme/useTheme";
+import { useEffect, useState } from "react";
+import { myAPIClient } from "../../auth/axiosInstance";
 
 export const ManageSyllabus = () => {
+  // GET ALL CLASSES FROM DB***********************************************************************
+  const [className, setClassName] = useState("");
+  const [classUpdate, setClassUpdate] = useState("");
+  const [classlist, setClasslist] = useState([]);
+
+  useEffect(() => {
+    const getClasses = async () => {
+      try {
+        const res = await myAPIClient.get("/classroom", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setClasslist(res.data);
+        console.log(classlist);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getClasses();
+  }, []);
+
+
+
+  
+  const {
+    theme: { primaryColor },
+  } = useTheme();
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
-        <Text fontSize={25} fontWeight="bold" ml={3}>
-          Syllabus
-        </Text>
-        <Flex flexDirection={"row"} gap={2} alignItems="center">
-          <Text fontSize={14}>Home</Text>
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        my={3}
+      >
+        <Box display={"flex"}>
+          <Heading as={"h5"} color={primaryColor.color}>
+            Manage Sylabus
+          </Heading>
+          <Text>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Home />
+          <Link to="/">
+            <Text fontWeight="bold" fontSize={14}>
+              Home
+            </Text>
+          </Link>
           <FaAngleRight />
-          <Text fontSize={14}>Manage Syllabus</Text>
-        </Flex>
+          <Class />
+          <Text fontWeight="bold" fontSize={14}>
+            Class
+          </Text>
+          <FaAngleRight />
+          <ClassOutlined />
+          <Text fontWeight="bold" fontSize={14}>
+            Manage Sylabus
+          </Text>
+        </Box>
       </Flex>
 
       <Box>
@@ -73,16 +132,20 @@ export const ManageSyllabus = () => {
                   >
                     Select Class
                   </Text>
-                  <Select placeholder="Select Class" w={"100%"}>
-                    <option value="option1">P1</option>
-                    <option value="option2">P2</option>
-                    <option value="option3">P3</option>
-                    <option value="option3">P4</option>
-                    <option value="option3">P5</option>
-                    <option value="option3">P6</option>
-                    <option value="option3">P7</option>
+                  <Select
+                    value={classUpdate}
+                    placeholder={"Select Class"}
+                    onChange={(e) => {
+                      setClassUpdate(e.target.value);
+                    }}
+                    w={"100%"}
+                  >
+                    {classlist?.map((c: any) => (
+                      <option key={c.classroomId}>{c.className}</option>
+                    ))}
                   </Select>
                 </Flex>
+
                 <Flex
                   p={3}
                   bg={"white"}
@@ -111,8 +174,34 @@ export const ManageSyllabus = () => {
                     <option value="option3">Primary Seven</option>
                   </Select>
                 </Flex>
+                <Flex
+                  p={3}
+                  bg={"white"}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <FormLabel alignSelf={"flex-start"}>
+                    Upload Image<span style={{ color: "red" }}>*</span>
+                  </FormLabel>
+                  <Input
+                    border={"none"}
+                    // onChange={onUploadImage}
+                    isRequired
+                    type="file"
+                  />
+                </Flex>
 
-                <Button variant={"solid"} w="50%" mx={3} colorScheme={"teal"}>
+                <Button
+                  variant={"solid"}
+                  w="50%"
+                  mx={3}
+                  disabled={!classUpdate}
+                  backgroundColor={primaryColor.color}
+                  color="white"
+                >
                   Add
                 </Button>
               </Box>

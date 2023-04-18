@@ -10,31 +10,33 @@ import {
   Input,
   // useDisclosure,
 } from "@chakra-ui/react";
-import { Class, ClassOutlined, Home } from "@mui/icons-material";
+import {
+  Class,
+  Home,
+  SubjectOutlined,
+} from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
 import { useEffect, useState } from "react";
 import { SubjectList } from "./SubjectList";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
-// import { ClassModal } from "./ClassModal";
 
 export const ManageSubject = () => {
   const token = localStorage.getItem("token");
-
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(false);
-  // const [success, setSuccess] = useState(false);
   const [subjectName, setSubjectName] = useState("");
-  const [className, setClassName] = useState("");
   const [subjectAbbrev, setSubjectAbbrev] = useState("");
   const [subjectTeacher, setSubjectTeacher] = useState("");
-
   const [subjectlist, setSubjectlist] = useState([]);
-
   const [teacher, setTeacher] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [classNumeral, setClassNumeral] = useState("");
+  const [classUpdate, setClassUpdate] = useState("");
+  const [classTeacher, setClassTeacher] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [classlist, setClasslist] = useState([]);
 
-  // Get all teachers
+  // Get all teachers****************************************************************
   useEffect(() => {
     const getTeachers = async () => {
       try {
@@ -51,8 +53,50 @@ export const ManageSubject = () => {
     getTeachers();
   }, []);
 
-  // Get all teachers
-  const [classlist, setClasslist] = useState([]);
+  // GET SUBJECT BY SUBJECTNAME *******************************************
+  const [targetSubject, setTargetSubject] = useState<any>([]);
+  useEffect(() => {
+    const getSubject = async () => {
+      try {
+        const res = await myAPIClient.get(`/subject/find/${selectedSubject}`, {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        setTargetSubject(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getSubject();
+  }, [selectedSubject]);
+
+  // UPDATE SUBJECT BY ID ***************************************************************
+  const updateSubject = async () => {
+    try {
+      const updatedSubject = {
+        subjectName: selectedSubject,
+        subjectTeacher,
+      };
+      await myAPIClient.put(
+        `/subject/${targetSubject?.subjectId}`,
+        updatedSubject,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      setClassTeacher("");
+      setClassUpdate("");
+      setSelectedSubject("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Get all teachers ***************************************************************
+  // const [classlist, setClasslist] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
       try {
@@ -69,7 +113,7 @@ export const ManageSubject = () => {
     getClasses();
   }, []);
 
-  // Get all classes registered
+  // Get all subjects **************************************************************************
   useEffect(() => {
     const getSubjects = async () => {
       try {
@@ -92,7 +136,7 @@ export const ManageSubject = () => {
       subjectName,
       subjectAbbrev,
       subjectTeacher,
-      className,
+      // className,
     };
     try {
       await myAPIClient.post("/subject", newSubject, {
@@ -103,7 +147,7 @@ export const ManageSubject = () => {
       setSubjectTeacher("");
       setSubjectAbbrev("");
       setSubjectName("");
-      setClassName("");
+      // setClassName("");
     } catch (err) {
       console.log(err);
     }
@@ -143,7 +187,7 @@ export const ManageSubject = () => {
             Class
           </Text>
           <FaAngleRight />
-          <ClassOutlined />
+          <SubjectOutlined />
           <Text fontWeight="bold" fontSize={14}>
             Manage Subjects
           </Text>
@@ -159,7 +203,7 @@ export const ManageSubject = () => {
           gap={2}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
-          <WrapItem
+          {/* <WrapItem
             flex={1}
             gap={6}
             flexDirection={"column"}
@@ -322,6 +366,246 @@ export const ManageSubject = () => {
                   }
                 >
                   Add Subject
+                </Button>
+              </Box>
+            </Center>
+          </WrapItem> */}
+
+          {/* ADD SUBJECT AND ASIGN IT A TEACHER */}
+          <WrapItem
+            flex={1}
+            gap={6}
+            flexDirection={"column"}
+            h={"max-content"}
+            w={{ base: "100%", md: "50%", lg: "50%" }}
+          >
+            <Center
+              flexDirection={"column"}
+              boxShadow={"base"}
+              borderRadius={2}
+              pb={4}
+              height="auto"
+              w="90%"
+              h="100%"
+            >
+              <Flex
+                alignItems="center"
+                bg="teal"
+                w="100%"
+                justifyContent="center"
+                flexDirection="column"
+              >
+                <Box>
+                  <Text
+                    p={2}
+                    color="white"
+                    textAlign="center"
+                    fontSize={22}
+                    fontWeight="bold"
+                  >
+                    Add Subject
+                  </Text>
+                </Box>
+              </Flex>
+              <Box w={"100%"}>
+                <Flex
+                  p={3}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text
+                    fontSize={20}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Subject Name
+                  </Text>
+                  <Input
+                    type="text"
+                    value={subjectName}
+                    onChange={(e) => setSubjectName(e.target.value)}
+                    placeholder={"Subject Name"}
+                    w={"100%"}
+                  />
+                </Flex>
+                <Flex
+                  p={3}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text
+                    fontSize={20}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Subject Shorthand
+                  </Text>
+                  <Input
+                    type="text"
+                    value={subjectAbbrev}
+                    onChange={(e) => setSubjectAbbrev(e.target.value)}
+                    placeholder={"Subject Shorthand"}
+                    w={"100%"}
+                  />
+                </Flex>
+
+                <Button
+                  variant={"solid"}
+                  w="50%"
+                  mx={3}
+                  colorScheme={primaryColor.name}
+                  onClick={addSubject}
+                  disabled={!subjectName || !subjectAbbrev}
+                >
+                  Add Subject
+                </Button>
+              </Box>
+            </Center>
+            <Center
+              flexDirection={"column"}
+              boxShadow={"base"}
+              borderRadius={2}
+              pb={4}
+              height="auto"
+              w="90%"
+              h="100%"
+            >
+              <Flex
+                alignItems="center"
+                bg="teal"
+                w="100%"
+                justifyContent="center"
+                flexDirection="column"
+              >
+                <Box>
+                  <Text
+                    p={2}
+                    textAlign="center"
+                    fontSize={22}
+                    color={"white"}
+                    fontWeight="bold"
+                  >
+                    Assign Subject Teacher
+                  </Text>
+                </Box>
+              </Flex>
+              <Box w={"100%"}>
+                <Flex
+                  p={3}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text
+                    fontSize={20}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Select Class
+                  </Text>
+                  <Select
+                    value={classUpdate}
+                    placeholder={"Select Class"}
+                    onChange={(e) => {
+                      setClassUpdate(e.target.value);
+                    }}
+                    w={"100%"}
+                  >
+                    {classlist?.map((c: any) => (
+                      <option key={c.classroomId}>{c.className}</option>
+                    ))}
+                  </Select>
+                </Flex>
+                <Flex
+                  p={3}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text
+                    fontSize={20}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Select Subject
+                  </Text>
+                  <Select
+                    value={selectedSubject}
+                    placeholder="Select Subject"
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        setSelectedSubject(e.target.value);
+                      }
+                    }}
+                  >
+                    {subjectlist.map((option: any) => (
+                      <option key={option.subjectId} value={option.subjectName}>
+                        {option.subjectName}
+                      </option>
+                    ))}
+                  </Select>
+                </Flex>
+                <Flex
+                  p={3}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text
+                    fontSize={20}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Select Teacher
+                  </Text>
+                  <Select
+                    value={classTeacher}
+                    placeholder="Select Teacher"
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        setClassTeacher(e.target.value);
+                      }
+                    }}
+                  >
+                    {teacher.map((option: any) => (
+                      <option key={option.teacherId} value={option.firstname}>
+                        {option.firstname}
+                      </option>
+                    ))}
+                  </Select>
+                </Flex>
+
+                <Button
+                  variant={"solid"}
+                  w="50%"
+                  mx={3}
+                  colorScheme={primaryColor.name}
+                  onClick={updateSubject}
+                  disabled={!classUpdate || !classTeacher || !selectedSubject}
+                >
+                  Assign Teacher
                 </Button>
               </Box>
             </Center>

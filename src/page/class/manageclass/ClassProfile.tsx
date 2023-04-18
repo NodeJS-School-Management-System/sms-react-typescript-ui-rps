@@ -7,6 +7,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
+import { Profile } from "./Profile";
 
 const ClassProfile = ({ isOpen, onClose, onOpen, id, user }: any) => {
   useEffect(() => {
@@ -19,11 +20,7 @@ const ClassProfile = ({ isOpen, onClose, onOpen, id, user }: any) => {
         <ModalHeader fontSize={22}></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus,
-          corrupti? Hic itaque illo, dolor aliquid explicabo, reiciendis velit
-          laudantium nostrum placeat, reprehenderit dolores distinctio beatae
-          provident quasi accusantium labore quaerat?
-          {/* <Profile studentId={id} /> */}
+          <Profile studentId={id} />
         </ModalBody>
       </ModalContent>
     </Modal>

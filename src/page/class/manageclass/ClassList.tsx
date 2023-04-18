@@ -53,7 +53,7 @@ export const ClassList = ({ list, query, isLoading, deleteClass }: any) => {
                   <Tr key={clas.classId}>
                     <Td>{clas.className}</Td>
                     <Td>{clas.classNumeral}</Td>
-                    <Td>{clas.classNumeral}</Td>
+                    <Td>{clas.classTeacher || "N/A"}</Td>
                     <Td>
                       <Td display={"flex"} gap={2}>
                         <IconButton

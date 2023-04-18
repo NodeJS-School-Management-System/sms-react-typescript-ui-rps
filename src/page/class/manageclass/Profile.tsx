@@ -23,37 +23,20 @@ import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useTheme from "../../../theme/useTheme";
-import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
+// import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 import { myAPIClient } from "../../auth/axiosInstance";
 
-export const Profile = ({ studentId }: any) => {
+export const Profile = ({ classroomId }: any) => {
   const token = localStorage.getItem("token");
   // const id1 = localStorage.getItem("studentId");
-  const id = studentId;
+  const id = classroomId;
 
   useEffect(() => {
     console.log(id);
   }, []);
 
-  const [student, setStudent] = useState<any>({});
-
-  useEffect(() => {
-    const getStudents = async () => {
-      try {
-        const res = await myAPIClient.get(`/students/${id}`, {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
-        setStudent(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getStudents();
-  }, [id]);
-  console.log(student);
+  // GET CLASSROOM BY ID **************************************************************
+  const [classroom, setClassroom] = useState<any>({});
 
   const {
     theme: { primaryColor },
@@ -72,7 +55,7 @@ export const Profile = ({ studentId }: any) => {
       >
         <Box display={"flex"}>
           <Heading as={"h5"} color={primaryColor.color}>
-            Student Profile
+            Class Profile
           </Heading>
           <Text>SMS</Text>
         </Box>
@@ -86,12 +69,12 @@ export const Profile = ({ studentId }: any) => {
           <FaAngleRight />
           <PersonOutline />
           <Text fontWeight="bold" fontSize={14}>
-            Student
+            Classroom
           </Text>
           <FaAngleRight />
           <PersonAddAlt1 />
           <Text fontWeight="bold" fontSize={14}>
-            {student.lastname}'s Profile
+            P4
           </Text>
         </Box>
       </Flex>
@@ -140,7 +123,7 @@ export const Profile = ({ studentId }: any) => {
                       borderRadius="50%"
                       objectFit="cover"
                       height={40}
-                      src={`${student.profileimage}`}
+                      src={`tes.png`}
                     />
                     <Box>
                       <Text
@@ -149,7 +132,7 @@ export const Profile = ({ studentId }: any) => {
                         fontSize={22}
                         fontWeight="bold"
                       >
-                        {student.firstname} {student.lastname}
+                        Primary Four
                       </Text>
                       <Text pb={2} textAlign="center" fontSize={17}>
                         Student
@@ -165,7 +148,7 @@ export const Profile = ({ studentId }: any) => {
                     flexDirection="row"
                   >
                     <Text mr={2}>Email </Text>
-                    <Text color={"#2e5984"}> {student.email}</Text>
+                    <Text color={"#2e5984"}> class@gmail.com</Text>
                   </Flex>
                   <Flex
                     w={"100%"}
@@ -176,7 +159,7 @@ export const Profile = ({ studentId }: any) => {
                     flexDirection="row"
                   >
                     <Text>Contact </Text>
-                    <Text color={"#2e5984"}> {student.contact} </Text>
+                    <Text color={"#2e5984"}> test </Text>
                   </Flex>
                   <Flex
                     w={"100%"}
@@ -187,7 +170,7 @@ export const Profile = ({ studentId }: any) => {
                     flexDirection="row"
                   >
                     <Text>DOB</Text>
-                    <Text color={"#2e5984"}> {student.dateofbirth} </Text>
+                    <Text color={"#2e5984"}> test</Text>
                   </Flex>
                   <Button
                     variant={"solid"}
@@ -195,7 +178,7 @@ export const Profile = ({ studentId }: any) => {
                     colorScheme={primaryColor.name}
                   >
                     {" "}
-                    Suspend {student.lastname}
+                    Suspend test
                   </Button>
                 </Box>
               </Box>
@@ -226,7 +209,7 @@ export const Profile = ({ studentId }: any) => {
                 justifyContent="flex-start"
                 flexDirection="row"
                 pb={3}
-                w='100%'
+                w="100%"
               >
                 <Tabs variant="unstyled">
                   <TabList>
@@ -261,18 +244,22 @@ export const Profile = ({ studentId }: any) => {
                   </TabList>
                   <TabPanels>
                     <TabPanel>
-                      <HomeComp />
+                      {/* <HomeComp /> */}
+                      Home
                     </TabPanel>
                     <TabPanel>
                       <Box px={4} overflowX={"auto"}>
-                        <Information student={student} />
+                        {/* <Information student={student} /> */}
+                        Infor
                       </Box>
                     </TabPanel>
                     <TabPanel>
-                      <ChangePassword student={student} />
+                      {/* <ChangePassword student={student} /> */}
+                      password
                     </TabPanel>
                     <TabPanel>
-                      <Settings student={student} />
+                      {/* <Settings student={student} /> */}
+                      setigns
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -306,7 +293,7 @@ export const Profile = ({ studentId }: any) => {
                   <Box>
                     <Box>
                       <Text p={2} fontSize={22} fontWeight="bold">
-                        About {student.lastname}
+                        About Primary FOur
                       </Text>
                       <Text p={2} fontSize={19} fontWeight="bold">
                         Education
@@ -340,8 +327,8 @@ export const Profile = ({ studentId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text fontSize={17}> {student.clas} </Text>
-                    <Text fontSize={17}>{student.stream} </Text>
+                    <Text fontSize={17}> P4</Text>
+                    <Text fontSize={17}>A</Text>
                     <Text fontSize={17}> {new Date().getFullYear()} </Text>
                   </Flex>
 
@@ -360,7 +347,7 @@ export const Profile = ({ studentId }: any) => {
                       </Text>
                     </Flex>
                     <Text fontSize={17} color="gray">
-                      {student.address}
+                      test
                     </Text>
                   </Box>
                 </Flex>
