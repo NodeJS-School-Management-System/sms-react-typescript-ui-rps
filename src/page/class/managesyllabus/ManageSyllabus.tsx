@@ -10,22 +10,28 @@ import {
   Heading,
   FormLabel,
   Input,
+  Image,
 } from "@chakra-ui/react";
 import { FaAngleRight } from "react-icons/fa";
 import DeleteIcon from "@mui/icons-material/Delete";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { Class, ClassOutlined, Home } from "@mui/icons-material";
+import { Class, ClassOutlined, Download, Home } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
 import { useEffect, useState } from "react";
 import { myAPIClient } from "../../auth/axiosInstance";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import app from "../../../firebase/firebase";
 
 export const ManageSyllabus = () => {
   // GET ALL CLASSES FROM DB***********************************************************************
-  // const [className, setClassName] = useState("");
   const [classUpdate, setClassUpdate] = useState("");
-  const [classlist, setClasslist] = useState([]);
 
+  const [classlist, setClasslist] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
       try {
@@ -43,9 +49,162 @@ export const ManageSyllabus = () => {
     getClasses();
   }, []);
 
+  const [subjectlist, setSubjectlist] = useState([]);
+  // Get all subjects **************************************************************************
+  useEffect(() => {
+    const getSubjects = async () => {
+      try {
+        const res = await myAPIClient.get("/subject", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setSubjectlist(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getSubjects();
+  }, []);
 
+  const [subjectName, setSubjectName] = useState("");
+  // IMAGE UPLOAD ***************************************************
+  const [fileImg, setFileImg] = useState<any>(undefined);
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFileImg(e.target.files[0]);
+      console.log(fileImg);
+    }
+  };
 
-  
+  // CREATE SYLABUS ************************************************************************
+  const addSylabus = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const sylabus: any = {
+      className: classUpdate,
+      subjectName,
+    };
+
+    if (fileImg !== null) {
+      const datai = new FormData();
+      const fileName = Date.now() + fileImg.name;
+      datai.append("name", fileName);
+      datai.append("file", fileImg);
+      // student.profileimage = fileName;
+
+      // Upload image to firebase storage ******************************************************************
+      const storage = getStorage(app);
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, fileImg);
+
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
+      uploadTask.on(
+        "state_changed",
+        (snapshot: any) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error: any) => {
+          // Handle unsuccessful uploads
+        },
+        async () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          await getDownloadURL(uploadTask.snapshot.ref).then(
+            (downloadURL: any) => {
+              console.log(downloadURL);
+              sylabus.subjectFile = downloadURL;
+            }
+          );
+          try {
+            const res = await myAPIClient.post("/sylabus", sylabus, {
+              headers: {
+                token: `token ${localStorage.getItem("token")}`,
+              },
+            });
+            console.log(res.data);
+            setClassUpdate("");
+            setSubjectName("");
+          } catch (err) {}
+        }
+      );
+    }
+  };
+
+  // GET ALL SULABUS ************************************************************************
+  const [sylist, setSylist] = useState([]);
+
+  useEffect(() => {
+    const getSylabus = async () => {
+      try {
+        const res = await myAPIClient.get("/sylabus", {
+          headers: {
+            token: `token ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setSylist(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getSylabus();
+  }, []);
+
+  // DELETE SYLABUS *************************************************************
+  const deleteSylabus = async (id: any) => {
+    try {
+      const res = await myAPIClient.delete(`/sylabus/${id}`, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // DOWNLOAD FILE *********************************************************************
+  function downloadImage(url: string, fileName: any) {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // OR
+  function downloadImage2(url: string, fileName: string) {
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch((error) => console.error(error));
+  }
+
   const {
     theme: { primaryColor },
   } = useTheme();
@@ -130,7 +289,7 @@ export const ManageSyllabus = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Select Class
+                    Select Class <span style={{ color: "red" }}>*</span>
                   </Text>
                   <Select
                     value={classUpdate}
@@ -162,16 +321,23 @@ export const ManageSyllabus = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Subject
+                    Select Subject <span style={{ color: "red" }}>*</span>
                   </Text>
-                  <Select placeholder="Select Class" w={"100%"}>
-                    <option value="option1">Primary One</option>
-                    <option value="option2">Primary Two</option>
-                    <option value="option3">Primary Three</option>
-                    <option value="option3">Primary Four</option>
-                    <option value="option3">Primary Five</option>
-                    <option value="option3">Primary Six</option>
-                    <option value="option3">Primary Seven</option>
+
+                  <Select
+                    value={subjectName}
+                    onChange={(e) => setSubjectName(e.target.value)}
+                    placeholder="Select Subject"
+                    w={"100%"}
+                  >
+                    {subjectlist.map((subject: any) => (
+                      <option
+                        key={subject.subjectId}
+                        value={subject.subjectName}
+                      >
+                        {subject.subjectName}
+                      </option>
+                    ))}
                   </Select>
                 </Flex>
                 <Flex
@@ -188,7 +354,7 @@ export const ManageSyllabus = () => {
                   </FormLabel>
                   <Input
                     border={"none"}
-                    // onChange={onUploadImage}
+                    onChange={onUploadImage}
                     isRequired
                     type="file"
                   />
@@ -198,11 +364,12 @@ export const ManageSyllabus = () => {
                   variant={"solid"}
                   w="50%"
                   mx={3}
-                  disabled={!classUpdate}
+                  onClick={addSylabus}
+                  disabled={!classUpdate || !subjectName}
                   backgroundColor={primaryColor.color}
                   color="white"
                 >
-                  Add
+                  Add Sylabus
                 </Button>
               </Box>
             </Center>
@@ -212,7 +379,7 @@ export const ManageSyllabus = () => {
             flexDirection={"column"}
             gap={2}
             h={"max-content"}
-            flex={1}
+            flex={2}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
             <Box
@@ -236,7 +403,7 @@ export const ManageSyllabus = () => {
                   <Box>
                     <Box>
                       <Text p={2} fontSize={22} fontWeight="bold">
-                        List of Subjects
+                        List of Subjects & Sylabus
                       </Text>
                     </Box>
                   </Box>
@@ -250,42 +417,74 @@ export const ManageSyllabus = () => {
                     flexDirection="row"
                   >
                     <Text fontSize={19} fontWeight="bold">
+                      Subject
+                    </Text>
+                    <Text fontSize={19} fontWeight="bold">
                       File
                     </Text>
                     <Text fontSize={19} fontWeight="bold">
-                      Downloaded
+                      Class
                     </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Option
+                    <Text textAlign={"center"} fontSize={19} fontWeight="bold">
+                      Action
                     </Text>
                   </Flex>
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    borderTop="1px solid #ccc"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={19} fontWeight="bold">
-                      sample_sy.png
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      5
-                    </Text>
-                    <Flex gap={2}>
-                      <IconButton
-                        colorScheme="red"
-                        aria-label="Delete from database"
-                        icon={<DeleteIcon />}
-                      />
-                      <IconButton
-                        colorScheme="blue"
-                        aria-label="Delete from database"
-                        icon={<RemoveRedEyeIcon />}
-                      />
+                  {sylist.map((sylabus: any) => (
+                    <Flex
+                      key={sylabus.sylabusId}
+                      w={"100%"}
+                      p={3}
+                      borderTop="1px solid #ccc"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      flexDirection="row"
+                    >
+                      <Text fontSize={14} fontWeight="bold">
+                        {sylabus.subjectName}
+                      </Text>
+                      <Box
+                        display={"flex"}
+                        alignItems="center"
+                        justifyContent={"center"}
+                      >
+                        <Image
+                          src={sylabus.subjectFile}
+                          alt=""
+                          borderRadius={"50%"}
+                          width={25}
+                          height={25}
+                          objectFit="cover"
+                        />
+                      </Box>
+                      <Text fontSize={14} fontWeight="bold">
+                        {sylabus.className}
+                      </Text>
+                      <Flex gap={2}>
+                        <IconButton
+                          colorScheme="red"
+                          onClick={() => deleteSylabus(sylabus.sylabusId)}
+                          aria-label="Delete from database"
+                          icon={<DeleteIcon />}
+                        />
+                        <IconButton
+                          colorScheme="blue"
+                          aria-label="Delete from database"
+                          icon={<Download />}
+                          onClick={() =>
+                            downloadImage(sylabus.subjectFile, "sylabus")
+                          }
+                        />
+                        <IconButton
+                          colorScheme="blue"
+                          aria-label="Delete from database"
+                          icon={<Download />}
+                          onClick={() =>
+                            downloadImage2(sylabus.subjectFile, "sylabus")
+                          }
+                        />
+                      </Flex>
                     </Flex>
-                  </Flex>
+                  ))}
                 </Flex>
               </Box>
             </Box>

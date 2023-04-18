@@ -633,7 +633,6 @@ export const AddStudent = () => {
                   isRequired
                   type="text"
                   value={password}
-                  // onChange={(e) => setpassword(e.target.value)}
                   placeholder="Password"
                   onChange={(e) => {
                     setError(false);
