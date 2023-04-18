@@ -189,22 +189,6 @@ export const ManageSyllabus = () => {
     document.body.removeChild(link);
   }
 
-  // OR
-  function downloadImage2(url: string, fileName: string) {
-    fetch(url)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      })
-      .catch((error) => console.error(error));
-  }
-
   const {
     theme: { primaryColor },
   } = useTheme();
@@ -472,14 +456,6 @@ export const ManageSyllabus = () => {
                           icon={<Download />}
                           onClick={() =>
                             downloadImage(sylabus.subjectFile, "sylabus")
-                          }
-                        />
-                        <IconButton
-                          colorScheme="blue"
-                          aria-label="Delete from database"
-                          icon={<Download />}
-                          onClick={() =>
-                            downloadImage2(sylabus.subjectFile, "sylabus")
                           }
                         />
                       </Flex>
