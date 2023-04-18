@@ -14,7 +14,7 @@ import {
   Box,
   Alert,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getDownloadURL,
   getStorage,
@@ -24,17 +24,32 @@ import {
 import app from "../../../firebase/firebase";
 import { myAPIClient } from "../../auth/axiosInstance";
 
-const EditModal = ({ isOpen, onOpen, onClose, setIsEditing, item }: any) => {
-  const finalRef = useRef(null);
+const EditModal = ({ isOpen, onOpen, onClose, selectedId }: any) => {
   const [itemName, setItemName] = useState("");
   const [itemImage, setItemImage] = useState<any>(undefined);
   const [itemQuantity, setItemQuantity] = useState("");
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [takenBy, setTakenBy] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const [item, setItem] = useState<any>([]);
+  useEffect(() => {
+    const getItem = async () => {
+      try {
+        const res = await myAPIClient.get(`/storemanager/${selectedId}`, {
+          headers: {
+            token: `token ${localStorage.getItem("token")}`,
+          },
+        });
+        setItem(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getItem();
+  }, [selectedId]);
   // EDIT ITEM IN STROE *************************************************
 
   const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,9 +65,10 @@ const EditModal = ({ isOpen, onOpen, onClose, setIsEditing, item }: any) => {
     e.preventDefault();
 
     const store: any = {
-      itemName: itemName ? itemName : item.itemName,
+      itemName: itemName ? itemName : item?.itemName,
       itemQuantity: itemQuantity ? parseInt(itemQuantity) : item.itemQuantity,
       category: category ? category : item.category,
+      takenBy: takenBy ? takenBy : item?.takenBy,
     };
 
     setIsLoading(true);
@@ -105,7 +121,7 @@ const EditModal = ({ isOpen, onOpen, onClose, setIsEditing, item }: any) => {
           );
           try {
             const res = await myAPIClient.put(
-              `/storemanager/${item.storeId}`,
+              `/storemanager/${selectedId}`,
               store,
               {
                 headers: {
@@ -131,7 +147,7 @@ const EditModal = ({ isOpen, onOpen, onClose, setIsEditing, item }: any) => {
     } else {
       try {
         const res = await myAPIClient.put(
-          `/storemanager/${item.storeId}`,
+          `/storemanager/${selectedId}`,
           store,
           {
             headers: {
@@ -160,7 +176,7 @@ const EditModal = ({ isOpen, onOpen, onClose, setIsEditing, item }: any) => {
       <Button mt={4} onClick={onOpen}>
         Open Modal
       </Button>
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontSize={22}>Update Store Item</ModalHeader>
@@ -221,6 +237,37 @@ const EditModal = ({ isOpen, onOpen, onClose, setIsEditing, item }: any) => {
                     setError(false);
                     setSuccess(false);
                     setCategory(e.target.value);
+                  }}
+                  placeholder={item.category}
+                />
+              </Flex>
+
+              <Flex
+                p={3}
+                bg={"white"}
+                w={"100%"}
+                h={"100%"}
+                flexDirection="column"
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <FormLabel
+                  fontSize={20}
+                  fontWeight="bold"
+                  alignSelf={"flex-start"}
+                  color={"gray"}
+                  mb={3}
+                >
+                  Taken By <span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <Input
+                  required
+                  type="text"
+                  value={takenBy}
+                  onChange={(e) => {
+                    setError(false);
+                    setSuccess(false);
+                    setTakenBy(e.target.value);
                   }}
                   placeholder={item.category}
                 />

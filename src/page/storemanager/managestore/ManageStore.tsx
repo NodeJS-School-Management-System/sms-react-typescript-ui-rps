@@ -84,9 +84,7 @@ const ManageStore = () => {
   };
 
   // EDIT ITEM IN STROE **********************************************************
-  const [isEditing, setIsEditing] = useState(false);
   const editItem = async (itemId: any) => {
-    setIsEditing(true);
     try {
       const res = await myAPIClient.put(`storemanager/${itemId}`, {
         headers: {
@@ -94,10 +92,8 @@ const ManageStore = () => {
         },
       });
       console.log(res.data);
-      setIsEditing(false);
     } catch (err) {
       console.log(err);
-      setIsEditing(false);
     }
   };
 
@@ -205,9 +201,14 @@ const ManageStore = () => {
       }
     };
     getStore();
-  }, [isDeleting, isEditing, onClose]);
+  }, [isDeleting]);
 
-  // ***********************************************************************************************
+  // OPEN MODAL ***********************************************************************************************
+  const [selectedId, setSelectedId] = useState("");
+  const openModel = (id: any) => {
+    setSelectedId(id);
+    onOpen();
+  };
 
   return (
     <Flex direction="column" style={{ width: "100%" }}>
@@ -478,19 +479,22 @@ const ManageStore = () => {
                           />
                           <IconButton
                             colorScheme="blue"
-                            onClick={onOpen}
+                            onClick={() => openModel(item.storeId)}
                             aria-label="Edit database"
                             icon={<Edit />}
                           />
                           <Box display="none">
-                            <EditModal
-                              setIsLoadingItems={setIsLoadingItems}
-                              item={item}
-                              editItem={editItem}
-                              onOpen={onOpen}
-                              onClose={onClose}
-                              isOpen={isOpen}
-                            />
+                            {isOpen ? (
+                              <EditModal
+                                setIsLoadingItems={setIsLoadingItems}
+                                // item={item}
+                                editItem={editItem}
+                                onOpen={onOpen}
+                                onClose={onClose}
+                                isOpen={isOpen}
+                                selectedId={selectedId}
+                              />
+                            ) : null}
                           </Box>
                         </Td>
                       </Tr>
