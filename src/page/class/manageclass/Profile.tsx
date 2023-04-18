@@ -21,13 +21,11 @@ import {
 } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import useTheme from "../../../theme/useTheme";
 // import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
-import { myAPIClient } from "../../auth/axiosInstance";
 
 export const Profile = ({ classroomId }: any) => {
-  const token = localStorage.getItem("token");
   // const id1 = localStorage.getItem("studentId");
   const id = classroomId;
 
@@ -36,7 +34,7 @@ export const Profile = ({ classroomId }: any) => {
   }, []);
 
   // GET CLASSROOM BY ID **************************************************************
-  const [classroom, setClassroom] = useState<any>({});
+  // const [classroom, setClassroom] = useState<any>({});
 
   const {
     theme: { primaryColor },

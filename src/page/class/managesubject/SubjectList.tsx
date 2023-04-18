@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Edit } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
 
 export const SubjectList = ({ list }: any) => {
@@ -24,6 +24,12 @@ export const SubjectList = ({ list }: any) => {
     setClickedId(id);
     onOpen();
   };
+
+  useEffect(() => {
+    openModal("weer");
+    console.log(isOpen, clickedId, onClose);
+  }, []);
+
   const isLoading = false;
 
   return (
@@ -68,7 +74,6 @@ export const SubjectList = ({ list }: any) => {
                           aria-label="Edit database"
                           icon={<Edit />}
                         />
-                        
                       </Td>
                     </Td>
                   </Tr>
