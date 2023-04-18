@@ -10,11 +10,7 @@ import {
   Input,
   // useDisclosure,
 } from "@chakra-ui/react";
-import {
-  Class,
-  Home,
-  SubjectOutlined,
-} from "@mui/icons-material";
+import { Class, Home, SubjectOutlined } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
@@ -78,7 +74,7 @@ export const ManageSubject = () => {
         subjectName: selectedSubject,
         subjectTeacher,
       };
-      await myAPIClient.put(
+      const res = await myAPIClient.put(
         `/subject/${targetSubject?.subjectId}`,
         updatedSubject,
         {
@@ -87,6 +83,7 @@ export const ManageSubject = () => {
           },
         }
       );
+      console.log(res.data);
       setClassTeacher("");
       setClassUpdate("");
       setSelectedSubject("");

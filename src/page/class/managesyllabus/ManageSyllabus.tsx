@@ -22,7 +22,7 @@ import { myAPIClient } from "../../auth/axiosInstance";
 
 export const ManageSyllabus = () => {
   // GET ALL CLASSES FROM DB***********************************************************************
-  const [className, setClassName] = useState("");
+  // const [className, setClassName] = useState("");
   const [classUpdate, setClassUpdate] = useState("");
   const [classlist, setClasslist] = useState([]);
 
