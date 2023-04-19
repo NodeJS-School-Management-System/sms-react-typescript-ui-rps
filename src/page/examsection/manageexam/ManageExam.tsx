@@ -28,6 +28,8 @@ export const ManageExam = () => {
   const [runningTerm, setRunningTerm] = useState("");
   const [examName, setExamName] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     theme: { primaryColor },
   } = useTheme();
@@ -45,6 +47,7 @@ export const ManageExam = () => {
 
   const addExam = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const newExam: any = {
       examDate,
       runningTerm,
@@ -106,8 +109,10 @@ export const ManageExam = () => {
             setRunningTerm("");
             setExamName("");
             setTimeTable("");
+            setIsLoading(false);
           } catch (err) {
             console.log(err);
+            setIsLoading(false);
           }
         }
       );
@@ -312,7 +317,7 @@ export const ManageExam = () => {
                   onClick={addExam}
                   color="white"
                 >
-                  Add Exam
+                  {isLoading ? "Adding.." : "Add Exam"}
                 </Button>
               </Box>
             </Center>
