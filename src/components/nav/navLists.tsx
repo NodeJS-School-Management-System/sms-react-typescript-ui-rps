@@ -90,7 +90,7 @@ const navList: NavOptions[] = [
       "/examandresult/"
     ),
     childrens: [
-      format("Exam Routine", "/examandresult/examroutine/"),
+      // format("Exam Routine", "/examandresult/examroutine/"),
       format("View Result", "/examandresult/viewresult/"),
     ],
   },

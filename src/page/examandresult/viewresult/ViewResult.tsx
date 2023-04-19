@@ -12,7 +12,7 @@ import {
 import ReportModal from "./ReportModal";
 import Logo from "../../../assets/logo.png";
 import { FaAngleRight } from "react-icons/fa";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 import { useReactToPrint } from "react-to-print";
@@ -22,6 +22,8 @@ import {
   MongoAPIClient,
   myAPIClient,
 } from "../../../components/auth/axiosInstance";
+import useTheme from "../../../theme/useTheme";
+import { CustomTable } from "./CustomTable";
 
 export const ViewResult = () => {
   const reportRef = useRef<any>();
@@ -38,13 +40,17 @@ export const ViewResult = () => {
   const [subject, setSubject] = useState("");
   const [exam, setExam] = useState("");
 
+  const {
+    theme: { primaryColor },
+  } = useTheme();
+
   // useDisclosure hook for controlling opening and closing of a chakraui modal *****
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Function for opening the reports modal *************************************************
-  const openReportModal = useCallback(() => {
-    onOpen();
-  }, []);
+  // const openReportModal = useCallback(() => {
+  //   onOpen();
+  // }, []);
 
   // *****************************************************************************************
 
@@ -156,7 +162,7 @@ export const ViewResult = () => {
     return { totalMarks, averageMarks };
   }
 
-  // **************************************************
+  // ********************************************************************
 
   return (
     <Box>
@@ -309,10 +315,11 @@ export const ViewResult = () => {
                   variant={"solid"}
                   w="50%"
                   mx={3}
-                  colorScheme={"teal"}
+                  backgroundColor={primaryColor.color}
+                  color="white"
                   disabled={!clas || !subject || !exam}
                 >
-                  Insert Marks
+                  View Marks
                 </Button>
               </Box>
             </Center>
@@ -365,23 +372,22 @@ export const ViewResult = () => {
                 >
                   {exam} {subject} Marks - For {clas}
                 </Text>
-
-                {/* <CustomTable
-                  clas={clas}
-                  subject={subject}
-                  exam={exam}
-                  list={results}
-                /> */}
-                <Box>
-                  <Text>Table with results will be here</Text>
+                <Box m="auto">
+                  <CustomTable />
                 </Box>
 
-                <Flex gap={3} ml={10}>
-                  <Button colorScheme="teal" onClick={openReportModal}>
+                <Flex
+                  gap={3}
+                  ml={10}
+                  align="center"
+                  justify={"center"}
+                  w="100%"
+                >
+                  {/* <Button colorScheme="teal" onClick={openReportModal}>
                     Generate Reports
-                  </Button>
-                  <Button colorScheme="facebook" onClick={handlePrint}>
-                    Print Report
+                  </Button> */}
+                  <Button m="auto" colorScheme="facebook" onClick={handlePrint}>
+                    Generate Reports for {clas}
                   </Button>
 
                   {results.map((result: any) => (

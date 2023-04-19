@@ -362,10 +362,10 @@ export const EntryMarks = () => {
                   term={term}
                 />
 
-                <Flex gap={3} ml={10}>
+                {/* <Flex gap={3} ml={10}>
                   <Button colorScheme="teal">Save</Button>
                   <Button colorScheme="facebook">Reset</Button>
-                </Flex>
+                </Flex> */}
               </>
             )}
           </WrapItem>

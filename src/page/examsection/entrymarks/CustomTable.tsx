@@ -33,7 +33,7 @@ const CustomTable = ({ list, exam, clas, subject, term }: any) => {
             <th>Last Name</th>
             <th>Attendence</th>
             <th>Marks</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
           {list.map((listItem: any) => (
             <tr key={listItem._id}>
