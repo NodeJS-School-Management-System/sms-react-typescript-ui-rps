@@ -452,7 +452,7 @@ export const ManageSyllabus = () => {
                         />
                         <IconButton
                           colorScheme="blue"
-                          aria-label="Delete from database"
+                          aria-label="Download from database"
                           icon={<Download />}
                           onClick={() =>
                             downloadImage(sylabus.subjectFile, "sylabus")

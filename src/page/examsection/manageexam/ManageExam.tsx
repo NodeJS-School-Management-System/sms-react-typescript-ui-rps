@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
-import { ClassList } from "./ClassList";
+import { ExamList } from "./ExamList";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
 import {
@@ -120,8 +120,27 @@ export const ManageExam = () => {
   };
   // **********************************************************************************************
 
+  // DELETE EXAM *********************************************************************
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteExam = async (examId: any) => {
+    setIsDeleting(true);
+    try {
+      const res = await myAPIClient.delete(`exams/${examId}`, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setIsDeleting(false);
+    } catch (err) {
+      console.log(err);
+      setIsDeleting(false);
+    }
+  };
+  // ************************************************************************************
+
   // Get all exams
-  // const [exams, setExams] = useState([]);
+  const [exams, setExams] = useState([]);
   useEffect(() => {
     const getExams = async () => {
       try {
@@ -130,32 +149,13 @@ export const ManageExam = () => {
             token: `Bearer ${token}`,
           },
         });
-        console.log(res.data);
-        // setExams(res.data);
+        setExams(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getExams();
-  }, []);
-
-  const [classlist, setClasslist] = useState([]);
-  // Get all classes registered *************************************
-  useEffect(() => {
-    const getClasses = async () => {
-      try {
-        const res = await myAPIClient.get("/classroom", {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
-        setClasslist(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getClasses();
-  }, []);
+  }, [isDeleting]);
 
   return (
     <Box>
@@ -340,7 +340,11 @@ export const ManageExam = () => {
               w="90%"
               h="100%"
             >
-              <ClassList list={classlist} />
+              <ExamList
+                isDeleting={isDeleting}
+                deleteExam={deleteExam}
+                list={exams}
+              />
             </Box>
           </WrapItem>
         </Flex>
