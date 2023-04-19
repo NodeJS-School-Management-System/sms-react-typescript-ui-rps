@@ -97,8 +97,8 @@ const navList: NavOptions[] = [
   {
     parent: formatGroupButton("Library", <LocalLibrary />, "/library/"),
     childrens: [
-      format("Manage", "/library/manage/"),
-      format("View", "/library/view/"),
+      format("Manage Library", "/library/manage/"),
+      format("View Library", "/library/view/"),
     ],
   },
   {

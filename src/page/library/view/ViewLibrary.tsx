@@ -1,81 +1,98 @@
-import { Box, Text, Center, Flex, WrapItem, Select } from "@chakra-ui/react";
-import { FaAngleRight } from "react-icons/fa";
-
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  IconButton,
+  Spinner,
+  Flex,
+} from "@chakra-ui/react";
+import { BiTrashAlt } from "react-icons/bi";
+import { BsEye } from "react-icons/bs";
+// import StudentProfile from "./StudentProfile";
 export const ViewLibrary = () => {
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  // const [clickedId, setClickedId] = useState("");
+
+  // const openModal = (id: any) => {
+  //   setClickedId(id);
+  //   onOpen();
+  // };
+
+  const isFetching = false;
 
   return (
-    <Box>
-      <Flex justifyContent={'space-between'} pr={10}>
-        <Text fontSize={25} fontWeight='bold' ml={3}>Library</Text>
-        <Flex flexDirection={'row'} gap={2} alignItems='center'>
-          <Text fontSize={14}>Home</Text><FaAngleRight />
-          <Text fontSize={14}>Library</Text>
+    <>
+      {isFetching ? (
+        <Flex align="center" m="auto" mt={5} justify="center">
+          <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
-      </Flex>
+      ) : (
+        <TableContainer>
+          <Table variant="simple">
+            <TableCaption>Library List</TableCaption>
+            <Thead>
+              <Tr>
+                <Th fontSize={14}>Full Name</Th>
+                <Th fontSize={14}>Profile Image</Th>
+                <Th fontSize={14}>Class</Th>
+                <Th fontSize={14}>Date of Birth</Th>
+                <Th fontSize={14}>Parent Name</Th>
+                <Th fontSize={14}>Parent Contact</Th>
+                <Th fontSize={14} m="auto" textAlign={"center"}>
+                  Action
+                </Th>
+              </Tr>
+            </Thead>
 
-      <Box>
-        <Flex boxShadow='md' p={4} w='100%' h='100%' gap={2} flexDirection={{ base: 'column', md: 'row', lg: 'row' }}>
-
-          <WrapItem flexDirection={'column'} gap={2} h={'max-content'} flex={2} w={{ base: '100%', md: '50%', lg: '50%' }}>
-            <Box flexDirection={'column'} boxShadow={'lg'} borderRadius={2} p={4} borderTop='3px solid #ccc' bg={'white'} height='auto' w='90%' h='100%'>
-              <Box w={'100%'}>
-                <Flex overflowX={'auto'} alignItems='flex-start' justifyContent='flex-start' flexDirection='column'>
-          
-                  <Flex w={'100%'} p={3} alignItems='center' justifyContent='space-between' flexDirection='row'>
-                    <Text fontSize={19} fontWeight='bold'>Name</Text>
-                    <Text fontSize={19} fontWeight='bold'>Author</Text>
-                    <Text fontSize={19} fontWeight='bold'>Publication</Text>
-                    <Text fontSize={19} fontWeight='bold'>Subject</Text>
-                    <Text fontSize={19} fontWeight='bold'>Class</Text>
-                  </Flex>
-                  <Flex w={'100%'} p={3} borderTop='1px solid #ccc' alignItems='center' justifyContent='space-between' flexDirection='row'>
-                    <Text fontSize={17} fontWeight='bold'>Back House</Text>
-                    <Text fontSize={17} fontWeight='bold'>Jack Ma</Text>
-                    <Text fontSize={17} fontWeight='bold'>Sample</Text>
-                    <Text fontSize={17} fontWeight='bold'>Mathematics</Text>
-                    <Text fontSize={17} fontWeight='bold'>P4</Text>
-                  </Flex>
-                  <Flex w={'100%'} p={3} borderTop='1px solid #ccc' alignItems='center' justifyContent='space-between' flexDirection='row'>
-                    <Text fontSize={17} fontWeight='bold'>Back House</Text>
-                    <Text fontSize={17} fontWeight='bold'>Jack Ma</Text>
-                    <Text fontSize={17} fontWeight='bold'>Sample</Text>
-                    <Text fontSize={17} fontWeight='bold'>Mathematics</Text>
-                    <Text fontSize={17} fontWeight='bold'>P4</Text>
-                  </Flex>
-                  <Flex w={'100%'} p={3} borderTop='1px solid #ccc' alignItems='center' justifyContent='space-between' flexDirection='row'>
-                    <Text fontSize={17} fontWeight='bold'>Back House</Text>
-                    <Text fontSize={17} fontWeight='bold'>Jack Ma</Text>
-                    <Text fontSize={17} fontWeight='bold'>Sample</Text>
-                    <Text fontSize={17} fontWeight='bold'>Mathematics</Text>
-                    <Text fontSize={17} fontWeight='bold'>P4</Text>
-                  </Flex>
-
-
-                </Flex>
-              </Box>
-            </Box>
-          </WrapItem>
-
-          <WrapItem flex={1} gap={6} flexDirection={'column'} h={'max-content'} w={{ base: '100%', md: '50%', lg: '50%' }}>
-            <Center flexDirection={'column'} boxShadow={'lg'} borderRadius={2} pb={4} borderTop='3px solid #ccc' bg={'white'} height='auto' w='90%' h='100%'>
-              <Box w={'100%'}>
-
-                <Flex p={3} bg={'white'} w={'100%'} h={'100%'} flexDirection='column' alignItems={'center'} justifyContent={'center'}>
-                  <Text fontSize={20} fontWeight='bold' alignSelf={'flex-start'} color={'gray'} mb={3}>Class In Numeric</Text>
-                  <Select placeholder='Select Class' w={'100%'}>
-                    <option value='option1'>P1</option>
-                    <option value='option2'>P2</option>
-                    <option value='option3'>P3</option>
-                    <option value='option3'>P4</option>
-                  </Select>
-                </Flex>
-
-              </Box>
-            </Center>
-
-          </WrapItem>
-        </Flex>
-      </Box>
-    </Box>
-  )
-}
+            <Tbody>
+              {[1, 2, 3, 4, 5].map((user: any) => (
+                <Tr key={user}>
+                  <Td>Test</Td>
+                  <Td textAlign={"center"} margin="auto" p={0}>
+                    Test
+                  </Td>
+                  <Td>Test</Td>
+                  <Td>Test</Td>
+                  <Td>Test</Td>
+                  <Td>Test</Td>
+                  {/* <Td> */}
+                  <Td display={"flex"} gap={2}>
+                    <IconButton
+                      colorScheme="red"
+                      aria-label="Delete database"
+                      // onClick={() => deleteStudent(user.studentId)}
+                      icon={<BiTrashAlt />}
+                    />
+                    <IconButton
+                      colorScheme="blue"
+                      // onClick={() => openModal(user.studentId)}
+                      aria-label="Edit database"
+                      icon={<BsEye />}
+                    />
+                    {/* <Box>
+                          {isOpen ? (
+                            <StudentProfile
+                              id={clickedId}
+                              user={user}
+                              onOpen={onOpen}
+                              onClose={onClose}
+                              isOpen={isOpen}
+                            />
+                          ) : null}
+                        </Box> */}
+                  </Td>
+                  {/* </Td> */}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      )}
+    </>
+  );
+};

@@ -6,6 +6,7 @@ import {
   WrapItem,
   Button,
   Input,
+  Heading,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
@@ -160,9 +161,13 @@ export const ManageExam = () => {
   return (
     <Box>
       <Flex justifyContent={"space-between"} pr={10}>
-        <Text fontSize={25} fontWeight="bold" ml={3}>
-          Manage Examination
-        </Text>
+        <Box display={"flex"}>
+          <Heading ml={3} as={"h5"} color={primaryColor.color}>
+            Manage Examination
+          </Heading>
+          <Text>SMS</Text>
+        </Box>
+
         <Flex flexDirection={"row"} gap={2} alignItems="center">
           <Text fontSize={14}>Home</Text>
           <FaAngleRight />
