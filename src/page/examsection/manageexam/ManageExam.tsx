@@ -11,36 +11,109 @@ import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { ClassList } from "./ClassList";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
+import useTheme from "../../../theme/useTheme";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import app from "../../../firebase/firebase";
 
 export const ManageExam = () => {
   const token = localStorage.getItem("token");
 
   const [examDate, setExamDate] = useState("");
-  const [examTimetable, setTimeTable] = useState("");
+  const [examTimetable, setTimeTable] = useState<any>(undefined);
   const [runningTerm, setRunningTerm] = useState("");
   const [examName, setExamName] = useState("");
 
-  // Add new exam and its details *************************************************
-  const addExam = async () => {
-    try {
-      const newExam = {
-        examDate,
-        examTimetable,
-        runningTerm,
-        examName,
-      };
+  const {
+    theme: { primaryColor },
+  } = useTheme();
 
-      const res = await myAPIClient.post("/exams", newExam, {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data);
-      alert("Added successfully");
-    } catch (err) {
-      console.log(err);
+  // UPLOAD IMAGE ***********************************************************************************
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setTimeTable(e.target.files[0]);
+
+      console.log(examTimetable);
     }
   };
+
+  // Add new exam and its details ********************************************************************
+
+  const addExam = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const newExam: any = {
+      examDate,
+      runningTerm,
+      examName,
+    };
+
+    if (examTimetable !== null) {
+      const datai = new FormData();
+      const fileName = Date.now() + examTimetable.name;
+      datai.append("name", fileName);
+      datai.append("file", examTimetable);
+      // student.profileimage = fileName;
+
+      // Upload image to firebase storage ******************************************************************
+      const storage = getStorage(app);
+      const storageRef = ref(storage, fileName);
+
+      const uploadTask = uploadBytesResumable(storageRef, examTimetable);
+
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
+      uploadTask.on(
+        "state_changed",
+        (snapshot: any) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error: any) => {
+          // Handle unsuccessful uploads
+        },
+        async () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+            newExam.examTimetable = downloadURL;
+          });
+          try {
+            const res = await myAPIClient.post("/exams", newExam, {
+              headers: {
+                token: `Bearer ${token}`,
+              },
+            });
+            console.log(res.data);
+            setExamDate("");
+            setRunningTerm("");
+            setExamName("");
+            setTimeTable("");
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      );
+    }
+  };
+  // **********************************************************************************************
 
   // Get all exams
   // const [exams, setExams] = useState([]);
@@ -52,7 +125,7 @@ export const ManageExam = () => {
             token: `Bearer ${token}`,
           },
         });
-        console.log(res.data)
+        console.log(res.data);
         // setExams(res.data);
       } catch (err) {
         console.log(err);
@@ -197,9 +270,8 @@ export const ManageExam = () => {
                   <Input
                     isRequired
                     pt={1}
-                    value={examTimetable}
                     type="file"
-                    onChange={(e) => setTimeTable(e.target.value)}
+                    onChange={onUploadImage}
                     placeholder="Exam Name"
                   />
                 </Flex>
@@ -236,95 +308,15 @@ export const ManageExam = () => {
                   w="50%"
                   mx={3}
                   p={2}
-                  colorScheme={"teal"}
+                  backgroundColor={primaryColor.color}
                   onClick={addExam}
+                  color="white"
                 >
-                  Add
+                  Add Exam
                 </Button>
               </Box>
             </Center>
           </WrapItem>
-          {/* 
-          <WrapItem
-            flexDirection={"column"}
-            gap={2}
-            h={"max-content"}
-            flex={1}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Box
-              flexDirection={"column"}
-              boxShadow={"lg"}
-              borderRadius={2}
-              p={4}
-              borderTop="3px solid blue"
-              bg={"white"}
-              height="auto"
-              w="90%"
-              h="100%"
-            >
-              <Box w={"100%"}>
-                <Flex
-                  overflowX={"auto"}
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  flexDirection="column"
-                >
-                  <Box>
-                    <Box>
-                      <Text p={2} fontSize={22} fontWeight="bold">
-                        Exam List
-                      </Text>
-                    </Box>
-                  </Box>
-
-                  <Text ml={3} fontSize={19} fontWeight="bold">
-                    Exams
-                  </Text>
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    borderTop="1px solid #ccc"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={19} fontWeight="bold">
-                      Exam Name
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Exam Date
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Time Table
-                    </Text>
-                  </Flex>
-                  {exams &&
-                    exams.map((exam: any) => (
-                      <Flex
-                        w={"100%"}
-                        p={3}
-                        borderTop="1px solid #ccc"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        flexDirection="row"
-                        key={exam.examId}
-                      >
-                        <Text fontSize={19} fontWeight="bold">
-                          {exam.examName}
-                        </Text>
-                        <Text fontSize={19} fontWeight="bold">
-                          {exam.examDate}
-                        </Text>
-                        <Text fontSize={19} fontWeight="bold">
-                          Mid Term
-                        </Text>
-                      </Flex>
-                    ))}
-                </Flex>
-              </Box>
-            </Box>
-          </WrapItem> */}
 
           <WrapItem
             flexDirection={"column"}
