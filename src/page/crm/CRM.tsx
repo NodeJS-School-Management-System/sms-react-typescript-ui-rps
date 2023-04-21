@@ -11,6 +11,19 @@ import {
   FormLabel,
   Textarea,
 } from "@chakra-ui/react";
+import {
+  AllInbox,
+  AttachMoney,
+  CalendarMonth,
+  CalendarViewMonthRounded,
+  Class,
+  Dashboard,
+  Diversity1,
+  FoodBank,
+  LocalLibrary,
+  Note,
+} from "@mui/icons-material";
+import { RiUserShared2Fill } from "react-icons/ri";
 import { Home } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { FaAngleRight, FaPlay } from "react-icons/fa";
@@ -18,10 +31,16 @@ import { Link } from "react-router-dom";
 import { myAPIClient } from "../../components/auth/axiosInstance";
 import useTheme from "../../theme/useTheme";
 import AnalyticsBox from "../../components/uicomponents/AnalyticsBox";
-import { homeAnalyticsRowOne, homeAnalyticsRowTwo } from "../../api/fakeAPI";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CRM = () => {
   const token = localStorage.getItem("token");
+
+  // PRIMARY COLOR FROM GLOABL THEME ************************************************************
+  const {
+    theme: { primaryColor },
+  } = useTheme();
 
   // GET ALL EXAMS *******************************************************************************
   const [exams, setExams] = useState([]);
@@ -59,7 +78,7 @@ const CRM = () => {
     };
 
     getStudents();
-  }, [studentlist]);
+  }, []);
 
   // ****************************************************************************************
 
@@ -83,7 +102,6 @@ const CRM = () => {
   }, [teachers]);
 
   // ****************************************************************************************
-
   // Get all classNames
   const [classes, setClasses] = useState([]);
   useEffect(() => {
@@ -102,11 +120,96 @@ const CRM = () => {
     getClasses();
   }, [classes]);
 
+  // UPDATE LIST OF DETAILS *****************************
+
+  const homeAnalyticsRowOne = [
+    {
+      title: "Total Students",
+      value: studentlist.length,
+      icon: CalendarViewMonthRounded,
+      bgColor: "#2e5984",
+    },
+    {
+      title: "Total Teachers",
+      value: teachers.length,
+      icon: RiUserShared2Fill,
+      bgColor: "orange",
+    },
+    {
+      title: "Classes",
+      value: classes.length,
+      icon: Class,
+      bgColor: "darkblue",
+    },
+  ];
+
+  const homeAnalyticsRowTwo = [
+    {
+      title: "Today's Attendence",
+      value: 34,
+      icon: CalendarMonth,
+      bgColor: "#586744",
+    },
+    {
+      title: "Exams",
+      value: exams.length,
+      icon: Note,
+      bgColor: "#f65b99",
+    },
+    {
+      title: "Study Materials",
+      value: 53,
+      icon: LocalLibrary,
+      bgColor: "teal",
+    },
+    {
+      title: "Fees Collected",
+      value: 4500000,
+      icon: AttachMoney,
+      bgColor: "purple",
+    },
+  ];
+
   // ****************************************************************************************
 
-  const {
-    theme: { primaryColor },
-  } = useTheme();
+  // SEND NEW MESSAGE ***********************************************************************
+  const [receiverName, setReceiverName] = useState("");
+  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const sendMessage = async () => {
+    setLoading(true);
+    try {
+      const res = await myAPIClient.post(
+        "/message",
+        {
+          title,
+          senderId: localStorage.getItem("id"),
+          receiverName,
+          message,
+        },
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data);
+      setLoading(false);
+      setMessage("");
+      setReceiverName("");
+      setTitle("");
+      toast.success("Message sent successfully!");
+    } catch (err) {
+      console.log(err);
+
+      setLoading(false);
+      toast.error(
+        "Error, something went wrong sending your message, try again!"
+      );
+    }
+  };
 
   return (
     <Flex direction="column" style={{ width: "100%" }}>
@@ -134,7 +237,7 @@ const CRM = () => {
               </Text>
             </Link>
             <FaAngleRight />
-            {/* <Diversity3 /> */}
+            <Dashboard />
             <Text fontWeight="bold" fontSize={14}>
               Dashboard
             </Text>
@@ -158,7 +261,7 @@ const CRM = () => {
           >
             <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
               <Flex
-                bgColor={"#2e5984"}
+                bgColor={"#1999d1"}
                 color={"white"}
                 w={"30%"}
                 h={"100%"}
@@ -190,7 +293,7 @@ const CRM = () => {
           </WrapItem>
 
           {homeAnalyticsRowOne.map((item: any) => (
-            <AnalyticsBox item={item} />
+            <AnalyticsBox item={item} value={studentlist} />
           ))}
         </Flex>
 
@@ -216,14 +319,19 @@ const CRM = () => {
               h={"max-content"}
               // w={{ base: "100%", md: "50%", lg: "50%" }}
             >
-              <Button colorScheme={"teal"} w={"100%"}>
+              <Button
+                py={7}
+                fontSize={22}
+                cursor="auto"
+                colorScheme={"teal"}
+                w={"100%"}
+              >
                 Quick Mail
               </Button>
 
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -239,11 +347,15 @@ const CRM = () => {
                   >
                     Message To:
                   </FormLabel>
-                  <Input type="text" placeholder="Receiver" />
+                  <Input
+                    value={receiverName}
+                    onChange={(e) => setReceiverName(e.target.value)}
+                    type="text"
+                    placeholder="Receiver"
+                  />
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -259,11 +371,15 @@ const CRM = () => {
                   >
                     Title
                   </FormLabel>
-                  <Input type="text" placeholder="Subject" />
+                  <Input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    type="text"
+                    placeholder="Subject"
+                  />
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -279,11 +395,23 @@ const CRM = () => {
                   >
                     Body
                   </FormLabel>
-                  <Textarea placeholder="Body"></Textarea>
+                  <Textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Body"
+                  ></Textarea>
                 </Flex>
 
-                <Button variant={"solid"} w="50%" mx={3} colorScheme={"teal"}>
-                  Send
+                <Button
+                  variant={"solid"}
+                  w="50%"
+                  mx={3}
+                  onClick={sendMessage}
+                  bgColor={primaryColor.color}
+                  // color="white"
+                  isDisabled={!message || !title || !receiverName}
+                >
+                  {loading ? "Sending.." : "Send Message"}
                 </Button>
               </Box>
             </WrapItem>
@@ -300,7 +428,6 @@ const CRM = () => {
             >
               <Flex
                 bgColor={"#2e5984"}
-                color={"white"}
                 w={"100%"}
                 h={"110px"}
                 alignItems={"center"}
@@ -409,3 +536,4 @@ const CRM = () => {
   );
 };
 export default CRM;
+

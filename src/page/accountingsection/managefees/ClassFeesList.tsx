@@ -5,6 +5,7 @@ import {
   Tr,
   Th,
   Td,
+  TableCaption,
   TableContainer,
   IconButton,
   Spinner,
@@ -12,50 +13,50 @@ import {
 } from "@chakra-ui/react";
 import { Edit } from "@mui/icons-material";
 import { BiTrashAlt } from "react-icons/bi";
-export const CustomTable = ({ results }: any) => {
-  const isFetching = false;
-  const isAdmin = localStorage.getItem("isAdmin");
+export const ClassFeesList = ({ list }: any) => {
+  const isLoading = false;
   return (
     <>
-      {isFetching ? (
+      {isLoading ? (
         <Flex align="center" m="auto" mt={5} justify="center">
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer w="100%">
+        <TableContainer>
           <Table variant="simple">
-            {/* <TableCaption>Results List</TableCaption> */}
+            <TableCaption>Fees List</TableCaption>
             <Thead>
               <Tr>
-                <Th fontSize={14}>First Name</Th>
-                <Th fontSize={14}>Last Name</Th>
-                <Th fontSize={14}>Marks</Th>
-                <Th fontSize={14}>Grade</Th>
+                <Th fontSize={14}>Class Name</Th>
+                <Th fontSize={14}>Amount</Th>
                 <Th fontSize={14} m="auto" textAlign={"center"}>
                   Action
                 </Th>
               </Tr>
             </Thead>
+
             <Tbody>
-              {results.map((res: any) => (
-                <Tr key={res.resultsId}>
-                  <Td>{res.firstname}</Td>
-                  <Td>{res.lastname}</Td>
-                  <Td>{res.examresults[0].marks[0].marks}</Td>
-                  <Td>{res.examresults[0].marks[0].grade}</Td>
+              {list?.map((fee: any) => (
+                <Tr key={fee?.classfeeId}>
+                  <Td>{fee?.class}</Td>
+                  <Td>{fee?.amount}</Td>
                   <Td>
-                    <Td display={"flex"} gap={2}>
+                    <Td
+                      display={"flex"}
+                      justifyContent="center"
+                      m="auto"
+                      textAlign={"center"}
+                      gap={2}
+                    >
                       <IconButton
                         colorScheme="red"
                         aria-label="Delete database"
-                        // onClick={() => deleteStudent(user.studentId)}
+                        //   onClick={() => deleteClass(clas.classroomId)}
                         icon={<BiTrashAlt />}
                       />
                       <IconButton
                         colorScheme="blue"
-                        // isDisabled={!isAdmin}
-                        isDisabled
-                        // onClick={() => openModal(user.studentId)}
+                        //   onClick={() => openModal(clas.classroomId)}
                         aria-label="Edit database"
                         icon={<Edit />}
                       />

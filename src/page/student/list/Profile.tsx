@@ -28,7 +28,6 @@ import { myAPIClient } from "../../auth/axiosInstance";
 
 export const Profile = ({ studentId }: any) => {
   const token = localStorage.getItem("token");
-  // const id1 = localStorage.getItem("studentId");
   const id = studentId;
 
   useEffect(() => {
@@ -226,7 +225,7 @@ export const Profile = ({ studentId }: any) => {
                 justifyContent="flex-start"
                 flexDirection="row"
                 pb={3}
-                w='100%'
+                w="100%"
               >
                 <Tabs variant="unstyled">
                   <TabList>

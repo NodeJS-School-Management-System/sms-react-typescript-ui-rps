@@ -110,6 +110,7 @@ const navList: NavOptions[] = [
     childrens: [
       format("Manage Fees", "/accountingsection/managefees/"),
       format("Fees Payment", "/accountingsection/feespayment/"),
+      format("Pay Fees", "/accountingsection/payfees/"),
     ],
   },
   {

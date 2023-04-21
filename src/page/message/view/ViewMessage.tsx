@@ -14,19 +14,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Conversation from "./Conversation";
 import { MongoAPIClient } from "../../../components/auth/axiosInstance";
-
-// interface ScrollbarStyles extends CSSProperties {
-//   "&::-webkit-scrollbar"?: CSSProperties;
-//   "&::-webkit-scrollbar-thumb"?: CSSProperties;
-//   "&::-webkit-scrollbar-thumb:hover"?: CSSProperties;
-//   "&::-webkit-scrollbar-thumb:active"?: CSSProperties;
-//   "&::-webkit-scrollbar-thumb:window-inactive"?: CSSProperties;
-//   "&::-webkit-scrollbar-track"?: CSSProperties;
-//   "&::-webkit-scrollbar-corner"?: CSSProperties;
-// }
+import useTheme from "../../../theme/useTheme";
 
 export const ViewMessage = () => {
   const PF = MongoAPIClient;
+
+  // IMPORT PRIMARY COLOR FROM THEME **************************************************
+  const {
+    theme: { primaryColor },
+  } = useTheme();
 
   // Logged in user id
   // State variables for showing hiding messages/message
@@ -175,7 +171,13 @@ export const ViewMessage = () => {
                   <Textarea placeholder="Body"></Textarea>
                 </Flex>
 
-                <Button variant={"solid"} w="50%" mx={3} colorScheme={"teal"}>
+                <Button
+                  variant={"solid"}
+                  w="50%"
+                  mx={3}
+                  backgroundColor={primaryColor.color}
+                  color="white"
+                >
                   Send
                 </Button>
               </Box>
@@ -218,43 +220,10 @@ export const ViewMessage = () => {
               </Box>
             </Box>
 
-            <Box
-              bg={"#eee"}
-              h={400}
-              p={5}
-              w="100%"
-              overflowY={"scroll"}
-              // style={
-              //   {
-              //     scrollbarWidth: "thin",
-              //     "&::-webkit-scrollbar": {
-              //       width: "5px",
-              //     },
-              //     "&::-webkit-scrollbar-track": {
-              //       backgroundColor: "#eee",
-              //     },
-              //     "&::-webkit-scrollbar-thumb": {
-              //       backgroundColor: "teal",
-              //       borderRadius: "10px",
-              //     },
-              //     "&::-webkit-scrollbar-thumb:hover": {
-              //       backgroundColor: "#999",
-              //     },
-              //     "&::-webkit-scrollbar-thumb:active": {
-              //       backgroundColor: "#555",
-              //     },
-              //     "&::-webkit-scrollbar-thumb:window-inactive": {
-              //       backgroundColor: "#ccc",
-              //     },
-              //     "&::-webkit-scrollbar-corner": {
-              //       backgroundColor: "#eee",
-              //     },
-              //   } as ScrollbarStyles
-              // }
-            >
+            <Box bg={"#eee"} h={400} p={5} w="100%" overflowY={"scroll"}>
               <>
                 {showMessages &&
-                  conversations.map((item: any, index) => (
+                  [1, 2, 3, 4, 5, 6, 7].map((item: any, index) => (
                     <Conversation
                       item={item}
                       setShowMessage={setShowMessage}

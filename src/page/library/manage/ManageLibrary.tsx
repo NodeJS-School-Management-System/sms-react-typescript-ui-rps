@@ -9,9 +9,16 @@ import {
   Input,
   Heading,
 } from "@chakra-ui/react";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
+import app from "../../../firebase/firebase";
 import useTheme from "../../../theme/useTheme";
 
 export const ManageLibrary = () => {
@@ -23,7 +30,7 @@ export const ManageLibrary = () => {
   const [author, setAuthor] = useState("");
   // const [file, setFile] = useState('')
 
-  // Get al classes
+  // Get all classes
   const [classes, setClasses] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
@@ -42,7 +49,7 @@ export const ManageLibrary = () => {
     getClasses();
   }, []);
 
-  // Get al classes
+  // Get all subjects
   const [subjects, setSubjects] = useState([]);
   useEffect(() => {
     const getSubjects = async () => {
@@ -60,28 +67,150 @@ export const ManageLibrary = () => {
     getSubjects();
   }, []);
 
-  const addBook = async () => {
+  // ADD NEW LIB BOOK *****************************************************************************
+
+  const [className, setClassName] = useState("");
+  const [status, setStatus] = useState("");
+  const [subjectName, setSubjectName] = useState("");
+  // const [releasedAgainst, setReleasedAgainst] = useState("");
+  const [bookAuthor, setBookAuthor] = useState("");
+  const [publication, setPublication] = useState<any>(undefined);
+  const [bookTitle, setBookTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // upload image
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setPublication(e.target.files[0]);
+
+      console.log(publication);
+    }
+  };
+
+  const addBook = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
     const newBook = {
-      bookName: title,
-      bookAuthor: author,
-      class: clas,
-      subject,
+      className,
+      subjectName,
+      bookAuthor,
+      bookTitle,
+      publication,
     };
+
+    // setIsLoading(true);
+    if (publication !== null) {
+      const datai = new FormData();
+      const fileName = Date.now() + publication?.name;
+      datai.append("name", fileName);
+      datai.append("file", publication);
+      // student.profileimage = fileName;
+
+      // Upload image to firebase storage ******************************************************************
+      const storage = getStorage(app);
+      const storageRef = ref(storage, fileName);
+
+      const uploadTask = uploadBytesResumable(storageRef, publication);
+
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
+      uploadTask.on(
+        "state_changed",
+        (snapshot: any) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error: any) => {
+          // Handle unsuccessful uploads
+        },
+        async () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          await getDownloadURL(uploadTask.snapshot.ref).then(
+            (downloadURL: any) => {
+              console.log(downloadURL);
+              newBook.publication = downloadURL;
+            }
+          );
+          try {
+            const res = await myAPIClient.post("/library", newBook, {
+              headers: {
+                token: `Bearer ${token}`,
+              },
+            });
+            console.log(res.data);
+            setIsLoading(false);
+            setBookAuthor("");
+            setPublication("");
+            setBookTitle("");
+            setClassName("");
+          } catch (err) {
+            console.log(err);
+            setIsLoading(false);
+          }
+        }
+      );
+    }
+  };
+
+  // ****************************************************************************************************
+  // UPDATE LIB BOOK *****************************************************************************
+
+  const [classNameUpdate, setClassNameUpdate] = useState("");
+  // const [statusUpdate, setStatusUpdate] = useState("");
+  // const [subjectNameUpdate, setSubjectNameUpdate] = useState("");
+  // const [releasedAgainstUpdate, setReleasedAgainstUpdate] = useState("");
+  const [bookAuthorUpdate, setBookAuthorUpdate] = useState("");
+  const [bookTitleUpdate, setBookTitleUpdate] = useState("");
+  // const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+
+  const updateBook = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // setIsLoadingUpdate(true);
+    const updatedBook = {
+      className: classNameUpdate,
+      // subjectName: subjectNameUpdate,
+      bookAuthor: bookAuthorUpdate,
+      bookTitle: bookTitleUpdate,
+      // releasedAgainst,
+      status,
+    };
+
+    // setIsLoadingUpdate(true);
+
     try {
-      const res = await myAPIClient.post("/library", newBook, {
+      const res = await myAPIClient.put("/library", updatedBook, {
         headers: {
           token: `Bearer ${token}`,
         },
       });
       console.log(res.data);
-      setTitle("");
-      setAuthor("");
-      setClas("");
-      setSubject("");
+      // setIsLoadingUpdate(false);
+      setBookAuthorUpdate("");
+      setBookTitleUpdate("");
+      setClassNameUpdate("");
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    setStatus("availabe");
+  }, []);
 
   // Get all library books
   // const [books, setBooks] = useState([])
@@ -184,9 +313,9 @@ export const ManageLibrary = () => {
                   </Text>
                   <Select
                     placeholder="Select Class"
-                    value={clas}
+                    value={className}
                     onChange={(e) => {
-                      setClas(e.target.value);
+                      setClassName(e.target.value);
                     }}
                     w={"100%"}
                   >
@@ -215,10 +344,10 @@ export const ManageLibrary = () => {
                   </Text>
                   <Select
                     placeholder="Select Class"
-                    value={subject}
+                    value={subjectName}
                     onChange={(e) => {
                       console.log(e.target.value);
-                      setSubject(e.target.value);
+                      setSubjectName(e.target.value);
                     }}
                     w={"100%"}
                   >
@@ -246,8 +375,8 @@ export const ManageLibrary = () => {
                     Book Title
                   </Text>
                   <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={bookTitle}
+                    onChange={(e) => setBookTitle(e.target.value)}
                     placeholder="Book title"
                   />
                 </Flex>
@@ -270,8 +399,8 @@ export const ManageLibrary = () => {
                     Book Author
                   </Text>
                   <Input
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
+                    value={bookAuthor}
+                    onChange={(e) => setBookAuthor(e.target.value)}
                     placeholder="Book Author"
                   />
                 </Flex>
@@ -293,22 +422,26 @@ export const ManageLibrary = () => {
                   >
                     Book Publication
                   </Text>
-                  <Input type="file" />
+                  <Input type="file" onChange={onUploadImage} />
                 </Flex>
 
                 <Button
                   onClick={addBook}
-                  disabled={!title || !author || !clas || !subject}
+                  isDisabled={
+                    !bookTitle || !bookAuthor || !className || !subjectName
+                  }
                   variant={"solid"}
                   w="50%"
                   mx={3}
-                  colorScheme={"teal"}
+                  color="white"
+                  backgroundColor={primaryColor.color}
                 >
-                  Add Book
+                  {isLoading ? "Adding.." : "Add Book"}
                 </Button>
               </Box>
             </Center>
           </WrapItem>
+
           <WrapItem
             flex={1}
             gap={6}
@@ -479,12 +612,14 @@ export const ManageLibrary = () => {
                 </Flex>
 
                 <Button
-                  onClick={addBook}
+                  // onClick={addBook}
                   disabled={!title || !author || !clas || !subject}
                   variant={"solid"}
                   w="50%"
                   mx={3}
-                  colorScheme={"teal"}
+                  color="white"
+                  onClick={updateBook}
+                  backgroundColor={primaryColor.color}
                 >
                   Lend Book
                 </Button>

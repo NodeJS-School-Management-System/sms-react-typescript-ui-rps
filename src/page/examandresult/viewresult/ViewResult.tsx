@@ -123,7 +123,12 @@ export const ViewResult = () => {
   useEffect(() => {
     const getResults = async () => {
       try {
-        const res = await axios.get(`${PF}results/Term One/${clas}`);
+        const res = await axios.get(`${PF}results/Term One/${clas}`, {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
         setResults(res.data);
       } catch (err) {
         console.log(err);
@@ -165,7 +170,7 @@ export const ViewResult = () => {
   // ********************************************************************
 
   return (
-    <Box>
+    <Box overflow={"hidden"}>
       <Flex justifyContent={"space-between"} pr={10}>
         <Text fontSize={25} fontWeight="bold" ml={3}>
           View Marks
@@ -199,7 +204,7 @@ export const ViewResult = () => {
               borderRadius={2}
               pb={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -207,7 +212,7 @@ export const ViewResult = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -244,7 +249,7 @@ export const ViewResult = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -278,7 +283,7 @@ export const ViewResult = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -345,7 +350,6 @@ export const ViewResult = () => {
               >
                 <Box w={"100%"}>
                   <Flex
-                    overflowX={"auto"}
                     alignItems="center"
                     bg={"blue"}
                     w="100%"
@@ -373,7 +377,7 @@ export const ViewResult = () => {
                   {exam} {subject} Marks - For {clas}
                 </Text>
                 <Box m="auto">
-                  <CustomTable />
+                  <CustomTable results={results} />
                 </Box>
 
                 <Flex

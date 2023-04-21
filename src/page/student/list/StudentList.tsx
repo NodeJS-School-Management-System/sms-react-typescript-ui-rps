@@ -47,6 +47,7 @@ export const StudentList = ({
                 <Th fontSize={14}>Full Name</Th>
                 <Th fontSize={14}>Profile Image</Th>
                 <Th fontSize={14}>Class</Th>
+                <Th fontSize={14}>Address</Th>
                 <Th fontSize={14}>Date of Birth</Th>
                 <Th fontSize={14}>Parent Name</Th>
                 <Th fontSize={14}>Parent Contact</Th>
@@ -74,6 +75,7 @@ export const StudentList = ({
                       />
                     </Td>
                     <Td>{user.clas}</Td>
+                    <Td>{user.address}</Td>
                     <Td>{user.dateofbirth}</Td>
                     <Td>{user.parentname}</Td>
                     <Td>{user.parentcontact}</Td>

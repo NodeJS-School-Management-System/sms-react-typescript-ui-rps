@@ -20,12 +20,7 @@ const Footer = () => {
     >
       <Text varient="body1" weight="medium">
         Made with ❤️ by{" "}
-        <a
-          href="https://github.com/Ashik-AD"
-          target={"_blank"}
-          rel="noreferrer"
-          className="text-primary"
-        >
+        <a href="#" target={"_blank"} rel="noreferrer" className="text-primary">
           Quadral Technologies
         </a>
       </Text>

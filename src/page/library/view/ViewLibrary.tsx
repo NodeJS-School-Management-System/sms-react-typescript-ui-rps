@@ -10,9 +10,13 @@ import {
   IconButton,
   Spinner,
   Flex,
+  Box,
 } from "@chakra-ui/react";
+import { Download, Edit } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
-import { BsEye } from "react-icons/bs";
+import { myAPIClient } from "../../auth/axiosInstance";
+import ViewLib from "./ViewLib";
 // import StudentProfile from "./StudentProfile";
 export const ViewLibrary = () => {
   // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,10 +27,30 @@ export const ViewLibrary = () => {
   //   onOpen();
   // };
 
+  // GET ALL LIB BOOKS **************************************************************************
+  const [books, setBooks] = useState([]);
+  useEffect(() => {
+    const getBooks = async () => {
+      try {
+        const res = await myAPIClient.get("/library", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setBooks(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getBooks();
+  }, []);
+
   const isFetching = false;
 
   return (
-    <>
+    <Box>
+      <ViewLib />
       {isFetching ? (
         <Flex align="center" m="auto" mt={5} justify="center">
           <Spinner style={{ margin: "auto" }} color="teal" />
@@ -37,29 +61,25 @@ export const ViewLibrary = () => {
             <TableCaption>Library List</TableCaption>
             <Thead>
               <Tr>
-                <Th fontSize={14}>Full Name</Th>
-                <Th fontSize={14}>Profile Image</Th>
-                <Th fontSize={14}>Class</Th>
-                <Th fontSize={14}>Date of Birth</Th>
-                <Th fontSize={14}>Parent Name</Th>
-                <Th fontSize={14}>Parent Contact</Th>
-                <Th fontSize={14} m="auto" textAlign={"center"}>
-                  Action
-                </Th>
+                <Th fontSize={14}>Book Title</Th>
+                <Th fontSize={14}>Book Author</Th>
+                <Th fontSize={14}>Subject Name</Th>
+                <Th fontSize={14}>Class Name</Th>
+                {/* <Th fontSize={14}>Publication</Th> */}
+                <Th fontSize={14}>Status</Th>
+                <Th fontSize={14}>Action</Th>
               </Tr>
             </Thead>
 
             <Tbody>
-              {[1, 2, 3, 4, 5].map((user: any) => (
-                <Tr key={user}>
-                  <Td>Test</Td>
-                  <Td textAlign={"center"} margin="auto" p={0}>
-                    Test
-                  </Td>
-                  <Td>Test</Td>
-                  <Td>Test</Td>
-                  <Td>Test</Td>
-                  <Td>Test</Td>
+              {books.map((book: any) => (
+                <Tr key={book.bookId}>
+                  <Td>{book.bookTitle}</Td>
+                  <Td>{book.bookAuthor}</Td>
+                  <Td>{book.subjectName}</Td>
+                  <Td>{book.className}</Td>
+                  {/* <Td>{book.}</Td> */}
+                  <Td>{book.status}</Td>
                   {/* <Td> */}
                   <Td display={"flex"} gap={2}>
                     <IconButton
@@ -70,10 +90,17 @@ export const ViewLibrary = () => {
                     />
                     <IconButton
                       colorScheme="blue"
-                      // onClick={() => openModal(user.studentId)}
                       aria-label="Edit database"
-                      icon={<BsEye />}
+                      // onClick={() => deleteStudent(user.studentId)}
+                      icon={<Edit />}
                     />
+                    <IconButton
+                      colorScheme="blue"
+                      aria-label="Download File"
+                      // onClick={() => deleteStudent(user.studentId)}
+                      icon={<Download />}
+                    />
+
                     {/* <Box>
                           {isOpen ? (
                             <StudentProfile
@@ -93,6 +120,6 @@ export const ViewLibrary = () => {
           </Table>
         </TableContainer>
       )}
-    </>
+    </Box>
   );
 };

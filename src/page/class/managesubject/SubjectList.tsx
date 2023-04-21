@@ -16,7 +16,7 @@ import { Edit } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
 
-export const SubjectList = ({ list }: any) => {
+export const SubjectList = ({ list, deleteSubject }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clickedId, setClickedId] = useState("");
 
@@ -45,7 +45,7 @@ export const SubjectList = ({ list }: any) => {
             <Thead>
               <Tr>
                 <Th fontSize={14}>Subject Name</Th>
-                <Th fontSize={14}>Subject Shorthand</Th>
+                <Th fontSize={14}>Class</Th>
                 <Th fontSize={14}>Subject Teacher</Th>
                 <Th fontSize={14} m="auto" textAlign={"center"}>
                   Action
@@ -58,14 +58,14 @@ export const SubjectList = ({ list }: any) => {
                 list.map((subj: any) => (
                   <Tr key={subj.subjectId}>
                     <Td>{subj.subjectName}</Td>
-                    <Td>{subj.subjectAbbrev}</Td>
+                    <Td>{subj.className || "N/A"}</Td>
                     <Td>{subj.subjectTeacher || "N/A"}</Td>
                     <Td>
                       <Td display={"flex"} gap={2}>
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          // onClick={() => deleteClass(subj.classroomId)}
+                          onClick={() => deleteSubject(subj.subjectId)}
                           icon={<BiTrashAlt />}
                         />
                         <IconButton

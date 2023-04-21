@@ -19,6 +19,7 @@ import {
   AirportShuttleOutlined,
   ClassOutlined,
   DateRange,
+  FormatIndentIncreaseTwoTone,
   Home,
   HomeOutlined,
   Person,
@@ -45,6 +46,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../../../firebase/firebase";
+import { BsBoxArrowDownRight } from "react-icons/bs";
 
 export const AddStudent = () => {
   const token = localStorage.getItem("token");
@@ -66,6 +68,9 @@ export const AddStudent = () => {
   const [stream, setStream] = useState("");
   const [parentname, setParentname] = useState("");
   const [parentcontact, setParentcontact] = useState("");
+  const [parentEmail, setParentEmail] = useState("");
+  const [nin, setNin] = useState("");
+  const [status, setStatus] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -91,6 +96,9 @@ export const AddStudent = () => {
       role,
       contact,
       gender,
+      nin,
+      parentEmail,
+      status,
       address,
       parentcontact,
       parentname,
@@ -183,6 +191,9 @@ export const AddStudent = () => {
             setHostel("");
             setTransport("");
             setAddress("");
+            setStatus("");
+            setParentEmail("");
+            setNin("");
 
             setIsLoading(false);
             setSuccess(true);
@@ -446,6 +457,27 @@ export const AddStudent = () => {
                 />
               </InputGroup>
             </Center>
+
+            <Center flexDirection={"column"} w="90%" h="100%">
+              <FormLabel alignSelf={"flex-start"}>Status</FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  cursor={"pointer"}
+                  pointerEvents="none"
+                  color="gray.400"
+                  width="2.5rem"
+                  children={<BsBoxArrowDownRight />}
+                />
+                <Input
+                  isRequired
+                  type="text"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  placeholder="Status e.g Day Scholar"
+                />
+              </InputGroup>
+            </Center>
+
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>
                 Parent Name<span style={{ color: "red" }}>*</span>
@@ -467,6 +499,27 @@ export const AddStudent = () => {
                 />
               </InputGroup>
             </Center>
+
+            <Center flexDirection={"column"} w="90%" h="100%">
+              <FormLabel alignSelf={"flex-start"}>Parent Email</FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  cursor={"pointer"}
+                  pointerEvents="none"
+                  color="gray.400"
+                  width="2.5rem"
+                  children={<ClassOutlined />}
+                />
+                <Input
+                  isRequired
+                  type="text"
+                  value={parentEmail}
+                  onChange={(e) => setParentEmail(e.target.value)}
+                  placeholder="Parent Email"
+                />
+              </InputGroup>
+            </Center>
+
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>
                 Parent Contact<span style={{ color: "red" }}>*</span>
@@ -481,6 +534,7 @@ export const AddStudent = () => {
                 />
                 <Input
                   isRequired
+                  maxLength={10}
                   type="text"
                   value={parentcontact}
                   onChange={(e) => setParentcontact(e.target.value)}
@@ -517,6 +571,29 @@ export const AddStudent = () => {
                 />
               </InputGroup>
             </Center>
+
+            <Center flexDirection={"column"} w="90%" h="100%">
+              <FormLabel alignSelf={"flex-start"}>
+                Student NIN 
+              </FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  cursor={"pointer"}
+                  pointerEvents="none"
+                  color="gray.400"
+                  width="2.5rem"
+                  children={<FormatIndentIncreaseTwoTone />}
+                />
+                <Input
+                  isRequired
+                  type="text"
+                  value={nin}
+                  onChange={(e) => setNin(e.target.value)}
+                  placeholder="Student NIN"
+                />
+              </InputGroup>
+            </Center>
+
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>Student Contact</FormLabel>
               <InputGroup>
@@ -530,6 +607,7 @@ export const AddStudent = () => {
                 <Input
                   isRequired
                   type="text"
+                  maxLength={10}
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
                   placeholder="Phone"

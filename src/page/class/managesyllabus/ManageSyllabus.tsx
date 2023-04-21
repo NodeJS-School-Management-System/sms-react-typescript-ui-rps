@@ -10,11 +10,9 @@ import {
   Heading,
   FormLabel,
   Input,
-  Image,
 } from "@chakra-ui/react";
 import { FaAngleRight } from "react-icons/fa";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Class, ClassOutlined, Download, Home } from "@mui/icons-material";
+import { Class, ClassOutlined, Home } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
 import { useEffect, useState } from "react";
@@ -26,6 +24,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import app from "../../../firebase/firebase";
+import { Sylist } from "./Sylist";
 
 export const ManageSyllabus = () => {
   // GET ALL CLASSES FROM DB***********************************************************************
@@ -145,6 +144,24 @@ export const ManageSyllabus = () => {
     }
   };
 
+  // DELETE SYLABUS *************************************************************
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteSylabus = async (id: any) => {
+    setIsDeleting(true);
+    try {
+      const res = await myAPIClient.delete(`/sylabus/${id}`, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setIsDeleting(false);
+    } catch (err) {
+      setIsDeleting(false);
+      console.log(err);
+    }
+  };
+
   // GET ALL SULABUS ************************************************************************
   const [sylist, setSylist] = useState([]);
 
@@ -163,21 +180,7 @@ export const ManageSyllabus = () => {
       }
     };
     getSylabus();
-  }, []);
-
-  // DELETE SYLABUS *************************************************************
-  const deleteSylabus = async (id: any) => {
-    try {
-      const res = await myAPIClient.delete(`/sylabus/${id}`, {
-        headers: {
-          token: `token ${localStorage.getItem("token")}`,
-        },
-      });
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  }, [isDeleting]);
 
   // DOWNLOAD FILE *********************************************************************
   function downloadImage(url: string, fileName: any) {
@@ -392,75 +395,11 @@ export const ManageSyllabus = () => {
                     </Box>
                   </Box>
 
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    borderTop="1px solid #ccc"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={19} fontWeight="bold">
-                      Subject
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      File
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Class
-                    </Text>
-                    <Text textAlign={"center"} fontSize={19} fontWeight="bold">
-                      Action
-                    </Text>
-                  </Flex>
-                  {sylist.map((sylabus: any) => (
-                    <Flex
-                      key={sylabus.sylabusId}
-                      w={"100%"}
-                      p={3}
-                      borderTop="1px solid #ccc"
-                      alignItems="center"
-                      justifyContent="space-between"
-                      flexDirection="row"
-                    >
-                      <Text fontSize={14} fontWeight="bold">
-                        {sylabus.subjectName}
-                      </Text>
-                      <Box
-                        display={"flex"}
-                        alignItems="center"
-                        justifyContent={"center"}
-                      >
-                        <Image
-                          src={sylabus.subjectFile}
-                          alt=""
-                          borderRadius={"50%"}
-                          width={25}
-                          height={25}
-                          objectFit="cover"
-                        />
-                      </Box>
-                      <Text fontSize={14} fontWeight="bold">
-                        {sylabus.className}
-                      </Text>
-                      <Flex gap={2}>
-                        <IconButton
-                          colorScheme="red"
-                          onClick={() => deleteSylabus(sylabus.sylabusId)}
-                          aria-label="Delete from database"
-                          icon={<DeleteIcon />}
-                        />
-                        <IconButton
-                          colorScheme="blue"
-                          aria-label="Download from database"
-                          icon={<Download />}
-                          onClick={() =>
-                            downloadImage(sylabus.subjectFile, "sylabus")
-                          }
-                        />
-                      </Flex>
-                    </Flex>
-                  ))}
+                  <Sylist
+                    downloadImage={downloadImage}
+                    deleteSylabus={deleteSylabus}
+                    list={sylist}
+                  />
                 </Flex>
               </Box>
             </Box>

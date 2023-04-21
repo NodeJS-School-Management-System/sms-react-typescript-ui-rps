@@ -59,6 +59,7 @@ export const ManageSubject = () => {
             token: `Bearer ${token}`,
           },
         });
+        console.log(res.data);
         setTargetSubject(res.data);
       } catch (err) {
         console.log(err);
@@ -73,9 +74,10 @@ export const ManageSubject = () => {
       const updatedSubject = {
         subjectName: selectedSubject,
         subjectTeacher,
+        className: classUpdate,
       };
       const res = await myAPIClient.put(
-        `/subject/${targetSubject?.subjectId}`,
+        `/subject/${targetSubject.subjectId}`,
         updatedSubject,
         {
           headers: {
@@ -110,6 +112,24 @@ export const ManageSubject = () => {
     getClasses();
   }, []);
 
+  // DELETE SUBJECT *************************************************************
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteSubject = async (id: any) => {
+    setIsDeleting(true);
+    try {
+      const res = await myAPIClient.delete(`/subject/${id}`, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setIsDeleting(false);
+    } catch (err) {
+      setIsDeleting(false);
+      console.log(err);
+    }
+  };
+
   // Get all subjects **************************************************************************
   useEffect(() => {
     const getSubjects = async () => {
@@ -125,7 +145,7 @@ export const ManageSubject = () => {
       }
     };
     getSubjects();
-  }, []);
+  }, [isDeleting]);
 
   // Add a new classroom
   const addSubject = async () => {
@@ -523,7 +543,9 @@ export const ManageSubject = () => {
                     w={"100%"}
                   >
                     {classlist?.map((c: any) => (
-                      <option key={c.classroomId}>{c.className}</option>
+                      <option key={c.classroomId} value={c.className}>
+                        {c.className}
+                      </option>
                     ))}
                   </Select>
                 </Flex>
@@ -625,7 +647,7 @@ export const ManageSubject = () => {
               w="90%"
               h="100%"
             >
-              <SubjectList list={subjectlist} />
+              <SubjectList deleteSubject={deleteSubject} list={subjectlist} />
             </Box>
           </WrapItem>
         </Flex>
