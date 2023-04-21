@@ -36,7 +36,7 @@ export const ViewMessage = () => {
     try {
       const res = await axios.get(`${PF}conversations/${userId}`);
       setConversations(res.data);
-      // console.log(conversations);
+      console.log(conversations);
     } catch (err) {
       console.log(err);
     }

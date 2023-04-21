@@ -14,7 +14,7 @@ import { Edit } from "@mui/icons-material";
 import { BiTrashAlt } from "react-icons/bi";
 export const CustomTable = ({ results }: any) => {
   const isFetching = false;
-  const isAdmin = localStorage.getItem("isAdmin");
+  // const isAdmin = localStorage.getItem("isAdmin");
   return (
     <>
       {isFetching ? (

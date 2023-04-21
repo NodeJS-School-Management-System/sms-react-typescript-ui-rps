@@ -71,7 +71,7 @@ export const FeesPayment = () => {
             token: `Bearer ${token}`,
           },
         });
-        // setStudents(res.data);
+        setStudents(res.data);
         console.log(res.data);
       } catch (err) {
         console.log(err);
