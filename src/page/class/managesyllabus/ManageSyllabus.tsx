@@ -1,7 +1,6 @@
 import {
   Box,
   Text,
-  IconButton,
   Center,
   Flex,
   WrapItem,

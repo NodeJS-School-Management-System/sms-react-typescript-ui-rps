@@ -9,22 +9,12 @@ import {
   TableContainer,
   IconButton,
   Spinner,
-  Box,
   Flex,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
-//   import ClassProfile from "./ClassProfile";
 export const NoticeList = ({ list, query, isLoading, deleteClass }: any) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [clickedId, setClickedId] = useState("");
-
-  const openModal = (id: any) => {
-    setClickedId(id);
-    onOpen();
-  };
+ 
 
   return (
     <>

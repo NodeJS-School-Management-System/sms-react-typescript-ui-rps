@@ -10,20 +10,12 @@ import {
   IconButton,
   Spinner,
   Flex,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Edit } from "@mui/icons-material";
-import { useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
 //   import ClassProfile from "./ClassProfile";
-export const FeesList = ({ list, query, isLoading, deleteClass }: any) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [clickedId, setClickedId] = useState("");
-
-  const openModal = (id: any) => {
-    setClickedId(id);
-    onOpen();
-  };
+export const FeesList = ({ isLoading }: any) => {
+  
 
   return (
     <>

@@ -12,14 +12,11 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import {
-  AllInbox,
   AttachMoney,
   CalendarMonth,
   CalendarViewMonthRounded,
   Class,
   Dashboard,
-  Diversity1,
-  FoodBank,
   LocalLibrary,
   Note,
 } from "@mui/icons-material";
@@ -31,7 +28,7 @@ import { Link } from "react-router-dom";
 import { myAPIClient } from "../../components/auth/axiosInstance";
 import useTheme from "../../theme/useTheme";
 import AnalyticsBox from "../../components/uicomponents/AnalyticsBox";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CRM = () => {
