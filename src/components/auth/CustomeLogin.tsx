@@ -1,181 +1,242 @@
-import {
-  Box,
-  Heading,
-  FormControl,
-  InputRightElement,
-  FormHelperText,
-  chakra,
-  FormLabel,
-  InputLeftElement,
-  InputGroup,
-  Input,
-  Button,
-  Flex,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FaUserAlt, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { MongoAPIClient, myAPIClient } from "./axiosInstance";
-import axios from "axios";
-const CFaLock = chakra(FaLock);
-const CFaEye = chakra(FaEye);
-const CFaEyeSlash = chakra(FaEyeSlash);
+import {
+  Button,
+  Checkbox,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Stack,
+  Image,
+  Box,
+  InputGroup,
+  InputRightElement,
+  CircularProgress,
+} from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import useTheme from "../../theme/useTheme";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { ToastContainer } from "react-toastify/dist/components";
+import axios from "axios";
 
-// Configure react-toastify
-// toast.configure();
+export function CustomLogin() {
+  // GLOBAL THEME
+  const {
+    theme: { primaryColor },
+  } = useTheme();
 
-export const CustomLogin = () => {
   const PF = MongoAPIClient;
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [togglePassword, setTogglePassword] = useState(false);
-
-  const handleTogglePassword = () => {
-    setTogglePassword(!togglePassword);
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   // Login Admin *****************************************************************
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    // toast.success("Wow so easy !");
     e.preventDefault();
     const user = {
       username,
       password,
     };
+    setIsLoading(true);
     try {
       const res = await myAPIClient.post("/auth/login", user);
       console.log(res.data);
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("isAdmin", res.data.user.isAdmin);
-      localStorage.setItem("id", res.data.user.userId);
-      localStorage.setItem("username", res.data.user.username);
-      setUsername("");
-      setPassword("");
-      // Also interact with mongo ***************************************************
-      try {
-        const res = await axios.post(`${PF}staff/loginstaff`, user);
-        console.log(res.data);
-        res.data && localStorage.setItem("_id", res.data.staff._id);
-
-        toast.success("Success, redirecting...");
-        setTimeout(() => {
-          navigate("/dashboards/crm/");
-          window.location.reload();
-        }, 4000);
-      } catch (err) {
-        console.log(err);
-        toast.error("Error, something went wron, try again!");
+      if (res.data.user.isAdmin === true) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("isAdmin", res.data.user.isAdmin);
+        localStorage.setItem("id", res.data.user.userId);
+        localStorage.setItem("username", res.data.user.username);
+        localStorage.setItem("firstname", res.data.user.firstname);
+        localStorage.setItem("lastname", res.data.user.lastname);
+        localStorage.setItem("email", res.data.user.email);
+        // Also interact with mongo *********************************************************
+        try {
+          const res = await axios.post(`${PF}staff/loginstaff`, user);
+          console.log(res.data);
+          res.data && localStorage.setItem("_id", res.data.staff?._id);
+          toast.success("Success, redirecting...");
+          setIsLoading(false);
+          setUsername("");
+          setPassword("");
+          setTimeout(() => {
+            navigate("/dashboards/crm/");
+          }, 4000);
+        } catch (err) {
+          console.log(err);
+          toast.error("Error, something went wrong, try again!");
+          setIsLoading(false);
+        }
+      } else {
+        toast.error("Youre not authorised to login from here!");
+        console.log(res.data.user?.isAdmin);
+        setIsLoading(false);
       }
     } catch (err) {
       console.log(err);
-      toast.error("Error, something went wron, try again!");
+      toast.error("Error, something went wrong, try again!");
+      setIsLoading(false);
     }
   };
 
+  // ***************************************************************************
+
+  const [isHoveringPassword, setIsHoveringPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
+  // Mouse Over create account
+  const handleMouseOver = () => {
+    setIsHovering(true);
+    // Other logic to handle mouse over event
+  };
+
+  // Mouse out create account
+  const handleMouseOut = () => {
+    setIsHovering(false);
+    // Other logic to handle mouse out event
+  };
+
+  // Mouse Over password
+  const handleMouseOverPassword = () => {
+    setIsHoveringPassword(true);
+    // Other logic to handle mouse over event
+  };
+
+  // Mouse out password
+  const handleMouseOutPassword = () => {
+    setIsHoveringPassword(false);
+    // Other logic to handle mouse out event
+  };
+
   return (
-    <Flex width="full" height="100vh" align="center" justifyContent="center">
-      <Box
-        my={3}
-        p={8}
-        maxWidth="500px"
-        borderWidth={1}
-        borderRadius={8}
-        boxShadow={"lg"}
-        textAlign={"left"}
+    <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
+      <Flex
+        flexDir={"column"}
+        p={{ sm: 1, lg: 6 }}
+        justify="center"
+        flex={1}
+        align={"center"}
       >
-        <Box textAlign={"center"}>
-          <Heading color="teal">Welcome Back!</Heading>
-        </Box>
-        <Box my={3}>
-          <form style={{ color: "white" }}>
-            {/* {error instanceof Error && (
-              <ErrorMessage
-                message={
-                  (axios.isAxiosError(error) && error.response?.data) ||
-                  error.message
-                }
-              />
-            )} */}
-            <FormControl alignItems={"center"}>
-              <FormLabel>Username</FormLabel>
-              <InputGroup alignItems={"center"}>
-                <InputLeftElement
-                  pointerEvents="none"
-                  color="gray.300"
-                  children={<FaUserAlt color="gray.300" />}
-                />
-                <Input
-                  isRequired
-                  value={username}
-                  color={"black"}
-                  onChange={(e) => setUsername(e.target.value)}
-                  type={"email"}
-                  placeholder="example"
-                />
-              </InputGroup>
-            </FormControl>
-            <FormControl alignItems={"center"} mt={5}>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  color="gray.300"
-                  children={<CFaLock color="gray.300" />}
-                />
-                <Input
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  isRequired
-                  color={"black"}
-                  type={togglePassword ? "text" : "password"}
-                  placeholder="********"
-                />
-                <InputRightElement
-                  onClick={handleTogglePassword}
-                  cursor={"pointer"}
-                  width="2.5rem"
-                >
-                  {togglePassword ? (
-                    <InputLeftElement children={<CFaEyeSlash />} />
-                  ) : (
-                    <InputLeftElement children={<CFaEye />} />
-                  )}
-                </InputRightElement>
-              </InputGroup>
-              <FormHelperText textAlign="right">
-                <Link to="/">Forgot Password?</Link>
-              </FormHelperText>
-            </FormControl>
-            <Button
-              disabled={!username || !password}
-              colorScheme="teal"
-              type="submit"
-              onClick={handleSubmit}
-              variant="outline"
-              width="full"
-              mt={4}
+        <Stack p={8} spacing={4} w={"full"} maxW={"md"}>
+          <Heading overflowY={"hidden"} fontSize={{ base: "2xl", lg: "3xl" }}>
+            Sign in to Your Account{" "}
+          </Heading>
+          <span style={{ fontSize: 12 }}>***admin***</span>
+
+          <Link to="/auth/register">
+            or{" "}
+            <span
+              onMouseOver={handleMouseOver}
+              onMouseOut={handleMouseOut}
+              style={{ color: isHovering ? primaryColor.color : "gray" }}
             >
-              <ToastContainer />
-              {/* {isLoading ? (
-                <CircularProgress isIndeterminate size="24px" color="teal" />
-              ) : ( */}
-              Sign In
-              {/* )} */}
-            </Button>
-          </form>
-        </Box>
-        <Box textAlign={"center"}>
-          Don't have an account?{" "}
-          <Link to="/auth/register" color="teal.500">
-            Sign Up
+              Create an Account
+            </span>
           </Link>
-        </Box>
-      </Box>
-    </Flex>
+
+          <FormControl isRequired id="email">
+            <FormLabel>Username</FormLabel>
+            <Input
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+              placeholder="Email"
+              type="text"
+            />
+          </FormControl>
+          <FormControl isRequired id="password">
+            <FormLabel>Password</FormLabel>
+            <InputGroup>
+              <Input
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                type={showPassword ? "text" : "password"}
+              />
+              <InputRightElement h={"full"}>
+                <Button
+                  variant={"ghost"}
+                  onClick={() =>
+                    setShowPassword((showPassword) => !showPassword)
+                  }
+                >
+                  {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+          <Stack spacing={6}>
+            <Stack
+              direction={{ base: "column", sm: "row" }}
+              align={"start"}
+              justify={"space-between"}
+              fontSize={{ base: 13, md: 15, lg: 16 }}
+            >
+              <Checkbox>Remember me</Checkbox>
+              <Link
+                to="/"
+                color={"blue.500"}
+                onMouseOver={handleMouseOverPassword}
+                onMouseOut={handleMouseOutPassword}
+                style={{
+                  color: isHoveringPassword ? primaryColor.color : "gray",
+                }}
+              >
+                Forgot password?
+              </Link>
+              <ToastContainer />
+            </Stack>
+            <Button
+              _hover={{ opacity: 0.7 }}
+              bgColor={primaryColor.color}
+              color={"white"}
+              onClick={handleSubmit}
+              isDisabled={!username || !password}
+            >
+              {isLoading ? (
+                <CircularProgress isIndeterminate color="teal" size="24px" />
+              ) : (
+                " Sign In"
+              )}
+            </Button>
+          </Stack>
+        </Stack>
+        <Flex
+          px={{ base: 6, lg: 1 }}
+          justify={"space-around"}
+          align="center"
+          gap={3}
+        >
+          <Box fontSize={{ base: 8, md: 10, lg: 12 }}>
+            {" "}
+            © {new Date().getFullYear()} Rwebitaps
+          </Box>
+          <Box fontSize={12} _hover={{ color: primaryColor }}>
+            <Link to="/">Terms of Service</Link>
+          </Box>
+          <Box fontSize={12} _hover={{ color: primaryColor }}>
+            <Link to="/">Privacy Policy</Link>
+          </Box>
+        </Flex>
+      </Flex>
+
+      <Flex display={{ base: "none", md: "flex" }} flex={1}>
+        <Image
+          alt={"Login Image"}
+          objectFit={"cover"}
+          src={
+            "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+          }
+        />
+      </Flex>
+    </Stack>
   );
-};
+}

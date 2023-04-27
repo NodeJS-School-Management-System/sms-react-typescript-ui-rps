@@ -1,10 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 interface ThemeOptions {
     textColor: string;
-    backgroundColor: string;
+    backgroundColor?: string;
     skinColor: string;
     skin: "bordered" | "default";
-    foregroundColor: string;
+    foregroundColor?: string;
     mode: "dark" | "light"
 }
 const GlobalStyle = createGlobalStyle<ThemeOptions>`

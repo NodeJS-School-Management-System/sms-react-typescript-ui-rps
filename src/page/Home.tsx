@@ -11,8 +11,8 @@ import PageLoading from "../components/loading/PageLoading";
 import Nav from "../components/nav/Nav";
 import StoreManager from "./storemanager";
 const PageNotFound = lazy(() => import("./404/PageNotFound"));
-// const Analytics = lazy(() => import("./analytics"));
 const CRM = lazy(() => import("./crm/CRM"));
+const Departments = lazy(() => import("./departments"));
 const Student = lazy(() => import("./student"));
 const Teacher = lazy(() => import("./teacher"));
 const Class = lazy(() => import("./class"));
@@ -20,6 +20,7 @@ const ExamSection = lazy(() => import("./examsection"));
 const ExamAndResult = lazy(() => import("./examandresult"));
 const NTStaffMembers = lazy(() => import("./nonteachingstaff"));
 const AccountingSection = lazy(() => import("./accountingsection"));
+const IncomeAndExpenditure = lazy(() => import("./incomeandexpenditure"));
 const Library = lazy(() => import("./library"));
 const Message = lazy(() => import("./message"));
 const NoticeBoard = lazy(() => import("./noticeboard"));
@@ -41,10 +42,18 @@ const Home = () => {
             <Routes>
               <Route index element={<CRM />} />
               <Route path="/dashboards/crm/" element={<CRM />} />
+              <Route
+                path="/dashboards/departments/"
+                element={<Departments />}
+              />
               <Route path="/student/*" element={<Student />} />
               <Route path="/teacher/*" element={<Teacher />} />
               <Route path="/nonteachingstaff/*" element={<NTStaffMembers />} />
               <Route path="/classroom/*" element={<Class />} />
+              <Route
+                path="/incomeandexpenditure/*"
+                element={<IncomeAndExpenditure />}
+              />
 
               <Route
                 path="/accountingsection/*"

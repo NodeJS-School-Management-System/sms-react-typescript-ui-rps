@@ -1,42 +1,42 @@
-import {
-  Box,
-  Heading,
-  FormControl,
-  InputRightElement,
-  FormHelperText,
-  chakra,
-  FormLabel,
-  InputLeftElement,
-  InputGroup,
-  Input,
-  Button,
-  Flex,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FaUserAlt, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { MongoAPIClient, myAPIClient } from "./axiosInstance";
-
+import {
+  Button,
+  Checkbox,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Stack,
+  Image,
+  Box,
+  InputGroup,
+  InputRightElement,
+  CircularProgress,
+} from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import useTheme from "../../theme/useTheme";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import axios from "axios";
-const CFaLock = chakra(FaLock);
-const CFaEye = chakra(FaEye);
-const CFaEyeSlash = chakra(FaEyeSlash);
+import RecoverPassword from "./RecoverPassword";
 
-export const UserLogin = () => {
+export function UserLogin() {
+  // GLOBAL THEME
+  const {
+    theme: { primaryColor },
+  } = useTheme();
+
   const PF = MongoAPIClient;
 
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [togglePassword, setTogglePassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleTogglePassword = () => {
-    setTogglePassword(!togglePassword);
-  };
-
+  // LOGIN USER ***************************************************************
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const user = {
@@ -44,7 +44,7 @@ export const UserLogin = () => {
       password,
     };
 
-    console.log(user);
+    setIsLoading(true);
 
     try {
       const res = await myAPIClient.post("/auth/loginuser", user);
@@ -88,114 +88,174 @@ export const UserLogin = () => {
       res.data && localStorage.setItem("username", res.data?.user?.username);
       localStorage.setItem("token", res.data.token);
 
+      // Call toast for a success alert*********************************
+      setIsLoading(false);
       setUsername("");
       setPassword("");
-
-      // Call toast for a success alert*********************************
       toast.success("Success, redirecting...");
       setTimeout(() => {
         navigate("/dashboards/crm/");
         window.location.reload();
-      }, 4000);
+      }, 5000);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   };
 
+  // ***************************************************************************
+
+  const [isHoveringPassword, setIsHoveringPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRecoverPwd, setShowRecoverPwd] = useState(false);
+
+  // Mouse Over password
+  const handleMouseOverPassword = () => {
+    setIsHoveringPassword(true);
+    // Other logic to handle mouse over event
+  };
+
+  // Mouse out password
+  const handleMouseOutPassword = () => {
+    setIsHoveringPassword(false);
+    // Other logic to handle mouse out event
+  };
+
   return (
-    <Flex width="full" height="100vh" align="center" justifyContent="center">
-      <Box
-        my={3}
-        p={8}
-        maxWidth="500px"
-        borderWidth={1}
-        borderRadius={8}
-        boxShadow={"lg"}
-        textAlign={"left"}
-      >
-        <Box textAlign={"center"}>
-          <Heading color="teal">Welcome Back!</Heading>
-        </Box>
-        <Box my={3}>
-          <form style={{ color: "white" }}>
-            {/* {error instanceof Error && (
-              <ErrorMessage
-                message={
-                  (axios.isAxiosError(error) && error.response?.data) ||
-                  error.message
-                }
-              />
-            )} */}
-            <FormControl alignItems={"center"}>
-              <FormLabel>Username</FormLabel>
-              <InputGroup alignItems={"center"}>
-                <InputLeftElement
-                  pointerEvents="none"
-                  color="gray.300"
-                  children={<FaUserAlt color="gray.300" />}
-                />
+    <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
+      <>
+        {!showRecoverPwd && (
+          <Flex
+            flexDir={"column"}
+            p={{ sm: 1, lg: 6 }}
+            justify="center"
+            flex={1}
+            align={"center"}
+          >
+            <Stack p={8} spacing={4} w={"full"} maxW={"md"}>
+              <Heading
+                overflowY={"hidden"}
+                fontSize={{ base: "2xl", lg: "3xl" }}
+              >
+                Sign in to Your Account
+              </Heading>
+              <span style={{ fontSize: 12 }}>
+                ***teacher, student or non teaching staff***
+              </span>
+
+              <FormControl isRequired id="email">
+                <FormLabel>Username</FormLabel>
                 <Input
-                  isRequired
                   value={username}
-                  color={"black"}
-                  onChange={(e) => setUsername(e.target.value)}
-                  type={"text"}
-                  placeholder="Enter Username"
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                  placeholder="Email"
+                  type="text"
                 />
-              </InputGroup>
-            </FormControl>
-            <FormControl alignItems={"center"} mt={5}>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  color="gray.300"
-                  children={<CFaLock color="gray.300" />}
-                />
-                <Input
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  isRequired
-                  color={"black"}
-                  type={togglePassword ? "text" : "password"}
-                  placeholder="********"
-                />
-                <InputRightElement
-                  onClick={handleTogglePassword}
-                  cursor={"pointer"}
-                  width="2.5rem"
+              </FormControl>
+              <FormControl isRequired id="password">
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+              <Stack spacing={6}>
+                <Stack
+                  direction={{ base: "column", sm: "row" }}
+                  align={"start"}
+                  justify={"space-between"}
+                  fontSize={{ base: 13, md: 15, lg: 16 }}
                 >
-                  {togglePassword ? (
-                    <InputLeftElement children={<CFaEyeSlash />} />
+                  <Checkbox>Remember me</Checkbox>
+                  <Box
+                    cursor={"pointer"}
+                    color={"blue.500"}
+                    onMouseOver={handleMouseOverPassword}
+                    onMouseOut={handleMouseOutPassword}
+                    onClick={() => setShowRecoverPwd(true)}
+                    style={{
+                      color: isHoveringPassword ? primaryColor.color : "gray",
+                    }}
+                  >
+                    Forgot password?
+                  </Box>
+                  <ToastContainer />
+                </Stack>
+                <Button
+                  _hover={{ color: "white", opacity: 0.7 }}
+                  bgColor={primaryColor.color}
+                  color={"white"}
+                  isDisabled={!username || !password}
+                  onClick={handleSubmit}
+                >
+                  {isLoading ? (
+                    <CircularProgress isIndeterminate size="24px" />
                   ) : (
-                    <InputLeftElement children={<CFaEye />} />
+                    " Sign In"
                   )}
-                </InputRightElement>
-              </InputGroup>
-              <FormHelperText textAlign="right">
-                <Link to="/">Forgot Password?</Link>
-              </FormHelperText>
-            </FormControl>
-            <Button
-              disabled={!username || !password}
-              colorScheme="teal"
-              type="submit"
-              onClick={handleSubmit}
-              variant="outline"
-              width="full"
-              mt={4}
+                </Button>
+              </Stack>
+            </Stack>
+            <Flex
+              px={{ base: 6, lg: 1 }}
+              justify={"space-around"}
+              align="center"
+              gap={3}
             >
-              <ToastContainer />
-              {/* <ToastContainer /> */}
-              {/* {isLoading ? (
-                <CircularProgress isIndeterminate size="24px" color="teal" />
-              ) : ( */}
-              Sign In
-              {/* )} */}
-            </Button>
-          </form>
-        </Box>
-      </Box>
-    </Flex>
+              <Box fontSize={{ base: 8, md: 10, lg: 12 }}>
+                {" "}
+                © {new Date().getFullYear()} Rwebitaps
+              </Box>
+              <Box fontSize={12} _hover={{ color: primaryColor }}>
+                <Link to="/">Terms of Service</Link>
+              </Box>
+              <Box fontSize={12} _hover={{ color: primaryColor }}>
+                <Link to="/">Privacy Policy</Link>
+              </Box>
+            </Flex>
+          </Flex>
+        )}
+
+        {showRecoverPwd && (
+          <Flex
+            flexDir={"column"}
+            p={{ sm: 1, lg: 6 }}
+            justify="center"
+            flex={1}
+            align={"center"}
+          >
+            <RecoverPassword />
+          </Flex>
+        )}
+      </>
+
+      <Flex display={{ base: "none", md: "flex" }} flex={1}>
+        <Image
+          alt={"Login Image"}
+          objectFit={"cover"}
+          src={
+            "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+          }
+        />
+      </Flex>
+    </Stack>
   );
-};
+}

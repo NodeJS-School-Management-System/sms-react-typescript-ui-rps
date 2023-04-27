@@ -33,6 +33,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const CRM = () => {
   const token = localStorage.getItem("token");
+  const isAdmin = localStorage.getItem("isAdmin");
 
   // PRIMARY COLOR FROM GLOABL THEME ************************************************************
   const {
@@ -405,7 +406,7 @@ const CRM = () => {
                   mx={3}
                   onClick={sendMessage}
                   bgColor={primaryColor.color}
-                  // color="white"
+                  color="white"
                   isDisabled={!message || !title || !receiverName}
                 >
                   {loading ? "Sending.." : "Send Message"}
@@ -431,8 +432,13 @@ const CRM = () => {
                 justifyContent={"center"}
                 flexDirection={"column"}
               >
-                <Heading>Abeine Vicent</Heading>
-                <strong>Admin</strong>
+                {isAdmin && (
+                  <Heading color="white">
+                    {localStorage.getItem("firstname")}{" "}
+                    {localStorage.getItem("lastname")}{" "}
+                  </Heading>
+                )}
+                <strong style={{ color: "white" }}>Admin</strong>
               </Flex>
               <Flex
                 w={"100%"}
@@ -533,4 +539,3 @@ const CRM = () => {
   );
 };
 export default CRM;
-

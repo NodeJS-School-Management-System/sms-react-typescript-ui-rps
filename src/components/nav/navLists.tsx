@@ -15,6 +15,7 @@ import {
   Upcoming,
   Email,
   StoreMallDirectory,
+  ExpandCircleDownOutlined,
 } from "@mui/icons-material";
 
 const format = (label: string, path: string, icon?: ReactNode): NavItemType => {
@@ -36,7 +37,7 @@ const navList: NavOptions[] = [
     parent: formatGroupButton("Dashboard", <Home />, "/dashboards/"),
     childrens: [
       format("Home", "/dashboards/crm/"),
-      // format("Analytics", "/dashboards/analytics/"),
+      format("Departments", "/dashboards/departments/"),
     ],
   },
   {
@@ -57,11 +58,7 @@ const navList: NavOptions[] = [
     ],
   },
   {
-    parent: formatGroupButton(
-      "Non Teaching Staff",
-      <Person />,
-      "/nonteachingstaff/"
-    ),
+    parent: formatGroupButton("Member", <Person />, "/nonteachingstaff/"),
     childrens: [
       format("List", "/nonteachingstaff/list/"),
       format("Add", "/nonteachingstaff/add/"),
@@ -84,11 +81,7 @@ const navList: NavOptions[] = [
     ],
   },
   {
-    parent: formatGroupButton(
-      "Exam Routine & Results",
-      <NoteAlt />,
-      "/examandresult/"
-    ),
+    parent: formatGroupButton("Exam Results", <NoteAlt />, "/examandresult/"),
     childrens: [
       // format("Exam Routine", "/examandresult/examroutine/"),
       format("View Result", "/examandresult/viewresult/"),
@@ -103,13 +96,24 @@ const navList: NavOptions[] = [
   },
   {
     parent: formatGroupButton(
+      "Income & Expenditure",
+      <ExpandCircleDownOutlined />,
+      "/incomeandexpenditure/"
+    ),
+    childrens: [
+      format("Manage Income", "/incomeandexpenditure/manageincome/"),
+      format("Manage Expenses", "/incomeandexpenditure/manageexpenditure/"),
+    ],
+  },
+  {
+    parent: formatGroupButton(
       "Accounting Section",
       <AttachMoney />,
       "/accountingsection/"
     ),
     childrens: [
       format("Manage Fees", "/accountingsection/managefees/"),
-      format("Fees Payment", "/accountingsection/feespayment/"),
+      format("Fees Payments", "/accountingsection/feespayment/"),
       format("Pay Fees", "/accountingsection/payfees/"),
     ],
   },

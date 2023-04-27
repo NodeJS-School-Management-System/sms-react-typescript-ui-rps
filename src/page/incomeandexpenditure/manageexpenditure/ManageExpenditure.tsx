@@ -16,69 +16,54 @@ import {
   TableCaption,
   TableContainer,
   IconButton,
-  Image,
   Alert,
   AlertIcon,
   Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Edit, Home, Store } from "@mui/icons-material";
-import { BiTrash } from "react-icons/bi";
+import { Edit, FeedRounded, Home, Money } from "@mui/icons-material";
+import { BiFoodMenu, BiTrash } from "react-icons/bi";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { storeAnalytics } from "../../../api/fakeAPI";
 import AnalyticsBox from "../../../components/uicomponents/AnalyticsBox";
 import useTheme from "../../../theme/useTheme";
 import { useEffect, useState } from "react";
 import { myAPIClient } from "../../auth/axiosInstance";
-
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import app from "../../../firebase/firebase";
+import { AllInbox, AttachMoney } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { SpinnerIcon } from "@chakra-ui/icons";
 import EditModal from "./EditModal";
-const ManageStore = () => {
+const ManageExpenditure = () => {
   const {
     theme: { primaryColor },
   } = useTheme();
 
-  const [itemName, setItemName] = useState("");
-  const [itemImage, setItemImage] = useState<any>(undefined);
-  const [itemQuantity, setItemQuantity] = useState<any>(undefined);
+  const [itemname, setItemName] = useState("");
   const [category, setCategory] = useState("");
+  const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingItems, setIsLoadingItems] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setItemImage(e.target.files[0]);
-      setError(false);
-      setSuccess(false);
-      console.log(itemImage);
-    }
-  };
-
-  // DELETE ITEM FROM STORE **********************************************************
+  // DELETE ITEM FROM income **********************************************************
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteItem = async (itemId: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`storemanager/${itemId}`, {
+      const res = await myAPIClient.delete(`expenditure/${itemId}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
       });
       console.log(res.data);
       setIsDeleting(false);
+      toast.success("Success, item has been deleted!");
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong, try again!");
       setIsDeleting(false);
     }
   };
@@ -86,7 +71,7 @@ const ManageStore = () => {
   // EDIT ITEM IN STROE **********************************************************
   const editItem = async (itemId: any) => {
     try {
-      const res = await myAPIClient.put(`storemanager/${itemId}`, {
+      const res = await myAPIClient.put(`expenditure/${itemId}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
@@ -97,118 +82,94 @@ const ManageStore = () => {
     }
   };
 
-  // CREATE NEW ITEM INTO STROE *************************************************
-  const createStore = async (e: any) => {
+  // CREATE NEW EXPENDITURE ************************************************************************************
+  const addIncome = async (e: any) => {
     e.preventDefault();
 
-    const store: any = {
-      itemName,
-      itemQuantity,
+    const income: any = {
+      itemname,
+      amount: Number(amount),
       category,
     };
 
     setIsLoading(true);
-    if (itemImage !== null) {
-      const datai = new FormData();
-      const fileName = Date.now() + itemImage.name;
-      datai.append("name", fileName);
-      datai.append("file", itemImage);
-      // student.profileimage = fileName;
 
-      // Upload image to firebase storage ******************************************************************
-      const storage = getStorage(app);
-      const storageRef = ref(storage, fileName);
-
-      const uploadTask = uploadBytesResumable(storageRef, itemImage);
-
-      // Register three observers:
-      // 1. 'state_changed' observer, called any time the state changes
-      // 2. Error observer, called on failure
-      // 3. Completion observer, called on successful completion
-      uploadTask.on(
-        "state_changed",
-        (snapshot: any) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
+    try {
+      const res = await myAPIClient.post("/expenditure", income, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
         },
-        (error: any) => {
-          // Handle unsuccessful uploads
-        },
-        async () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log(downloadURL);
-            store.itemImage = downloadURL;
-          });
-          try {
-            const res = await myAPIClient.post("/storemanager", store, {
-              headers: {
-                token: `token ${localStorage.getItem("token")}`,
-              },
-            });
-
-            setItemImage("");
-            setItemName("");
-            setItemQuantity(1);
-            setCategory("");
-
-            setIsLoading(false);
-            setSuccess(true);
-            setError(false);
-            console.log(res.data);
-          } catch (err) {
-            setError(true);
-            setSuccess(false);
-            setIsLoading(false);
-          }
-        }
-      );
+      });
+      console.log(res.data);
+      setIsLoading(false);
+      setItemName("");
+      setAmount("");
+      setCategory("");
+      toast.success("Success, expense has been added!");
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+      toast.error("Something went wrong, try again!");
     }
   };
 
-  // GET STORE ITEMS FROM DB ****************************************************************
-  const [storeItems, setStoreItems] = useState([]);
+  // GET EXPENDITURE ITEMS FROM DB ****************************************************************
+  const [incomeItems, setincomeItems] = useState([]);
   useEffect(() => {
-    const getStore = async () => {
+    const getincome = async () => {
       setIsLoadingItems(true);
       try {
-        const res = await myAPIClient.get(
-          "/storemanager",
-
-          {
-            headers: {
-              token: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        setStoreItems(res.data);
+        const res = await myAPIClient.get("/expenditure", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setincomeItems(res.data);
         setIsLoadingItems(false);
       } catch (err) {
         console.log(err);
         setIsLoadingItems(false);
       }
     };
-    getStore();
+    getincome();
   }, [isDeleting]);
 
   // OPEN MODAL ***********************************************************************************************
+
   const [selectedId, setSelectedId] = useState("");
   const openModel = (id: any) => {
     setSelectedId(id);
     onOpen();
   };
+
+  // ANALYTICS
+  const storeAnalytics = [
+    {
+      title: "Food",
+      value: 34,
+      icon: BiFoodMenu,
+      bgColor: "teal",
+    },
+    {
+      title: "Staff Salary",
+      value: 3,
+      icon: FeedRounded,
+      bgColor: "orange",
+    },
+    {
+      title: "Others",
+      value: 53,
+      icon: AllInbox,
+      bgColor: "darkblue",
+    },
+    {
+      title: "Total Spent",
+      value: 4500000,
+      icon: AttachMoney,
+      bgColor: "purple",
+    },
+  ];
 
   return (
     <Flex direction="column" style={{ width: "100%" }}>
@@ -224,7 +185,7 @@ const ManageStore = () => {
         >
           <Box display={"flex"}>
             <Heading as={"h5"} color={primaryColor.color}>
-              Store Manager
+              Manage Expenditure
             </Heading>
             <Text>SMS</Text>
           </Box>
@@ -236,9 +197,9 @@ const ManageStore = () => {
               </Text>
             </Link>
             <FaAngleRight />
-            <Store />
+            <Money />
             <Text fontWeight="bold" fontSize={14}>
-              Manage Store
+              Manage Expenditure
             </Text>
           </Box>
         </Flex>
@@ -275,7 +236,7 @@ const ManageStore = () => {
                 fontSize={20}
                 w={"100%"}
               >
-                Add Store Item
+                Add Expense
               </Button>
 
               <Box w={"100%"}>
@@ -298,19 +259,18 @@ const ManageStore = () => {
                     Item Name <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <Input
-                    value={itemName}
+                    value={itemname}
                     onChange={(e) => {
                       setError(false);
                       setSuccess(false);
                       setItemName(e.target.value);
                     }}
                     type="text"
-                    placeholder="Name e.g Firewood"
+                    placeholder="Name e.g Staff Salary"
                   />
                 </Flex>
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -335,13 +295,12 @@ const ManageStore = () => {
                       setSuccess(false);
                       setCategory(e.target.value);
                     }}
-                    placeholder="Category e.g Library"
+                    placeholder="Category e.g Accounts Payable"
                   />
                 </Flex>
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -355,44 +314,20 @@ const ManageStore = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Item Quantity <span style={{ color: "red" }}>*</span>
+                    Amount <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <Input
-                    value={itemQuantity}
+                    value={amount}
+                    type="number"
                     onChange={(e) => {
                       setError(false);
                       setSuccess(false);
-                      setItemQuantity(e.target.value);
+                      setAmount(e.target.value);
                     }}
-                    placeholder="Quantity e.g 40"
+                    placeholder="Amount e.g 400,000"
                   />
                 </Flex>
 
-                <Flex
-                  p={3}
-                  // bg={"white"}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Item Image <span style={{ color: "red" }}>*</span>
-                  </FormLabel>
-                  <Input
-                    border={"none"}
-                    onChange={onUploadImage}
-                    isRequired
-                    type="file"
-                  />
-                </Flex>
                 {error && (
                   <Alert p={6} w={"90%"} status="error">
                     <AlertIcon />
@@ -401,9 +336,9 @@ const ManageStore = () => {
                 )}
 
                 {success && (
-                  <Alert p={6} w={"90%"} status="success">
+                  <Alert ml={3} p={6} w={"90%"} status="success">
                     <AlertIcon />
-                    Success, store item has been added successfully!
+                    Success, expense has been added successfully!
                   </Alert>
                 )}
 
@@ -412,14 +347,12 @@ const ManageStore = () => {
                   variant={"solid"}
                   w="50%"
                   mx={3}
-                  onClick={createStore}
+                  onClick={addIncome}
+                  isDisabled={!itemname || !category || !amount}
                   backgroundColor={primaryColor.color}
                   color="white"
-                  disabled={
-                    !itemName || !itemImage || !itemQuantity || !category
-                  }
                 >
-                  {isLoading ? <Spinner color="red.500" /> : "Create Store"}
+                  {isLoading ? <Spinner color="white" /> : "Add Expense"}
                 </Button>
               </Box>
             </WrapItem>
@@ -440,48 +373,33 @@ const ManageStore = () => {
             ) : (
               <TableContainer>
                 <Table variant="simple">
-                  <TableCaption>Store Analytics</TableCaption>
+                  <TableCaption>Expenditure Analytics</TableCaption>
                   <Thead>
                     <Tr>
                       <Th fontSize={16}>Item Name</Th>
-                      <Th fontSize={16}>Item Category</Th>
-                      <Th fontSize={16}>Item Image</Th>
-                      <Th fontSize={16}>Total Items</Th>
-                      <Th fontSize={16}>Items Used</Th>
-                      <Th fontSize={16}>Remaining Items</Th>
-                      <Th fontSize={16}>Date Added</Th>
+                      <Th fontSize={16}>Category</Th>
+                      <Th fontSize={16}>Amount</Th>
                       <Th fontSize={16}>Action</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {storeItems.map((item: any) => (
-                      <Tr key={item.storeId}>
-                        <Td>{item.itemName}</Td>
+                    {incomeItems?.map((item: any) => (
+                      <Tr key={item.expenditureId}>
+                        <Td>{item.itemname}</Td>
                         <Td>{item.category}</Td>
-                        <Td textAlign={"center"} margin="auto" p={0}>
-                          <Image
-                            w={45}
-                            margin="auto"
-                            h={45}
-                            objectFit="cover"
-                            borderRadius={"50%"}
-                            src={item.itemImage}
-                          />
-                        </Td>
-                        <Td>{item.itemQuantity}</Td>
-                        <Td>40</Td>
-                        <Td>80</Td>
-                        <Td>12/02/2023</Td>
+
+                        <Td>{item.amount}/=</Td>
+
                         <Td display={"flex"} gap={2}>
                           <IconButton
                             colorScheme="red"
                             aria-label="Delete database"
-                            onClick={() => deleteItem(item.storeId)}
+                            onClick={() => deleteItem(item.expenditureId)}
                             icon={isDeleting ? <SpinnerIcon /> : <BiTrash />}
                           />
                           <IconButton
                             colorScheme="blue"
-                            onClick={() => openModel(item.storeId)}
+                            onClick={() => openModel(item.expenditureId)}
                             aria-label="Edit database"
                             icon={<Edit />}
                           />
@@ -489,7 +407,7 @@ const ManageStore = () => {
                             {isOpen ? (
                               <EditModal
                                 setIsLoadingItems={setIsLoadingItems}
-                                // item={item}
+                                item={item}
                                 editItem={editItem}
                                 onOpen={onOpen}
                                 onClose={onClose}
@@ -512,4 +430,4 @@ const ManageStore = () => {
   );
 };
 
-export default ManageStore;
+export default ManageExpenditure;

@@ -16,22 +16,29 @@ import {
   TableCaption,
   TableContainer,
   IconButton,
-  Image,
   Alert,
   AlertIcon,
   Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Edit, Home, Store } from "@mui/icons-material";
+import {
+  Agriculture,
+  Download,
+  Edit,
+  FeedRounded,
+  Home,
+  Money,
+} from "@mui/icons-material";
 import { BiTrash } from "react-icons/bi";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { storeAnalytics } from "../../../api/fakeAPI";
 import AnalyticsBox from "../../../components/uicomponents/AnalyticsBox";
 import useTheme from "../../../theme/useTheme";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { myAPIClient } from "../../auth/axiosInstance";
-
+import { AllInbox, AttachMoney } from "@mui/icons-material";
 import {
   getDownloadURL,
   getStorage,
@@ -41,15 +48,24 @@ import {
 import app from "../../../firebase/firebase";
 import { SpinnerIcon } from "@chakra-ui/icons";
 import EditModal from "./EditModal";
-const ManageStore = () => {
+import { useReactToPrint } from "react-to-print";
+const ManageIncome = () => {
+  const incomeStmtRef = useRef<any>();
+  const [showPrint, setShowPrint] = useState(false);
+
+  const handlePrint = useReactToPrint({
+    content: () => incomeStmtRef.current,
+    documentTitle: "Income Statement",
+  });
+
   const {
     theme: { primaryColor },
   } = useTheme();
 
   const [itemName, setItemName] = useState("");
   const [itemImage, setItemImage] = useState<any>(undefined);
-  const [itemQuantity, setItemQuantity] = useState<any>(undefined);
   const [category, setCategory] = useState("");
+  const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingItems, setIsLoadingItems] = useState(false);
   const [error, setError] = useState(false);
@@ -65,20 +81,22 @@ const ManageStore = () => {
     }
   };
 
-  // DELETE ITEM FROM STORE **********************************************************
+  // DELETE ITEM FROM INCOME **********************************************************
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteItem = async (itemId: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`storemanager/${itemId}`, {
+      const res = await myAPIClient.delete(`income/${itemId}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
       });
       console.log(res.data);
       setIsDeleting(false);
+      toast.success("Success, item has been deleted!");
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong, try again!");
       setIsDeleting(false);
     }
   };
@@ -86,7 +104,7 @@ const ManageStore = () => {
   // EDIT ITEM IN STROE **********************************************************
   const editItem = async (itemId: any) => {
     try {
-      const res = await myAPIClient.put(`storemanager/${itemId}`, {
+      const res = await myAPIClient.put(`incomemanager/${itemId}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
@@ -97,18 +115,19 @@ const ManageStore = () => {
     }
   };
 
-  // CREATE NEW ITEM INTO STROE *************************************************
-  const createStore = async (e: any) => {
+  // CREATE NEW INCOME ************************************************************************************
+  const addIncome = async (e: any) => {
     e.preventDefault();
 
-    const store: any = {
+    const income: any = {
       itemName,
-      itemQuantity,
+      amount: Number(amount),
       category,
     };
 
     setIsLoading(true);
-    if (itemImage !== null) {
+
+    if (itemImage && itemImage !== null) {
       const datai = new FormData();
       const fileName = Date.now() + itemImage.name;
       datai.append("name", fileName);
@@ -150,65 +169,131 @@ const ManageStore = () => {
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log(downloadURL);
-            store.itemImage = downloadURL;
+            income.itemImage = downloadURL;
           });
           try {
-            const res = await myAPIClient.post("/storemanager", store, {
+            const res = await myAPIClient.post("/income", income, {
               headers: {
                 token: `token ${localStorage.getItem("token")}`,
               },
             });
-
             setItemImage("");
             setItemName("");
-            setItemQuantity(1);
+            setAmount("");
             setCategory("");
 
             setIsLoading(false);
             setSuccess(true);
             setError(false);
+            toast.success("Success, item has been added!");
             console.log(res.data);
           } catch (err) {
             setError(true);
             setSuccess(false);
             setIsLoading(false);
+            toast.error("Something went wrong, try again!");
           }
         }
       );
+    } else {
+      try {
+        const res = await myAPIClient.post("/income", income, {
+          headers: {
+            token: `token ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setIsLoading(false);
+        setItemImage("");
+        setItemName("");
+        setAmount("");
+        setCategory("");
+        toast.success("Success, item has been added!");
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+        toast.error("Something went wrong, try again!");
+      }
     }
   };
 
-  // GET STORE ITEMS FROM DB ****************************************************************
-  const [storeItems, setStoreItems] = useState([]);
+  // GET income ITEMS FROM DB ****************************************************************
+  const [incomeItems, setincomeItems] = useState([]);
   useEffect(() => {
-    const getStore = async () => {
+    const getincome = async () => {
       setIsLoadingItems(true);
       try {
-        const res = await myAPIClient.get(
-          "/storemanager",
-
-          {
-            headers: {
-              token: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        setStoreItems(res.data);
+        const res = await myAPIClient.get("/income", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setincomeItems(res.data);
         setIsLoadingItems(false);
       } catch (err) {
         console.log(err);
         setIsLoadingItems(false);
       }
     };
-    getStore();
+    getincome();
   }, [isDeleting]);
 
+  // GET EXPENSES FROM DB ****************************************************************
+  const [expenditureItems, setExpenditureItems] = useState([]);
+  useEffect(() => {
+    const getExpenses = async () => {
+      setIsLoadingItems(true);
+      try {
+        const res = await myAPIClient.get("/expenditure", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setExpenditureItems(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getExpenses();
+  }, []);
+
   // OPEN MODAL ***********************************************************************************************
+
   const [selectedId, setSelectedId] = useState("");
   const openModel = (id: any) => {
     setSelectedId(id);
     onOpen();
   };
+
+  // ANALYTICS
+  const incomeAnalytics = [
+    {
+      title: "Agriculture",
+      value: 34,
+      icon: Agriculture,
+      bgColor: "teal",
+    },
+    {
+      title: "School Fees",
+      value: 3,
+      icon: FeedRounded,
+      bgColor: "orange",
+    },
+    {
+      title: "Others",
+      value: 53,
+      icon: AllInbox,
+      bgColor: "darkblue",
+    },
+    {
+      title: "Total Received",
+      value: 4500000,
+      icon: AttachMoney,
+      bgColor: "purple",
+    },
+  ];
 
   return (
     <Flex direction="column" style={{ width: "100%" }}>
@@ -224,7 +309,7 @@ const ManageStore = () => {
         >
           <Box display={"flex"}>
             <Heading as={"h5"} color={primaryColor.color}>
-              Store Manager
+              Manage Income
             </Heading>
             <Text>SMS</Text>
           </Box>
@@ -236,9 +321,9 @@ const ManageStore = () => {
               </Text>
             </Link>
             <FaAngleRight />
-            <Store />
+            <Money />
             <Text fontWeight="bold" fontSize={14}>
-              Manage Store
+              Manage Income
             </Text>
           </Box>
         </Flex>
@@ -251,7 +336,7 @@ const ManageStore = () => {
           gap={3}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
-          {storeAnalytics.map((item: any) => (
+          {incomeAnalytics.map((item: any) => (
             <AnalyticsBox item={item} />
           ))}
         </Flex>
@@ -275,7 +360,7 @@ const ManageStore = () => {
                 fontSize={20}
                 w={"100%"}
               >
-                Add Store Item
+                Add Income
               </Button>
 
               <Box w={"100%"}>
@@ -305,7 +390,7 @@ const ManageStore = () => {
                       setItemName(e.target.value);
                     }}
                     type="text"
-                    placeholder="Name e.g Firewood"
+                    placeholder="Name e.g School Fees"
                   />
                 </Flex>
                 <Flex
@@ -335,13 +420,12 @@ const ManageStore = () => {
                       setSuccess(false);
                       setCategory(e.target.value);
                     }}
-                    placeholder="Category e.g Library"
+                    placeholder="Category e.g Accounts Receivalble"
                   />
                 </Flex>
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -355,22 +439,22 @@ const ManageStore = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Item Quantity <span style={{ color: "red" }}>*</span>
+                    Amount <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <Input
-                    value={itemQuantity}
+                    value={amount}
+                    type="number"
                     onChange={(e) => {
                       setError(false);
                       setSuccess(false);
-                      setItemQuantity(e.target.value);
+                      setAmount(e.target.value);
                     }}
-                    placeholder="Quantity e.g 40"
+                    placeholder="Amount e.g 400,000"
                   />
                 </Flex>
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -384,7 +468,12 @@ const ManageStore = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Item Image <span style={{ color: "red" }}>*</span>
+                    Image{" "}
+                    <span
+                      style={{ color: "gray", fontWeight: 300, fontSize: 12 }}
+                    >
+                      (optional)
+                    </span>
                   </FormLabel>
                   <Input
                     border={"none"}
@@ -401,9 +490,9 @@ const ManageStore = () => {
                 )}
 
                 {success && (
-                  <Alert p={6} w={"90%"} status="success">
+                  <Alert ml={3} p={6} w={"90%"} status="success">
                     <AlertIcon />
-                    Success, store item has been added successfully!
+                    Success, income item has been added successfully!
                   </Alert>
                 )}
 
@@ -412,14 +501,12 @@ const ManageStore = () => {
                   variant={"solid"}
                   w="50%"
                   mx={3}
-                  onClick={createStore}
+                  onClick={addIncome}
+                  isDisabled={!itemName || !category || !amount}
                   backgroundColor={primaryColor.color}
                   color="white"
-                  disabled={
-                    !itemName || !itemImage || !itemQuantity || !category
-                  }
                 >
-                  {isLoading ? <Spinner color="red.500" /> : "Create Store"}
+                  {isLoading ? <Spinner color="white" /> : "Add Income"}
                 </Button>
               </Box>
             </WrapItem>
@@ -440,48 +527,33 @@ const ManageStore = () => {
             ) : (
               <TableContainer>
                 <Table variant="simple">
-                  <TableCaption>Store Analytics</TableCaption>
+                  <TableCaption>Income Analytics</TableCaption>
                   <Thead>
                     <Tr>
                       <Th fontSize={16}>Item Name</Th>
-                      <Th fontSize={16}>Item Category</Th>
-                      <Th fontSize={16}>Item Image</Th>
-                      <Th fontSize={16}>Total Items</Th>
-                      <Th fontSize={16}>Items Used</Th>
-                      <Th fontSize={16}>Remaining Items</Th>
-                      <Th fontSize={16}>Date Added</Th>
+                      <Th fontSize={16}>Category</Th>
+                      <Th fontSize={16}>Amount</Th>
                       <Th fontSize={16}>Action</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {storeItems.map((item: any) => (
-                      <Tr key={item.storeId}>
+                    {incomeItems?.map((item: any) => (
+                      <Tr key={item.incomeId}>
                         <Td>{item.itemName}</Td>
                         <Td>{item.category}</Td>
-                        <Td textAlign={"center"} margin="auto" p={0}>
-                          <Image
-                            w={45}
-                            margin="auto"
-                            h={45}
-                            objectFit="cover"
-                            borderRadius={"50%"}
-                            src={item.itemImage}
-                          />
-                        </Td>
-                        <Td>{item.itemQuantity}</Td>
-                        <Td>40</Td>
-                        <Td>80</Td>
-                        <Td>12/02/2023</Td>
+
+                        <Td>{item.amount}/=</Td>
+
                         <Td display={"flex"} gap={2}>
                           <IconButton
                             colorScheme="red"
                             aria-label="Delete database"
-                            onClick={() => deleteItem(item.storeId)}
+                            onClick={() => deleteItem(item.incomeId)}
                             icon={isDeleting ? <SpinnerIcon /> : <BiTrash />}
                           />
                           <IconButton
                             colorScheme="blue"
-                            onClick={() => openModel(item.storeId)}
+                            onClick={() => openModel(item.incomeId)}
                             aria-label="Edit database"
                             icon={<Edit />}
                           />
@@ -489,7 +561,7 @@ const ManageStore = () => {
                             {isOpen ? (
                               <EditModal
                                 setIsLoadingItems={setIsLoadingItems}
-                                // item={item}
+                                item={item}
                                 editItem={editItem}
                                 onOpen={onOpen}
                                 onClose={onClose}
@@ -507,9 +579,141 @@ const ManageStore = () => {
             )}
           </Box>
         </Flex>
+
+        {/* GET INCOME STATEMENT BUTTON */}
+        <Box position="fixed" bottom="50px" right="50px">
+          <IconButton
+            w={70}
+            h={70}
+            bgColor={primaryColor.color}
+            color="white"
+            onClick={() => {
+              setShowPrint(true);
+              setTimeout(() => {
+                handlePrint();
+              }, 2000);
+            }}
+            aria-label="Add to database"
+            icon={<Download style={{ width: "60%", height: "60%" }} />}
+          />
+        </Box>
+
+        {/* Income statement */}
+        <Box
+          display={showPrint ? "block" : "none"}
+          w="70%"
+          m="auto"
+          ref={incomeStmtRef}
+        >
+          <Box m="auto">
+            <Heading color={primaryColor.color} m="auto" textAlign={"center"}>
+              Rwebita Preparatory School
+            </Heading>
+            <Box
+              color={primaryColor.color}
+              m="auto"
+              textAlign={"center"}
+              fontSize={20}
+              fontWeight="bold"
+            >
+              Income Statement for the Year {new Date().getFullYear()}
+            </Box>
+          </Box>
+          <Box>
+            <TableContainer>
+              <Table variant="simple">
+                <TableCaption></TableCaption>
+                <Thead>
+                  <Th fontSize={18} fontWeight="bold">
+                    REVENUES
+                  </Th>
+                  <Tr>
+                    <Th fontSize={16}>Item Name</Th>
+                    <Th fontSize={16}>Category</Th>
+                    <Th fontSize={16}>Amount</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr></Tr>
+                  {incomeItems?.map((item: any) => (
+                    <Tr key={item.incomeId}>
+                      <Td>{item.itemName}</Td>
+                      <Td>{item.category}</Td>
+
+                      <Td>{item.amount}/=</Td>
+                    </Tr>
+                  ))}
+                  <Tr>
+                    <Th fontSize={16}>Total Revenue</Th>
+                    <Th fontSize={16}></Th>
+                    <Th fontSize={16}>
+                      {incomeItems.reduce(
+                        (total: any, item: any) => total + item.amount,
+                        0
+                      )}
+                      /=
+                    </Th>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <TableContainer>
+              <Table variant="simple">
+                <TableCaption>Income Statement</TableCaption>
+                <Thead>
+                  <Th fontSize={18} fontWeight="bold">
+                    EXPENSES
+                  </Th>
+                  <Tr>
+                    <Th fontSize={16}>Item Name</Th>
+                    <Th fontSize={16}>Category</Th>
+                    <Th fontSize={16}>Amount</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr></Tr>
+                  {expenditureItems?.map((item: any) => (
+                    <Tr key={item.expenditureId}>
+                      <Td>{item.itemname}</Td>
+                      <Td>{item.category}</Td>
+                      <Td>{item.amount}/=</Td>
+                    </Tr>
+                  ))}
+                  <Tr>
+                    <Th fontSize={16}>Total Expenses</Th>
+                    <Th fontSize={16}></Th>
+                    <Th fontSize={16}>
+                      {expenditureItems.reduce(
+                        (total: any, item: any) => total + item.amount,
+                        0
+                      )}
+                      /=
+                    </Th>
+                  </Tr>
+                  <Tr></Tr>
+                  <Tr>
+                    <Th fontSize={16}>Net Income</Th>
+                    <Th></Th>
+                    <Th fontSize={16}>
+                      {incomeItems.reduce(
+                        (total: any, item: any) => total + item.amount,
+                        0
+                      ) -
+                        expenditureItems.reduce(
+                          (total: any, item: any) => total + item.amount,
+                          0
+                        )}
+                      /=
+                    </Th>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Box>
       </Box>
     </Flex>
   );
 };
 
-export default ManageStore;
+export default ManageIncome;

@@ -10,11 +10,24 @@ import {
   IconButton,
   Spinner,
   Flex,
+  Box,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Edit } from "@mui/icons-material";
+import "react-toastify/dist/ReactToastify.css";
 import { BiTrashAlt } from "react-icons/bi";
-export const ClassFeesList = ({ list }: any) => {
-  const isLoading = false;
+import EditModal from "./EditModal";
+import { useState } from "react";
+
+export const ClassFeesList = ({ list, isLoading, deleteClassFee }: any) => {
+  const [selectedId, setSelectedId] = useState("");
+  const openModel = (id: any) => {
+    setSelectedId(id);
+    onOpen();
+  };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
       {isLoading ? (
@@ -51,15 +64,27 @@ export const ClassFeesList = ({ list }: any) => {
                       <IconButton
                         colorScheme="red"
                         aria-label="Delete database"
-                        //   onClick={() => deleteClass(clas.classroomId)}
+                        onClick={() => deleteClassFee(fee?.classfeeId)}
                         icon={<BiTrashAlt />}
                       />
+
                       <IconButton
                         colorScheme="blue"
-                        //   onClick={() => openModal(clas.classroomId)}
+                        onClick={() => openModel(fee?.classfeeId)}
                         aria-label="Edit database"
                         icon={<Edit />}
                       />
+                      <Box display="none">
+                        {isOpen ? (
+                          <EditModal
+                            item={fee}
+                            onOpen={onOpen}
+                            onClose={onClose}
+                            isOpen={isOpen}
+                            selectedId={selectedId}
+                          />
+                        ) : null}
+                      </Box>
                     </Td>
                   </Td>
                 </Tr>

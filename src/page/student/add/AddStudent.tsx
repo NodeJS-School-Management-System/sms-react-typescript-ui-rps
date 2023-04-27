@@ -34,7 +34,6 @@ import {
 import { useState, useEffect } from "react";
 import { BiEnvelope } from "react-icons/bi";
 import { FaAngleRight } from "react-icons/fa";
-import { GiPadlock } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
@@ -61,7 +60,6 @@ export const AddStudent = () => {
   const [dateofbirth, setDateofbirth] = useState("");
   const [profileimage, setProfileimage] = useState<any>(undefined);
   const [role, setRole] = useState("");
-  const [password, setpassword] = useState("");
   const [hostel, setHostel] = useState("");
   const [transport, setTransport] = useState("");
   const [clas, setClass] = useState("");
@@ -85,14 +83,30 @@ export const AddStudent = () => {
     }
   };
 
+  // SYSTEM GENERATED STUDENT PASSWORD *****************************************************
+  const generateOTP = () => {
+    let otp = "";
+    const possible = "0123456789";
+    for (let i = 0; i < 4; i++) {
+      otp += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return otp;
+  };
+
+  // STUDENT PASSCODE
+  const [passcode, setPasscode] = useState<any>(null)
+  // const passcode = generateOTP();
+
+  // REGISTER NEW STUDENT *****************************************************************
   const addstudent = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setPasscode(generateOTP())
     e.preventDefault();
     const student: any = {
       username,
       firstname,
       lastname,
       email,
-      password,
+      password: passcode,
       role,
       contact,
       gender,
@@ -176,7 +190,6 @@ export const AddStudent = () => {
 
             setEmail("");
             setUsername("");
-            setpassword("");
             setGender("");
             setDateofbirth("");
             setFirstname("");
@@ -205,19 +218,6 @@ export const AddStudent = () => {
           }
         }
       );
-
-      // Upload IMage to uploads folder on the backend **********************************************
-      // This will be replaced by firebase and then commented out later *****************************
-      // try {
-      //   await myAPIClient.post("/upload", datai, {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   });
-      // } catch (err) {
-      //   setError(true);
-      //   setSuccess(false);
-      // }
     }
   };
 
@@ -480,48 +480,6 @@ export const AddStudent = () => {
 
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>
-                Parent Name<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<ClassOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={parentname}
-                  onChange={(e) => setParentname(e.target.value)}
-                  placeholder="Parent Name"
-                />
-              </InputGroup>
-            </Center>
-
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Parent Email</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<ClassOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={parentEmail}
-                  onChange={(e) => setParentEmail(e.target.value)}
-                  placeholder="Parent Email"
-                />
-              </InputGroup>
-            </Center>
-
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
                 Parent Contact<span style={{ color: "red" }}>*</span>
               </FormLabel>
               <InputGroup>
@@ -550,6 +508,46 @@ export const AddStudent = () => {
             flex={1}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
+            <Center flexDirection={"column"} mt={2} w="90%" h="100%">
+              <FormLabel alignSelf={"flex-start"}>
+                Parent Name<span style={{ color: "red" }}>*</span>
+              </FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  cursor={"pointer"}
+                  pointerEvents="none"
+                  color="gray.400"
+                  width="2.5rem"
+                  children={<ClassOutlined />}
+                />
+                <Input
+                  isRequired
+                  type="text"
+                  value={parentname}
+                  onChange={(e) => setParentname(e.target.value)}
+                  placeholder="Parent Name"
+                />
+              </InputGroup>
+            </Center>
+            <Center flexDirection={"column"} w="90%" h="100%">
+              <FormLabel alignSelf={"flex-start"}>Parent Email</FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  cursor={"pointer"}
+                  pointerEvents="none"
+                  color="gray.400"
+                  width="2.5rem"
+                  children={<ClassOutlined />}
+                />
+                <Input
+                  isRequired
+                  type="text"
+                  value={parentEmail}
+                  onChange={(e) => setParentEmail(e.target.value)}
+                  placeholder="Parent Email"
+                />
+              </InputGroup>
+            </Center>
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>
                 Address<span style={{ color: "red" }}>*</span>
@@ -571,11 +569,8 @@ export const AddStudent = () => {
                 />
               </InputGroup>
             </Center>
-
             <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Student NIN 
-              </FormLabel>
+              <FormLabel alignSelf={"flex-start"}>Student NIN</FormLabel>
               <InputGroup>
                 <InputLeftElement
                   cursor={"pointer"}
@@ -593,7 +588,6 @@ export const AddStudent = () => {
                 />
               </InputGroup>
             </Center>
-
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>Student Contact</FormLabel>
               <InputGroup>
@@ -675,7 +669,6 @@ export const AddStudent = () => {
                 />
               </InputGroup>
             </Center>
-
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>Transport</FormLabel>
               <InputGroup>
@@ -697,31 +690,6 @@ export const AddStudent = () => {
             </Center>
             <Center flexDirection={"column"} w="90%" h="100%">
               <FormLabel alignSelf={"flex-start"}>
-                Password<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<GiPadlock />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={password}
-                  placeholder="Password"
-                  onChange={(e) => {
-                    setError(false);
-                    setSuccess(false);
-                    setpassword(e.target.value);
-                  }}
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
                 Profile Image<span style={{ color: "red" }}>*</span>
               </FormLabel>
               <Input
@@ -731,21 +699,18 @@ export const AddStudent = () => {
                 type="file"
               />
             </Center>
-
             {error && (
               <Alert p={6} w={"90%"} status="error">
                 <AlertIcon />
                 There was an error processing your request
               </Alert>
             )}
-
             {success && (
               <Alert p={6} w={"90%"} status="success">
                 <AlertIcon />
                 Success, student has been added successfully!
               </Alert>
             )}
-
             <Button
               variant={"solid"}
               colorScheme={primaryColor.name}
@@ -754,7 +719,6 @@ export const AddStudent = () => {
               onClick={addstudent}
               disabled={
                 !username ||
-                !password ||
                 !firstname ||
                 !lastname ||
                 !gender ||
@@ -771,7 +735,8 @@ export const AddStudent = () => {
               ) : (
                 "Add Student"
               )}
-            </Button>
+            </Button>{" "}
+            <span>Student passcode is {passcode}</span>
           </WrapItem>
         </form>
         {/* </Flex> */}

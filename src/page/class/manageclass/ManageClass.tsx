@@ -216,7 +216,7 @@ export const ManageClass = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"
@@ -308,7 +308,7 @@ export const ManageClass = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"

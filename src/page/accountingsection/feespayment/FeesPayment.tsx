@@ -11,39 +11,62 @@ import {
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
-import { SelectInput } from "../../../components/reusable/SelectInput";
 import useTheme from "../../../theme/useTheme";
 import { FeesList } from "./FeesList";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const FeesPayment = () => {
   const token = localStorage.getItem("token");
 
   const [clas, setClas] = useState("");
-  const [studentName, setStudentName] = useState("");
+  const [bankname, setBankname] = useState("");
+  const [studentname, setStudentName] = useState("");
+  const [termname, setTermname] = useState("");
   const [accountType, setAccountType] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [amount, setAmount] = useState("");
   const [paymentReference, setPaymentReference] = useState("");
+  const [scheme, setScheme] = useState("");
 
-  // SPONSOR OPTIONS
-  const sponsors = [
-    {
-      label: "Full Bursary",
-      value: "Full Bursary",
-    },
-    {
-      label: "Half Bursary",
-      value: "Half Bursary",
-    },
-    {
-      label: "Self",
-      value: "Self",
-    },
-  ];
+  // UPDATE CLASS NAME ACCORDING TO CLASS NUMMERAL
+  let clasn: string = "";
+  if (clas === "P1") {
+    clasn = "Primary One";
+  } else if (clas === "P2") {
+    clasn = "Primary Two";
+  } else if (clas === "P3") {
+    clasn = "Primary Three";
+  } else if (clas === "P4") {
+    clasn = "Primary Four";
+  } else if (clas === "P5") {
+    clasn = "Primary Five";
+  } else if (clas === "P6") {
+    clasn = "Primary Six";
+  } else if (clas === "P7") {
+    clasn = "Primary Seven";
+  }
 
-  const [selectedOption, setSelectedOption] = useState<any>(null);
+  // GET CLASS FEES
+  const [classfees, setClassFees] = useState<any>({});
+  useEffect(() => {
+    const getClassFees = async () => {
+      try {
+        const res = await myAPIClient.get(`/classfee/findbyclass/${clasn}`, {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setClassFees(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getClassFees();
+  }, [clas]);
 
-  //  Get all classes
+  //  Get all classes***********************************************************************************
   const [classes, setClasses] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
@@ -60,8 +83,9 @@ export const FeesPayment = () => {
     };
     getClasses();
   }, []);
+  // ****************************************************************************************************
 
-  // Get students by className
+  // Get students by className***********************************************************
   const [students, setStudents] = useState([]);
   useEffect(() => {
     const getStudents = async () => {
@@ -71,8 +95,10 @@ export const FeesPayment = () => {
             token: `Bearer ${token}`,
           },
         });
-        setStudents(res.data);
+
         console.log(res.data);
+
+        setStudents(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -80,6 +106,8 @@ export const FeesPayment = () => {
 
     getStudents();
   }, [clas]);
+
+  // ************************************************************************************
 
   // Get all account types
   const [accountTypes, setAccountTypes] = useState([]);
@@ -95,35 +123,68 @@ export const FeesPayment = () => {
     getAccountTypes();
   }, []);
 
+  const [isLoading, setIsLoading] = useState(false);
+  const deleteAccountDetails: any = async (id: any) => {
+    setIsLoading(true);
+    try {
+      const res = await myAPIClient.delete(`/fees/${id}`, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      toast.success("Success, details have been deleted!");
+
+      console.log(res.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      toast.error("Sorry, something went wrong, try again!");
+      setIsLoading(false);
+    }
+  };
+
+  // ADD ACCOUNT DETAILS ********************************************************
   const addAccountDetails = async () => {
     const newAccount = {
       amount,
+      bankname,
+      scheme,
       accountType,
-      studentName,
+      termname,
+      studentName: studentname,
       class: clas,
       accountNumber,
       paymentReference,
+      classFeesAMount: classfees?.amount,
     };
+    setIsLoading(true);
     try {
       const res = await myAPIClient.post("/fees", newAccount, {
         headers: {
           token: `Bearer ${token}`,
         },
       });
+      toast.success("Success, details have been saved!");
       setAccountNumber("");
       setAmount("");
-      setAccountType("");
       setClas("");
+      setScheme("");
+      setTermname("");
+      setAccountType("");
       setStudentName("");
       setPaymentReference("");
+      setBankname("");
       console.log(res.data);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
+      toast.error("Sorry, something went wrong, try again!");
+      setIsLoading(false);
     }
   };
 
   // Get all accounts
-  // const [accounts, setAccounts] = useState([])
+  const [accounts, setAccounts] = useState([]);
   useEffect(() => {
     const getAccounts = async () => {
       try {
@@ -133,12 +194,13 @@ export const FeesPayment = () => {
           },
         });
         console.log(res.data);
+        setAccounts(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getAccounts();
-  }, []);
+  }, [isLoading]);
 
   // GET THEME WITH PRIMARY COLOR ******************************************
   const {
@@ -190,14 +252,14 @@ export const FeesPayment = () => {
               borderRadius={2}
               pb={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
             >
               <Flex
                 alignItems="center"
-                bg={"teal"}
+                bg={primaryColor.color}
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"
@@ -217,7 +279,7 @@ export const FeesPayment = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -240,14 +302,14 @@ export const FeesPayment = () => {
                     w={"100%"}
                   >
                     {classes.map((c: any) => (
-                      <option value={c.className}>{c.className}</option>
+                      <option value={c.classNumeral}>{c.className}</option>
                     ))}
                   </Select>
                 </Flex>
 
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -265,19 +327,19 @@ export const FeesPayment = () => {
                   </Text>
                   <Select
                     placeholder="Select Term"
-                    value={clas}
-                    onChange={(e) => setClas(e.target.value)}
+                    value={termname}
+                    onChange={(e) => setTermname(e.target.value)}
                     w={"100%"}
                   >
-                    {classes.map((c: any) => (
-                      <option value={c.className}>{c.className}</option>
-                    ))}
+                    <option value={"Term One"}>Term One</option>
+                    <option value={"Term Two"}>Term Two</option>
+                    <option value={"Term Three"}>Term Three</option>
                   </Select>
                 </Flex>
 
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -291,14 +353,26 @@ export const FeesPayment = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Student
+                    Select Student
                   </Text>
-                  <SelectInput options={students} />
+
+                  <Select
+                    placeholder="Select Class"
+                    value={studentname}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    w={"100%"}
+                  >
+                    {students?.map((c: any) => (
+                      <option
+                        value={`${c.firstname} ${c.lastname}`}
+                      >{`${c.firstname} ${c.lastname}`}</option>
+                    ))}
+                  </Select>
                 </Flex>
 
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -329,9 +403,10 @@ export const FeesPayment = () => {
                     ))}
                   </Select>
                 </Flex>
+
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -353,9 +428,10 @@ export const FeesPayment = () => {
                     onChange={(e) => setAccountNumber(e.target.value)}
                   />
                 </Flex>
+
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -371,16 +447,21 @@ export const FeesPayment = () => {
                   >
                     Sponsorship Scheme
                   </Text>
-                  <SelectInput
-                    options={sponsors}
-                    selectedOption={selectedOption}
-                    setSelectedOption={setSelectedOption}
-                  />
+                  <Select
+                    placeholder="Select Scheme"
+                    value={scheme}
+                    onChange={(e) => setScheme(e.target.value)}
+                    w={"100%"}
+                  >
+                    <option value="Self">Self</option>
+                    <option value="Half Barsary">Half Barsary</option>
+                    <option value="Full Barsary">Full Barsary</option>
+                  </Select>
                 </Flex>
 
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -398,14 +479,14 @@ export const FeesPayment = () => {
                   </Text>
                   <Input
                     placeholder="Bank Name"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    value={bankname}
+                    onChange={(e) => setBankname(e.target.value)}
                   />
                 </Flex>
 
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -419,7 +500,12 @@ export const FeesPayment = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Amount
+                    Amount <span style={{ color: "red" }}>*</span>{" "}
+                    {clas && (
+                      <span style={{ color: "gray", fontSize: 12 }}>
+                        (Total for {clas}: {classfees?.amount}/=)
+                      </span>
+                    )}
                   </Text>
                   <Input
                     placeholder="Amount"
@@ -429,7 +515,7 @@ export const FeesPayment = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -462,11 +548,13 @@ export const FeesPayment = () => {
                     !accountNumber ||
                     !accountType ||
                     !clas ||
+                    !bankname ||
+                    !studentname ||
                     !paymentReference
                   }
                   onClick={addAccountDetails}
                 >
-                  Add Details
+                  {isLoading ? "Adding.." : "Add Details"}
                 </Button>
               </Box>
             </Center>
@@ -480,14 +568,13 @@ export const FeesPayment = () => {
             flex={1}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            
             <Box
               flexDirection={"column"}
               boxShadow={"lg"}
               borderRadius={2}
               p={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -499,7 +586,6 @@ export const FeesPayment = () => {
                 direction="row"
                 align={"center"}
                 justify={"space-between"}
-
               >
                 <Flex
                   // mb={2}
@@ -525,7 +611,6 @@ export const FeesPayment = () => {
                     <option value="option2">50</option>
                     <option value="option3">100</option>
                     <option value="option3">500</option>
-                    <option value="option3">2000</option>
                   </Select>
                   <Text
                     fontSize={20}
@@ -553,47 +638,12 @@ export const FeesPayment = () => {
                 </Flex>
               </Flex>
 
-              <FeesList />
-              {/* <Box w={"100%"}>
-                <Flex
-                  overflowX={"auto"}
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  flexDirection="column"
-                >
-                  <Box>
-                    <Box>
-                      <Text
-                        p={2}
-                        fontSize={22}
-                        textAlign="center"
-                        fontWeight="bold"
-                      >
-                        Fees Status of Vicent
-                      </Text>
-                    </Box>
-                  </Box>
-
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    borderTop="1px solid #ccc"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={19} fontWeight="bold">
-                      Month
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Status
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Action
-                    </Text>
-                  </Flex>
-                </Flex>
-              </Box> */}
+              <FeesList
+                accounts={accounts}
+                setIsLoading={setIsLoading}
+                isLoading={isLoading}
+                deleteAccountDetails={deleteAccountDetails}
+              />
             </Box>
           </WrapItem>
         </Flex>

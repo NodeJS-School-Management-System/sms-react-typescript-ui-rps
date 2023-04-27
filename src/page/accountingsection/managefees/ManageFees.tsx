@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
 import { ClassFeesList } from "./ClassFeesList";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const ManageFees = () => {
   const token = localStorage.getItem("token");
@@ -27,10 +29,31 @@ export const ManageFees = () => {
   const [classUpdate, setClassUpdate] = useState("");
   const [fees, setFees] = useState("");
   const [classlist, setClasslist] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // DELETE CLASS FEE ***********************************************************
+  const [isDeleting, setIsdeleting] = useState(false);
+  const deleteClassFee = async (id: any) => {
+    setIsdeleting(true);
+    try {
+      const res = await myAPIClient.delete(`classfee/${id}`, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data);
+      setIsdeleting(false);
+      toast.success("Success, class fee has been deleted!");
+    } catch (err) {
+      console.log(err);
+      setIsdeleting(false);
+      toast.error("Error, something went wrong, try again!");
+    }
+  };
 
   useEffect(() => {
     const getClasses = async () => {
-      // setIsLoading(true);
+      setIsLoading(true);
       try {
         const res = await myAPIClient.get("/classroom", {
           headers: {
@@ -39,10 +62,10 @@ export const ManageFees = () => {
         });
         setClasslist(res.data);
         console.log(classlist);
-        // setIsLoading(false);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
-        // setIsLoading(false);
+        setIsLoading(false);
       }
     };
     getClasses();
@@ -50,7 +73,7 @@ export const ManageFees = () => {
 
   const addClassFees = async () => {
     try {
-      const res = await myAPIClient.post(
+      await myAPIClient.post(
         "/classfee",
         { class: classUpdate, amount: fees },
         {
@@ -59,14 +82,15 @@ export const ManageFees = () => {
           },
         }
       );
-      console.log(res.data);
+      toast.success("Success, fees have been added!");
     } catch (err) {
       console.log(err);
+      toast.error("Error, something went wrong, try again!");
     }
   };
 
   // GET CLASS FEES **************************************************************************************
- const [feess, setFeess] = useState([])
+  const [feess, setFeess] = useState([]);
   useEffect(() => {
     const getClassFees = async () => {
       try {
@@ -76,44 +100,34 @@ export const ManageFees = () => {
           },
         });
         console.log(res.data);
-        setFeess(res.data)
+        setFeess(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getClassFees();
-  }, []);
+  }, [isDeleting]);
 
   const [accountType, setAccountType] = useState("");
 
   const addAccountType = async () => {
-    const res = await myAPIClient.post(
-      "/accounttype",
-      { accountType },
-      {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(res.data);
-  };
-
-  useEffect(() => {
-    const getAccountTypes = async () => {
-      try {
-        const res = await myAPIClient.get("/accounttype", {
+    try {
+      const res = await myAPIClient.post(
+        "/accounttype",
+        { accountType },
+        {
           headers: {
             token: `Bearer ${token}`,
           },
-        });
-        console.log(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getAccountTypes();
-  }, []);
+        }
+      );
+      console.log(res.data);
+      toast.success("Success, account type has been added!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error, something went wrong, try again!");
+    }
+  };
 
   return (
     <Box>
@@ -130,17 +144,13 @@ export const ManageFees = () => {
           <Text>SMS</Text>
         </Flex>
         <Flex flexDirection={"row"} gap={2} alignItems="center">
-          <Text color={"black"} fontWeight={"bold"} fontSize={14}>
+          <Text color={"black"} fontWeight={"bold"} fontSize={15}>
             <Link to="/">Home</Link>
           </Text>
           <FaAngleRight />
-          <Text fontSize={14} fontWeight="bold">
-            Accounting
-          </Text>
+          <Text fontSize={15}>Accounting</Text>
           <FaAngleRight />
-          <Text fontWeight="bold" fontSize={14}>
-            Manage Accounting
-          </Text>
+          <Text>Manage Accounting</Text>
         </Flex>
       </Flex>
 
@@ -166,7 +176,7 @@ export const ManageFees = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              borderTop="3px solid #ccc"
+              // borderTop="3px solid #ccc"
               bg={"white"}
               height="auto"
               w="90%"
@@ -174,7 +184,7 @@ export const ManageFees = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 color="white"
                 w="100%"
                 justifyContent="center"
@@ -279,7 +289,7 @@ export const ManageFees = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 color="white"
                 w="100%"
                 justifyContent="center"
@@ -359,7 +369,11 @@ export const ManageFees = () => {
               h="100%"
             >
               <Box w={"100%"}>
-                <ClassFeesList list={feess} />
+                <ClassFeesList
+                  deleteClassFee={deleteClassFee}
+                  isLoading={isLoading}
+                  list={feess}
+                />
               </Box>
             </Box>
           </WrapItem>
