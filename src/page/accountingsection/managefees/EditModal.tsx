@@ -164,7 +164,7 @@ const EditModal = ({ isOpen, onClose, selectedId }: any) => {
                 variant={"solid"}
                 w="50%"
                 mx={3}
-                onClick={updateClassFee}
+                onClick={updateFee}
                 bgColor={primaryColor.color}
                 color="white"
                 isDisabled={!classname && !amount}

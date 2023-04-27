@@ -14,7 +14,7 @@ import {
   Box,
   Alert,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useTheme from "../../../theme/useTheme";
 import { myAPIClient } from "../../auth/axiosInstance";
 
@@ -25,25 +25,6 @@ const EditModal = ({ isOpen, item, onOpen, onClose, selectedId }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  // const [itemm, setItem] = useState<any>([]);
-  // useEffect(() => {
-  //   console.log(item);
-  //   const getItem = async () => {
-  //     try {
-  //       const res = await myAPIClient.get(`/income/${selectedId}`, {
-  //         headers: {
-  //           token: `token ${localStorage.getItem("token")}`,
-  //         },
-  //       });
-  //       setItem(res.data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   getItem();
-  // }, [selectedId]);
-  // EDIT ITEM IN STROE *************************************************
 
   const updateStore = async (e: any) => {
     e.preventDefault();
