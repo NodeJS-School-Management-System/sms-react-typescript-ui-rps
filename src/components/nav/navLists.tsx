@@ -13,7 +13,7 @@ import {
   LocalLibrary,
   AttachMoney,
   Upcoming,
-  Email,
+  // Email,
   StoreMallDirectory,
   ExpandCircleDownOutlined,
 } from "@mui/icons-material";
@@ -132,9 +132,9 @@ const navList: NavOptions[] = [
     parent: formatGroupButton("Notice Board", <Upcoming />, "/noticeboard/"),
     childrens: [format("View", "/noticeboard/view/")],
   },
-  {
-    parent: formatGroupButton("Message", <Email />, "/message/"),
-    childrens: [format("View", "/message/view/")],
-  },
+  // {
+  //   parent: formatGroupButton("Message", <Email />, "/message/"),
+  //   childrens: [format("View", "/message/view/")],
+  // },
 ];
 export default navList;

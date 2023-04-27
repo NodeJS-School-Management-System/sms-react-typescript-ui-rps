@@ -65,7 +65,8 @@ export function CustomLogin() {
           setPassword("");
           setTimeout(() => {
             navigate("/dashboards/crm/");
-          }, 4000);
+            window.location.reload()
+          }, 3000);
         } catch (err) {
           console.log(err);
           toast.error("Error, something went wrong, try again!");
@@ -146,7 +147,7 @@ export function CustomLogin() {
               onChange={(e) => {
                 setUsername(e.target.value);
               }}
-              placeholder="Email"
+              placeholder="Username"
               type="text"
             />
           </FormControl>
