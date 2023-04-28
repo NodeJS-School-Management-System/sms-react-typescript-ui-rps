@@ -48,6 +48,7 @@ export const TeacherList = ({
             <Thead>
               <Tr>
                 <Th fontSize={14}>Full Name</Th>
+                <Th fontSize={14}>Username</Th>
                 <Th fontSize={14}>Profile Image</Th>
                 <Th fontSize={14}>Class</Th>
                 <Th fontSize={14}>Stream</Th>
@@ -66,6 +67,9 @@ export const TeacherList = ({
                   <Tr key={user.teacherId}>
                     <Td>
                       {user.firstname} {user.lastname}
+                    </Td>
+                    <Td>
+                      {user.username}
                     </Td>
                     <Td textAlign={"center"} margin="auto" p={0}>
                       <Image

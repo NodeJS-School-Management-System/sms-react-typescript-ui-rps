@@ -736,7 +736,7 @@ export const AddStudent = () => {
                 "Add Student"
               )}
             </Button>{" "}
-            <span>Student passcode is {passcode}</span>
+           {passcode && <span>Student passcode is {passcode}</span>}
           </WrapItem>
         </form>
         {/* </Flex> */}

@@ -64,7 +64,7 @@ const AppBar = () => {
           <Box display="flex">
             <MenuSideNav />
             <Heading as={"h5"} color={primaryColor.color}>
-              SCHOOL MANAGEMENT SYSTEM
+            GORILLA SCHOOL MANAGEMENT SYSTEM
             </Heading>
           </Box>
           <Box display="flex" align="center" space={0.6}>

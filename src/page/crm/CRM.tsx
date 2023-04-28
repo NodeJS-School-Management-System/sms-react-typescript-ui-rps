@@ -144,7 +144,7 @@ const CRM = () => {
   const homeAnalyticsRowTwo = [
     {
       title: "Today's Attendence",
-      value: 34,
+      value: 7,
       icon: CalendarMonth,
       bgColor: "#586744",
     },
@@ -162,7 +162,7 @@ const CRM = () => {
     },
     {
       title: "Fees Collected",
-      value: 4500000,
+      value: 100000,
       icon: AttachMoney,
       bgColor: "purple",
     },

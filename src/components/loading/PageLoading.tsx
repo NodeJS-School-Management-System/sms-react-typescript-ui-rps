@@ -18,7 +18,7 @@ const PageLoading = () => {
         justifyContent="center"
         flexDirection="column"
       >
-        <Logo height="16px" width="65%" />
+        <Logo height="16px" width="35%" />
         <Text size={100} align="center" lineHeight="48px" skinColor paragraph>
           <Icon icon="eos-icons:three-dots-loading" />{" "}
         </Text>

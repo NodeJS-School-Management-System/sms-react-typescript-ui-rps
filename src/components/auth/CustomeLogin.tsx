@@ -65,7 +65,7 @@ export function CustomLogin() {
           setPassword("");
           setTimeout(() => {
             navigate("/dashboards/crm/");
-            window.location.reload()
+            window.location.reload();
           }, 3000);
         } catch (err) {
           console.log(err);

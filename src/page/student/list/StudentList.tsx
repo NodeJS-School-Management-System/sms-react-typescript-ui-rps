@@ -45,6 +45,7 @@ export const StudentList = ({
             <Thead>
               <Tr>
                 <Th fontSize={14}>Full Name</Th>
+                <Th fontSize={14}>Username</Th>
                 <Th fontSize={14}>Profile Image</Th>
                 <Th fontSize={14}>Class</Th>
                 <Th fontSize={14}>Address</Th>
@@ -63,6 +64,9 @@ export const StudentList = ({
                   <Tr key={user.studentId}>
                     <Td>
                       {user.firstname} {user.lastname}
+                    </Td>
+                    <Td>
+                      {user.username}
                     </Td>
                     <Td textAlign={"center"} margin="auto" p={0}>
                       <Image
