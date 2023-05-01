@@ -432,7 +432,7 @@ const SingleDepartment = ({ d }: any) => {
                       color="white"
                     />
                   ) : (
-                    "Add Department"
+                    "Update Department"
                   )}
                 </Button>
               </Box>
