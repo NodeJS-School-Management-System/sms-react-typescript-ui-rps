@@ -94,12 +94,12 @@ export const AddStudent = () => {
   };
 
   // STUDENT PASSCODE
-  const [passcode, setPasscode] = useState<any>(null)
+  const [passcode, setPasscode] = useState<any>(null);
   // const passcode = generateOTP();
 
   // REGISTER NEW STUDENT *****************************************************************
   const addstudent = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setPasscode(generateOTP())
+    setPasscode(generateOTP());
     e.preventDefault();
     const student: any = {
       username,
@@ -247,7 +247,7 @@ export const AddStudent = () => {
 
   return (
     <Box>
-      <Flex
+      {/* <Flex
         w={"100%"}
         display={"flex"}
         alignItems={"center"}
@@ -280,6 +280,46 @@ export const AddStudent = () => {
             Add Student
           </Text>
         </Box>
+      </Flex> */}
+
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        my={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            Register Student
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <PersonAddAlt1 style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Add Student
+          </Text>
+        </Box>
       </Flex>
 
       <Box boxShadow="base" p={4}>
@@ -292,454 +332,456 @@ export const AddStudent = () => {
           p={4}
           h={50}
         >
-          <Text textAlign={"center"}>
-            *************All the fields marked with * are required ***********
+          <Text textAlign={"center"} fontSize={{ base: 10, md: 13, lg: 16 }}>
+            ***All the fields marked with * are required ***
           </Text>
         </Flex>
         <form
           style={{
             display: "flex",
-            width: "100%",
-            height: "100%",
-            gap: 3,
             flexDirection: "row",
           }}
         >
-          <WrapItem
-            flex={1}
-            gap={2}
-            flexDirection={"column"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
+          <Flex
+            w={"100%"}
+            justifyContent={"space-around"}
+            flexDirection={{ base: "column", md: "row" }}
           >
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                First Name<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<PersonOutlineOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={firstname}
-                  onChange={(e) => {
-                    setError(false);
-                    setSuccess(false);
-                    setFirstname(e.target.value);
-                  }}
-                  placeholder="First Name"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Last Name<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<PersonOutline />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={lastname}
-                  onChange={(e) => setLastname(e.target.value)}
-                  placeholder="Last Name"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Username<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<Person />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Username"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Email</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<BiEnvelope />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                />
-              </InputGroup>
-            </Center>
-
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Class<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <Select
-                  placeholder="Select Class"
-                  value={clas}
-                  onChange={(e) => setClass(e.target.value)}
-                  w={"100%"}
-                >
-                  {classes?.map((c: any) => (
-                    <option key={c.classNumeral} value={c.classNumeral}>
-                      {c.classNumeral}
-                    </option>
-                  ))}
-                </Select>
-              </InputGroup>
-            </Center>
-
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Stream</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<ViewStreamOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={stream}
-                  onChange={(e) => setStream(e.target.value)}
-                  placeholder="Stream"
-                />
-              </InputGroup>
-            </Center>
-
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Role</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<ClassOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  placeholder="Role"
-                />
-              </InputGroup>
-            </Center>
-
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Status</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<BsBoxArrowDownRight />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  placeholder="Status e.g Day Scholar"
-                />
-              </InputGroup>
-            </Center>
-
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Parent Contact<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<PhoneOutlined />}
-                />
-                <Input
-                  isRequired
-                  maxLength={10}
-                  type="text"
-                  value={parentcontact}
-                  onChange={(e) => setParentcontact(e.target.value)}
-                  placeholder="Parent Contact"
-                />
-              </InputGroup>
-            </Center>
-          </WrapItem>
-
-          <WrapItem
-            flexDirection={"column"}
-            gap={2}
-            flex={1}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center flexDirection={"column"} mt={2} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Parent Name<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<ClassOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={parentname}
-                  onChange={(e) => setParentname(e.target.value)}
-                  placeholder="Parent Name"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Parent Email</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<ClassOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={parentEmail}
-                  onChange={(e) => setParentEmail(e.target.value)}
-                  placeholder="Parent Email"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Address<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<Home />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Address"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Student NIN</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<FormatIndentIncreaseTwoTone />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={nin}
-                  onChange={(e) => setNin(e.target.value)}
-                  placeholder="Student NIN"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Student Contact</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<Phone />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  maxLength={10}
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  placeholder="Phone"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Date of Birth<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<DateRange />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={dateofbirth}
-                  onChange={(e) => setDateofbirth(e.target.value)}
-                  placeholder="Date of Birth"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Gender<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<WcOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  placeholder="Gender"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Hostel/Dormitory</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<HomeOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={hostel}
-                  onChange={(e) => setHostel(e.target.value)}
-                  placeholder="Hostel/Dormitory"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>Transport</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  cursor={"pointer"}
-                  pointerEvents="none"
-                  color="gray.400"
-                  width="2.5rem"
-                  children={<AirportShuttleOutlined />}
-                />
-                <Input
-                  isRequired
-                  type="text"
-                  value={transport}
-                  onChange={(e) => setTransport(e.target.value)}
-                  placeholder="Transport"
-                />
-              </InputGroup>
-            </Center>
-            <Center flexDirection={"column"} w="90%" h="100%">
-              <FormLabel alignSelf={"flex-start"}>
-                Profile Image<span style={{ color: "red" }}>*</span>
-              </FormLabel>
-              <Input
-                border={"none"}
-                onChange={onUploadImage}
-                isRequired
-                type="file"
-              />
-            </Center>
-            {error && (
-              <Alert p={6} w={"90%"} status="error">
-                <AlertIcon />
-                There was an error processing your request
-              </Alert>
-            )}
-            {success && (
-              <Alert p={6} w={"90%"} status="success">
-                <AlertIcon />
-                Success, student has been added successfully!
-              </Alert>
-            )}
-            <Button
-              variant={"solid"}
-              colorScheme={primaryColor.name}
-              px={20}
-              py={4}
-              onClick={addstudent}
-              disabled={
-                !username ||
-                !firstname ||
-                !lastname ||
-                !gender ||
-                !address ||
-                !dateofbirth ||
-                !profileimage ||
-                !clas ||
-                !parentname ||
-                !parentcontact
-              }
+            <WrapItem
+              flex={1}
+              gap={2}
+              flexDirection={"column"}
+              w={{ base: "100%", md: "50%", lg: "50%" }}
             >
-              {isLoading ? (
-                <CircularProgress isIndeterminate size="24px" color="white" />
-              ) : (
-                "Add Student"
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  First Name<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<PersonOutlineOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={firstname}
+                    onChange={(e) => {
+                      setError(false);
+                      setSuccess(false);
+                      setFirstname(e.target.value);
+                    }}
+                    placeholder="First Name"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Last Name<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<PersonOutline />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={lastname}
+                    onChange={(e) => setLastname(e.target.value)}
+                    placeholder="Last Name"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Username<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<Person />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Username"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Email</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<BiEnvelope />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Class<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <Select
+                    placeholder="Select Class"
+                    value={clas}
+                    onChange={(e) => setClass(e.target.value)}
+                    w={"100%"}
+                  >
+                    {classes?.map((c: any) => (
+                      <option key={c.classNumeral} value={c.classNumeral}>
+                        {c.classNumeral}
+                      </option>
+                    ))}
+                  </Select>
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Stream</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<ViewStreamOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={stream}
+                    onChange={(e) => setStream(e.target.value)}
+                    placeholder="Stream"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Role</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<ClassOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    placeholder="Role"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Status</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<BsBoxArrowDownRight />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    placeholder="Status e.g Day Scholar"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Parent Contact<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<PhoneOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    maxLength={10}
+                    type="text"
+                    value={parentcontact}
+                    onChange={(e) => setParentcontact(e.target.value)}
+                    placeholder="Parent Contact"
+                  />
+                </InputGroup>
+              </Center>
+            </WrapItem>
+
+            <WrapItem
+              flexDirection={"column"}
+              gap={2}
+              flex={1}
+              w={{ base: "100%", md: "50%", lg: "50%" }}
+            >
+              <Center flexDirection={"column"} mt={2} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Parent Name<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<ClassOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={parentname}
+                    onChange={(e) => setParentname(e.target.value)}
+                    placeholder="Parent Name"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Parent Email</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<ClassOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={parentEmail}
+                    onChange={(e) => setParentEmail(e.target.value)}
+                    placeholder="Parent Email"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Address<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<Home />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="Address"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Student NIN</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<FormatIndentIncreaseTwoTone />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={nin}
+                    onChange={(e) => setNin(e.target.value)}
+                    placeholder="Student NIN"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Student Contact</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<Phone />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    maxLength={10}
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    placeholder="Phone"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Date of Birth<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<DateRange />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={dateofbirth}
+                    onChange={(e) => setDateofbirth(e.target.value)}
+                    placeholder="Date of Birth"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Gender<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<WcOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    placeholder="Gender"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Hostel/Dormitory</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<HomeOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={hostel}
+                    onChange={(e) => setHostel(e.target.value)}
+                    placeholder="Hostel/Dormitory"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Transport</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<AirportShuttleOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={transport}
+                    onChange={(e) => setTransport(e.target.value)}
+                    placeholder="Transport"
+                  />
+                </InputGroup>
+              </Center>
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Profile Image<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <Input
+                  border={"none"}
+                  onChange={onUploadImage}
+                  isRequired
+                  type="file"
+                />
+              </Center>
+              {error && (
+                <Alert p={6} w={"90%"} status="error">
+                  <AlertIcon />
+                  There was an error processing your request
+                </Alert>
               )}
-            </Button>{" "}
-           {passcode && <span>Student passcode is {passcode}</span>}
-          </WrapItem>
+              {success && (
+                <Alert p={6} w={"90%"} status="success">
+                  <AlertIcon />
+                  Success, student has been added successfully!
+                </Alert>
+              )}
+              <Button
+                variant={"solid"}
+                colorScheme={primaryColor.name}
+                px={20}
+                py={4}
+                onClick={addstudent}
+                disabled={
+                  !username ||
+                  !firstname ||
+                  !lastname ||
+                  !gender ||
+                  !address ||
+                  !dateofbirth ||
+                  !profileimage ||
+                  !clas ||
+                  !parentname ||
+                  !parentcontact
+                }
+              >
+                {isLoading ? (
+                  <CircularProgress isIndeterminate size="24px" color="white" />
+                ) : (
+                  "Add Student"
+                )}
+              </Button>{" "}
+              {passcode && <span>Student passcode is {passcode}</span>}
+            </WrapItem>
+          </Flex>
         </form>
-        {/* </Flex> */}
       </Box>
     </Box>
   );

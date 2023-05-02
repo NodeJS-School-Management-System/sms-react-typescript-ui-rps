@@ -185,16 +185,22 @@ const Departments = () => {
           <Text>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <GiRadarCrossSection />
-          <Text fontWeight="bold" fontSize={14}>
-            Departments
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <GiRadarCrossSection style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Dashboard
           </Text>
         </Box>
       </Flex>

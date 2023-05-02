@@ -10,6 +10,7 @@ import HorizontalNav from "../nav/horizontal/HorizontalNav";
 import Notification from "../notification/Notification";
 import MenuSideNav from "./components/MenuSideNav";
 import ProfileDropdown from "./components/ProfileDropdown";
+import "./AppBar.css";
 
 const AppBar = () => {
   const {
@@ -43,6 +44,7 @@ const AppBar = () => {
   return (
     <StyledAppBar
       ref={contentRef}
+      style={{ display: "flex", alignItems: "center" }}
       className={`${
         appBarPosition === "hidden"
           ? "appbar-hidden"
@@ -61,10 +63,18 @@ const AppBar = () => {
           py={12}
           px={layout === "horizontal" ? 20 : 0}
         >
-          <Box display="flex">
+          <Box display="flex" align="center">
             <MenuSideNav />
-            <Heading as={"h5"} color={primaryColor.color}>
-            GORILLA SCHOOL MANAGEMENT SYSTEM
+            <Heading
+              as={"h5"}
+              fontSize={{ base: 22, md: 25, lg: 35 }}
+              color={primaryColor.color}
+            >
+              {/* GORILLA SCHOOL MANAGEMENT SYSTEM */}
+              <span className="show-on-small">GSMS</span>
+              <span className="show-on-large">
+                GORILLA SCHOOL MANAGEMENT SYSTEM
+              </span>
             </Heading>
           </Box>
           <Box display="flex" align="center" space={0.6}>

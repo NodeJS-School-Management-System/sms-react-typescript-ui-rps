@@ -14,7 +14,7 @@ const AnalyticsBox = ({ item }: any) => {
       flexDirection={"column"}
       w={{ base: "100%", md: "50%", lg: "50%" }}
     >
-      <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+      <Center flexDirection={"row"} w="100%" h={"110px"} boxShadow={"base"}>
         <Flex
           bgColor={item.bgColor}
           w={"30%"}
@@ -32,7 +32,7 @@ const AnalyticsBox = ({ item }: any) => {
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <Text fontSize={20} fontWeight="bold" color={"gray"} mb={3}>
+          <Text fontSize={20} textAlign='center' fontWeight="bold" color={"gray"} mb={3}>
             {item.title}
           </Text>
           <Heading as="h2">{(item.value).toLocaleString()}</Heading>

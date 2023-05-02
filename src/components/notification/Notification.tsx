@@ -1,7 +1,7 @@
 import { NotificationsOutlined } from "@mui/icons-material";
 import styled from "styled-components";
 import useTheme from "../../theme/useTheme";
-import { Button, Chip, IconButton, Text } from "../../ui";
+import { Button, IconButton, Text } from "../../ui";
 import Box from "../box/Box";
 import DropdownV2 from "../dropdown/DropdownV2";
 import ScrollContainer from "../scroll-container/ScrollContainer";
@@ -33,6 +33,8 @@ const Notification = () => {
     <NotificationItem {...item} key={item.subject} />
   ));
 
+  const notifsAvailable: boolean = false;
+
   return (
     <StyledNotification theme={{ mode: mode.name }}>
       <DropdownV2
@@ -52,7 +54,7 @@ const Notification = () => {
                 <Text varient="body1" weight="bold">
                   Notifications
                 </Text>
-                <Chip label="13 New" skin="light" size="small" />
+                {/* <Chip label="13 New" skin="light" size="small" /> */}
               </Box>
             ),
           },
@@ -62,8 +64,9 @@ const Notification = () => {
               <ScrollContainer
                 maxHeight="350px"
                 key={"notificationScrollContainer"}
+
               >
-                {notificationItems}
+                {notifsAvailable ? notificationItems : <span style={{marginLeft: 20}}>No notifications available!</span>}
               </ScrollContainer>
             ),
           },
@@ -71,9 +74,11 @@ const Notification = () => {
             type: "children",
             children: (
               <Box display="flex" flex={1} px={20} py={12}>
-                <Button varient="contained" width="100%">
-                  read all notifications
-                </Button>
+                {notifsAvailable && (
+                  <Button varient="contained" width="100%">
+                    read all notifications
+                  </Button>
+                )}
               </Box>
             ),
           },

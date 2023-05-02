@@ -228,19 +228,20 @@ const CRM = () => {
             <Text>SMS</Text>
           </Box>
           <Box display={"flex"} alignItems="center" gap={2}>
-            <Home />
+            <Home style={{ fontSize: 16 }} />
             <Link to="/">
-              <Text fontWeight="bold" fontSize={14}>
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
                 Home
               </Text>
             </Link>
             <FaAngleRight />
-            <Dashboard />
-            <Text fontWeight="bold" fontSize={14}>
+            <Dashboard style={{ fontSize: 16 }} />
+            <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
               Dashboard
             </Text>
           </Box>
         </Flex>
+
         <Flex
           boxShadow="base"
           p={4}
@@ -257,7 +258,12 @@ const CRM = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
                 bgColor={"#1999d1"}
                 color={"white"}
@@ -308,20 +314,20 @@ const CRM = () => {
           ))}
         </Flex>
 
-        <Flex boxShadow={"lg"}>
+        <Flex boxShadow={"lg"} flexDir={{ base: "column", lg: "row" }}>
           <Box boxShadow={"lg"} m={2} flex={1}>
             <WrapItem
               flex={1}
               gap={6}
               flexDirection={"column"}
               h={"max-content"}
-              // w={{ base: "100%", md: "50%", lg: "50%" }}
+              color="white"
             >
               <Button
                 py={7}
                 fontSize={22}
                 cursor="auto"
-                colorScheme={"teal"}
+                bgColor={primaryColor.color}
                 w={"100%"}
               >
                 Quick Mail
@@ -343,7 +349,7 @@ const CRM = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Message To:
+                    Message To: <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <Input
                     value={receiverName}
@@ -367,7 +373,7 @@ const CRM = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Title
+                    Title <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <Input
                     value={title}
@@ -391,7 +397,7 @@ const CRM = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Body
+                    Body <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <Textarea
                     value={message}
@@ -404,6 +410,7 @@ const CRM = () => {
                   variant={"solid"}
                   w="50%"
                   mx={3}
+                  mb={2}
                   onClick={sendMessage}
                   bgColor={primaryColor.color}
                   color="white"

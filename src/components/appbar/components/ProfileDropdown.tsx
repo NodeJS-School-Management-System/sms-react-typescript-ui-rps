@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { Avatar, Divider, Text } from "../../../ui";
-import john from "../../../image/humans/3.png";
 import Box from "../../box/Box";
 import {
   ChatBubbleOutline,
@@ -26,7 +25,12 @@ const ProfileDropdown = () => {
       type: "component",
       content: (
         <Box display="flex" align="center" space={0.6} padding={16}>
-          <Avatar src={john} alt="john doe" />
+          <Avatar
+            src={
+              "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683014096~exp=1683014696~hmac=21316efa5253c58a4501926c1c4c466c0e79f8d7704acf5f53030a5fc9fe5239"
+            }
+            alt="Logged In User"
+          />
           <Box>
             <Text varient="body1" weight="bold" paragraph>
               {username}
@@ -86,7 +90,14 @@ const ProfileDropdown = () => {
   ];
   return (
     <DropdownV2
-      labelContent={<Avatar src={john} alt="john doe" />}
+      labelContent={
+        <Avatar
+          src={
+            "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683014096~exp=1683014696~hmac=21316efa5253c58a4501926c1c4c466c0e79f8d7704acf5f53030a5fc9fe5239"
+          }
+          alt="john doe"
+        />
+      }
       dropdownList={dropdownItems}
       width="250px"
     />

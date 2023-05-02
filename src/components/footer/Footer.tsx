@@ -1,13 +1,14 @@
 import { LinkedIn, Twitter } from "@mui/icons-material";
 import styled from "styled-components";
 import useTheme from "../../theme/useTheme";
-import { Text } from "../../ui";
+import { Text as CText } from "@chakra-ui/react";
 import Box from "../box/Box";
 
 const Footer = () => {
   const {
     theme: {
       layout: { footerPosition },
+      primaryColor,
     },
   } = useTheme();
   if (footerPosition === "hidden") return <></>;
@@ -18,18 +19,18 @@ const Footer = () => {
         footerPosition === "fixed" ? "fg-theme" : ""
       }`}
     >
-      <Text varient="body1" weight="medium">
+      <CText fontSize={{ base: 12, md: 14, lg: 16 }}>
         Made with ❤️ by{" "}
         <a href="#" target={"_blank"} rel="noreferrer" className="text-primary">
           Quadral Technologies
         </a>
-      </Text>
+      </CText>
       <Box display="flex" space={0.6}>
         <a href="#" target={"_blank"} rel="noreferrer">
-          <LinkedIn />
+          <LinkedIn style={{ color: primaryColor.color }} />
         </a>
         <a href="#" target={"_blank"} rel="noreferrer">
-          <Twitter />{" "}
+          <Twitter style={{ color: primaryColor.color }} />
         </a>
       </Box>
     </StyledFooter>

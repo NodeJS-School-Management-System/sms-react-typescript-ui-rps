@@ -39,7 +39,9 @@ export const StudentList = ({
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer>
+        <TableContainer
+        // h={700} overflowY={"auto"}
+        >
           <Table variant="simple">
             <TableCaption>Student's List</TableCaption>
             <Thead>
@@ -65,9 +67,7 @@ export const StudentList = ({
                     <Td>
                       {user.firstname} {user.lastname}
                     </Td>
-                    <Td>
-                      {user.username}
-                    </Td>
+                    <Td>{user.username}</Td>
                     <Td textAlign={"center"} margin="auto" p={0}>
                       <Image
                         w={45}
