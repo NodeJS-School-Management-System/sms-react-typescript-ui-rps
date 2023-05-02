@@ -311,7 +311,7 @@ export const ManageLibrary = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -338,7 +338,7 @@ export const ManageLibrary = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -369,7 +369,7 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -401,7 +401,7 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -425,7 +425,7 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -449,7 +449,7 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -497,7 +497,7 @@ export const ManageLibrary = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -524,7 +524,7 @@ export const ManageLibrary = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -555,7 +555,7 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -587,7 +587,7 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -611,7 +611,7 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -635,7 +635,6 @@ export const ManageLibrary = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -655,7 +654,6 @@ export const ManageLibrary = () => {
                 </Flex>
 
                 <Button
-                  // onClick={addBook}
                   disabled={!title || !author || !clas || !subject}
                   variant={"solid"}
                   w="50%"

@@ -132,7 +132,7 @@ export const ViewNoticeBoard = () => {
               borderRadius={2}
               pb={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -140,7 +140,7 @@ export const ViewNoticeBoard = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -165,7 +165,6 @@ export const ViewNoticeBoard = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -191,7 +190,6 @@ export const ViewNoticeBoard = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -242,7 +240,6 @@ export const ViewNoticeBoard = () => {
               borderRadius={2}
               p={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
               height="auto"
               w="90%"
               h="100%"
