@@ -38,6 +38,7 @@ const navList: NavOptions[] = [
     childrens: [
       format("Home", "/dashboards/crm/"),
       format("Departments", "/dashboards/departments/"),
+      // format("Analytics", "/dashboards/departments/"),
     ],
   },
   {

@@ -221,6 +221,7 @@ export const AddNTStaff = () => {
 
   return (
     <Box>
+      
       <Flex
         w={"100%"}
         display={"flex"}
@@ -228,30 +229,36 @@ export const AddNTStaff = () => {
         justify="space-between"
         h={70}
         p={5}
-        my={3}
+        pt={0}
+        mb={3}
       >
         <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
-            Non Teaching Staff Registration
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            Register Member
           </Heading>
-          <Text>SMS</Text>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <PersonOutline />
-          <Text fontWeight="bold" fontSize={14}>
-            NTStaff
-          </Text>
-          <FaAngleRight />
-          <PersonAddAlt1 />
-          <Text fontWeight="bold" fontSize={14}>
-            Add NTStaff
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <PersonAddAlt1 style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Add Member
           </Text>
         </Box>
       </Flex>
@@ -266,19 +273,26 @@ export const AddNTStaff = () => {
           p={4}
           h={50}
         >
-          <Text textAlign={"center"}>
-            *************All the fields marked with * are required ***********
+          <Text
+            textAlign={"center"}
+            color="white"
+            fontSize={{ base: 10, md: 13, lg: 16 }}
+          >
+            ***All the fields marked with * are required ***
           </Text>
         </Flex>
-        <form
+
+       <form
           style={{
             display: "flex",
-            width: "100%",
-            height: "100%",
-            gap: 3,
             flexDirection: "row",
           }}
         >
+          <Flex
+            w={"100%"}
+            justifyContent={"space-around"}
+            flexDirection={{ base: "column", md: "row" }}
+          >
           <WrapItem
             flex={1}
             gap={2}
@@ -648,6 +662,7 @@ export const AddNTStaff = () => {
               )}
             </Button>
           </WrapItem>
+          </Flex>
         </form>
       </Box>
     </Box>

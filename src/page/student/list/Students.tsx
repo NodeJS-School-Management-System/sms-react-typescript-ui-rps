@@ -371,7 +371,7 @@ export const Students = () => {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search.."
+              placeholder="Search students.."
             />
           </Box>
         </Box>

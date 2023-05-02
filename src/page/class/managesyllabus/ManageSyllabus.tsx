@@ -11,7 +11,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { FaAngleRight } from "react-icons/fa";
-import { Class, ClassOutlined, Home } from "@mui/icons-material";
+import { ClassOutlined, Home } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
 import { useEffect, useState } from "react";
@@ -203,29 +203,35 @@ export const ManageSyllabus = () => {
         justify="space-between"
         h={70}
         p={5}
-        my={3}
+        pt={0}
+        mb={3}
       >
         <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
             Manage Sylabus
           </Heading>
-          <Text>SMS</Text>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <Class />
-          <Text fontWeight="bold" fontSize={14}>
-            Class
-          </Text>
-          <FaAngleRight />
-          <ClassOutlined />
-          <Text fontWeight="bold" fontSize={14}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <ClassOutlined style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
             Manage Sylabus
           </Text>
         </Box>

@@ -20,6 +20,8 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import app from "../../../firebase/firebase";
+import { Home, SquareSharp } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 export const ManageExam = () => {
   const token = localStorage.getItem("token");
@@ -160,7 +162,7 @@ export const ManageExam = () => {
 
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
+      {/* <Flex justifyContent={"space-between"} pr={10}>
         <Box display={"flex"}>
           <Heading ml={3} as={"h5"} color={primaryColor.color}>
             Manage Examination
@@ -175,6 +177,47 @@ export const ManageExam = () => {
           <FaAngleRight />
           <Text fontSize={14}>Manage Exam</Text>
         </Flex>
+      </Flex> */}
+
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            Manage Exam
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <SquareSharp style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Manage Exam
+          </Text>
+        </Box>
       </Flex>
 
       <Box>
@@ -215,7 +258,7 @@ export const ManageExam = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -242,7 +285,7 @@ export const ManageExam = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -269,7 +312,7 @@ export const ManageExam = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -295,7 +338,7 @@ export const ManageExam = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}

@@ -8,10 +8,15 @@ import {
   Input,
   FormLabel,
   Textarea,
+  Heading,
 } from "@chakra-ui/react";
+import { Home } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
+import { RiNotificationBadgeFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
+import useTheme from "../../../theme/useTheme";
 import { NoticeList } from "./NoticeList";
 
 export const ViewNoticeBoard = () => {
@@ -58,17 +63,51 @@ export const ViewNoticeBoard = () => {
     }
   };
 
+  const {
+    theme: { primaryColor },
+  } = useTheme();
+
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
-        <Text fontSize={25} fontWeight="bold" ml={3}>
-          Noticeboard
-        </Text>
-        <Flex flexDirection={"row"} gap={2} alignItems="center">
-          <Text fontSize={14}>Home</Text>
-          <FaAngleRight />
-          <Text fontSize={14}>Notice Board</Text>
-        </Flex>
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            NoticeBoard
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <RiNotificationBadgeFill style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Notice Board
+          </Text>
+        </Box>
       </Flex>
 
       <Box>
@@ -181,7 +220,8 @@ export const ViewNoticeBoard = () => {
                   w="50%"
                   mx={3}
                   onClick={addNotice}
-                  colorScheme={"teal"}
+                  bgColor={primaryColor.color}
+                  color="white"
                 >
                   Add
                 </Button>
@@ -208,110 +248,6 @@ export const ViewNoticeBoard = () => {
               h="100%"
             >
               <NoticeList />
-              {/* <Box w={"100%"}>
-                <Flex
-                  overflowX={"auto"}
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  flexDirection="column"
-                >
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={19} fontWeight="bold">
-                      Name
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Author
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Publication
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Subject
-                    </Text>
-                    <Text fontSize={19} fontWeight="bold">
-                      Class
-                    </Text>
-                  </Flex>
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    borderTop="1px solid #ccc"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={17} fontWeight="bold">
-                      Back House
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Jack Ma
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Sample
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Mathematics
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      P4
-                    </Text>
-                  </Flex>
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    borderTop="1px solid #ccc"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={17} fontWeight="bold">
-                      Back House
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Jack Ma
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Sample
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Mathematics
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      P4
-                    </Text>
-                  </Flex>
-                  <Flex
-                    w={"100%"}
-                    p={3}
-                    borderTop="1px solid #ccc"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexDirection="row"
-                  >
-                    <Text fontSize={17} fontWeight="bold">
-                      Back House
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Jack Ma
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Sample
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Mathematics
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      P4
-                    </Text>
-                  </Flex>
-                </Flex>
-              </Box> */}
             </Box>
           </WrapItem>
         </Flex>

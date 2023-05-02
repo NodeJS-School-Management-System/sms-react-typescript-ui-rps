@@ -7,6 +7,7 @@ import {
   Button,
   Input,
   Select,
+  Heading,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
@@ -16,6 +17,7 @@ import useTheme from "../../../theme/useTheme";
 import { ClassFeesList } from "./ClassFeesList";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CurrencyBitcoin, Home } from "@mui/icons-material";
 
 export const ManageFees = () => {
   const token = localStorage.getItem("token");
@@ -131,7 +133,7 @@ export const ManageFees = () => {
 
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
+      {/* <Flex justifyContent={"space-between"} pr={10}>
         <Flex>
           <Text
             fontSize={25}
@@ -152,6 +154,47 @@ export const ManageFees = () => {
           <FaAngleRight />
           <Text>Manage Accounting</Text>
         </Flex>
+      </Flex> */}
+
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            Manage Fees
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <CurrencyBitcoin style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Manage Accounting
+          </Text>
+        </Box>
       </Flex>
 
       <Box>
@@ -177,7 +220,7 @@ export const ManageFees = () => {
               borderRadius={2}
               pb={4}
               // borderTop="3px solid #ccc"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -185,7 +228,7 @@ export const ManageFees = () => {
               <Flex
                 alignItems="center"
                 bg={primaryColor.color}
-                color="white"
+                // color="white"
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"
@@ -237,7 +280,7 @@ export const ManageFees = () => {
 
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -282,7 +325,7 @@ export const ManageFees = () => {
               borderRadius={2}
               pb={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -290,7 +333,7 @@ export const ManageFees = () => {
               <Flex
                 alignItems="center"
                 bg={primaryColor.color}
-                color="white"
+                // color="white"
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"
@@ -311,7 +354,7 @@ export const ManageFees = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -363,7 +406,6 @@ export const ManageFees = () => {
               borderRadius={2}
               p={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
               height="auto"
               w="90%"
               h="100%"

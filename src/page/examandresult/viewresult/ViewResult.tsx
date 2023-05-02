@@ -8,6 +8,7 @@ import {
   Image,
   useDisclosure,
   Select,
+  Heading,
 } from "@chakra-ui/react";
 import ReportModal from "./ReportModal";
 import Logo from "../../../assets/logo.png";
@@ -24,6 +25,8 @@ import {
 } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
 import { CustomTable } from "./CustomTable";
+import { ClassOutlined, Home } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 export const ViewResult = () => {
   const reportRef = useRef<any>();
@@ -171,7 +174,7 @@ export const ViewResult = () => {
 
   return (
     <Box overflow={"hidden"}>
-      <Flex justifyContent={"space-between"} pr={10}>
+      {/* <Flex justifyContent={"space-between"} pr={10}>
         <Text fontSize={25} fontWeight="bold" ml={3}>
           View Marks
         </Text>
@@ -180,6 +183,47 @@ export const ViewResult = () => {
           <FaAngleRight />
           <Text fontSize={14}>View Result</Text>
         </Flex>
+      </Flex> */}
+
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            View Marks
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <ClassOutlined style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            View Result
+          </Text>
+        </Box>
       </Flex>
 
       <Box>
@@ -341,7 +385,8 @@ export const ViewResult = () => {
               <Box
                 flexDirection={"column"}
                 boxShadow={"lg"}
-                bg={"blue"}
+                bg={primaryColor.color}
+
                 borderRadius={2}
                 py={4}
                 height="auto"
@@ -351,7 +396,8 @@ export const ViewResult = () => {
                 <Box w={"100%"}>
                   <Flex
                     alignItems="center"
-                    bg={"blue"}
+                    bg={primaryColor.color}
+
                     w="100%"
                     h="100%"
                     color="white"

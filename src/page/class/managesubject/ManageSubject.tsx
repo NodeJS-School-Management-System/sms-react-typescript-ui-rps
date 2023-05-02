@@ -10,7 +10,7 @@ import {
   Input,
   // useDisclosure,
 } from "@chakra-ui/react";
-import { Class, Home, SubjectOutlined } from "@mui/icons-material";
+import { Home, SubjectOutlined } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
@@ -183,29 +183,35 @@ export const ManageSubject = () => {
         justify="space-between"
         h={70}
         p={5}
-        my={3}
+        pt={0}
+        mb={3}
       >
         <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
             Manage Subjects
           </Heading>
-          <Text>SMS</Text>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <Class />
-          <Text fontWeight="bold" fontSize={14}>
-            Class
-          </Text>
-          <FaAngleRight />
-          <SubjectOutlined />
-          <Text fontWeight="bold" fontSize={14}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <SubjectOutlined style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
             Manage Subjects
           </Text>
         </Box>
@@ -220,174 +226,6 @@ export const ManageSubject = () => {
           gap={2}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
-          {/* <WrapItem
-            flex={1}
-            gap={6}
-            flexDirection={"column"}
-            h={"max-content"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center
-              flexDirection={"column"}
-              boxShadow={"base"}
-              borderRadius={2}
-              pb={4}
-              height="auto"
-              w="90%"
-              h="100%"
-            >
-              <Flex
-                alignItems="center"
-                bg="teal"
-                w="100%"
-                justifyContent="center"
-                flexDirection="column"
-              >
-                <Box>
-                  <Text
-                    p={2}
-                    textAlign="center"
-                    fontSize={22}
-                    color={"white"}
-                    fontWeight="bold"
-                  >
-                    Add Subject
-                  </Text>
-                </Box>
-              </Flex>
-              <Box w={"100%"}>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Subject Name
-                  </Text>
-                  <Input
-                    type={"text"}
-                    value={subjectName}
-                    onChange={(e) => setSubjectName(e.target.value)}
-                    placeholder="Subject Name"
-                  />
-                </Flex>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Subject Shorthand
-                  </Text>
-                  <Input
-                    type={"text"}
-                    value={subjectAbbrev}
-                    onChange={(e) => setSubjectAbbrev(e.target.value)}
-                    placeholder="Subject Shorthand"
-                  />
-                </Flex>
-
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Select Class
-                  </Text>
-                  <Select
-                    // value={className}
-                    placeholder={"Select Class"}
-                    onChange={(e) => {
-                      setClassName(e.target.value);
-                    }}
-                    w={"100%"}
-                  >
-                    {classlist?.map((c: any) => (
-                      <option key={c.classroomId}>{c.className}</option>
-                    ))}
-                  </Select>
-                </Flex>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Select Teacher
-                  </Text>
-                  <Select
-                    value={subjectTeacher}
-                    placeholder="Select Teacher"
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        setSubjectTeacher(e.target.value);
-                      }
-                    }}
-                  >
-                    {teacher.map((option: any) => (
-                      <option key={option.teacherId} value={option.firstname}>
-                        {`${option.firstname} ${option.lastname}`}
-                      </option>
-                    ))}
-                  </Select>
-                </Flex>
-
-                <Button
-                  variant={"solid"}
-                  w="50%"
-                  mx={3}
-                  colorScheme={primaryColor.name}
-                  onClick={addSubject}
-                  disabled={
-                    !className ||
-                    !subjectTeacher ||
-                    !subjectName ||
-                    !subjectAbbrev
-                  }
-                >
-                  Add Subject
-                </Button>
-              </Box>
-            </Center>
-          </WrapItem> */}
-
           {/* ADD SUBJECT AND ASIGN IT A TEACHER */}
           <WrapItem
             flex={1}
@@ -407,7 +245,7 @@ export const ManageSubject = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"
@@ -499,7 +337,7 @@ export const ManageSubject = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"

@@ -9,6 +9,7 @@ import {
   Input,
   Heading,
 } from "@chakra-ui/react";
+import { Home, LibraryAdd } from "@mui/icons-material";
 import {
   getDownloadURL,
   getStorage,
@@ -17,6 +18,7 @@ import {
 } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import app from "../../../firebase/firebase";
 import useTheme from "../../../theme/useTheme";
@@ -233,7 +235,7 @@ export const ManageLibrary = () => {
 
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
+      {/* <Flex justifyContent={"space-between"} pr={10}>
         <Box display={"flex"}>
           <Heading ml={3} as={"h5"} color={primaryColor.color}>
             Manage Library
@@ -245,6 +247,47 @@ export const ManageLibrary = () => {
           <FaAngleRight />
           <Text fontSize={14}>Library</Text>
         </Flex>
+      </Flex> */}
+
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            Manage Library
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <LibraryAdd style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Manage Library
+          </Text>
+        </Box>
       </Flex>
 
       <Box>
@@ -275,7 +318,7 @@ export const ManageLibrary = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"
@@ -461,7 +504,7 @@ export const ManageLibrary = () => {
             >
               <Flex
                 alignItems="center"
-                bg="teal"
+                bg={primaryColor.color}
                 w="100%"
                 justifyContent="center"
                 flexDirection="column"

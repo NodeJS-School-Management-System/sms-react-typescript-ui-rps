@@ -7,6 +7,7 @@ import {
   Button,
   Select,
   Input,
+  Heading,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
@@ -15,6 +16,8 @@ import useTheme from "../../../theme/useTheme";
 import { FeesList } from "./FeesList";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Home, Money } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 export const FeesPayment = () => {
   const token = localStorage.getItem("token");
@@ -209,7 +212,7 @@ export const FeesPayment = () => {
 
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
+      {/* <Flex justifyContent={"space-between"} pr={10}>
         <Flex>
           <Text
             fontSize={25}
@@ -228,6 +231,47 @@ export const FeesPayment = () => {
           <FaAngleRight />
           <Text fontSize={14}>Fees</Text>
         </Flex>
+      </Flex> */}
+
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
+            Fees Payments
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <Money style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Fees Payment
+          </Text>
+        </Box>
       </Flex>
 
       <Box>
@@ -252,7 +296,6 @@ export const FeesPayment = () => {
               borderRadius={2}
               pb={4}
               borderTop="3px solid #ccc"
-              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -309,7 +352,6 @@ export const FeesPayment = () => {
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -339,7 +381,6 @@ export const FeesPayment = () => {
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -372,7 +413,6 @@ export const FeesPayment = () => {
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -406,7 +446,6 @@ export const FeesPayment = () => {
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -579,7 +618,7 @@ export const FeesPayment = () => {
               w="90%"
               h="100%"
             >
-              <Flex
+              {/* <Flex
                 // p={3}
                 px={0}
                 h={"100%"}
@@ -636,6 +675,35 @@ export const FeesPayment = () => {
                     placeholder="Search.."
                   />
                 </Flex>
+              </Flex> */}
+
+              <Flex>
+                <Box
+                  w={"100%"}
+                  display={"flex"}
+                  alignItems={"center"}
+                  flexDirection={{ base: "column", lg: "row" }}
+                  justifyContent="flex-end"
+                  h={70}
+                  p={5}
+                  pl={0}
+                  my={3}
+                >
+                  <Box
+                    display="flex"
+                    alignItems={"center"}
+                    gap={2}
+                    justifyContent={"flex-end"}
+                  >
+                    <Text>Search:</Text>
+                    <Input
+                      type="search"
+                      // value={query}
+                      // onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search.."
+                    />
+                  </Box>
+                </Box>
               </Flex>
 
               <FeesList

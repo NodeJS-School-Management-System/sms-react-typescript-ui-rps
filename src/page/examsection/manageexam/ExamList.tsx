@@ -46,7 +46,7 @@ export const ExamList = ({ list, query, deleteExam }: any) => {
             <TableCaption>Exam List</TableCaption>
             <Thead>
               <Tr>
-                <Th fontSize={14}>Exam Name</Th>
+                <Th style={{fontSize: 10}}>Exam Name</Th>
                 <Th fontSize={14}>Exam Date</Th>
                 <Th fontSize={14}>Running Term</Th>
                 <Th fontSize={14} m="auto" textAlign={"center"}>

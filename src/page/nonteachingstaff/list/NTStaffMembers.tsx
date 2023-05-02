@@ -36,7 +36,7 @@ export const NTStaffMembers = () => {
         }
       );
       setIsDeleting(false);
-      console.log(res.data)
+      console.log(res.data);
     } catch (err) {
       console.log(err);
       setIsDeleting(false);
@@ -113,7 +113,7 @@ export const NTStaffMembers = () => {
   return (
     <>
       <Box>
-        <Flex
+        {/* <Flex
           w={"100%"}
           display={"flex"}
           alignItems={"center"}
@@ -141,7 +141,47 @@ export const NTStaffMembers = () => {
               Members
             </Text>
           </Box>
+        </Flex> */}
+        <Flex
+          w={"100%"}
+          display={"flex"}
+          alignItems={"center"}
+          justify="space-between"
+          h={70}
+          p={5}
+          my={3}
+        >
+          <Box display={"flex"}>
+            <Heading
+              as={"h5"}
+              fontSize={{ base: 22, md: 32, lg: 37 }}
+              color={primaryColor.color}
+            >
+              Members
+            </Heading>
+            <Text>SMS</Text>
+          </Box>
+          <Box display={"flex"} alignItems="center" gap={2}>
+            <Box
+              display={{ base: "none", md: "flex" }}
+              alignItems="center"
+              gap={3}
+            >
+              <Home style={{ fontSize: 16 }} />
+              <Link to="/">
+                <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                  Home
+                </Text>
+              </Link>
+              <FaAngleRight />
+            </Box>
+            <Diversity3 style={{ fontSize: 16 }} />
+            <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+              Members' List
+            </Text>
+          </Box>
         </Flex>
+
         <Flex
           boxShadow="base"
           p={4}
@@ -158,7 +198,12 @@ export const NTStaffMembers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
                 bgColor={"#2e5984"}
                 color={"white"}
@@ -190,6 +235,7 @@ export const NTStaffMembers = () => {
               </Flex>
             </Center>
           </WrapItem>
+
           <WrapItem
             boxShadow={"base"}
             flex={1}
@@ -197,7 +243,12 @@ export const NTStaffMembers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
                 bgColor={"teal"}
                 w={"30%"}
@@ -222,6 +273,7 @@ export const NTStaffMembers = () => {
               </Flex>
             </Center>
           </WrapItem>
+
           <WrapItem
             boxShadow={"base"}
             flex={1}
@@ -229,7 +281,12 @@ export const NTStaffMembers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
                 bgColor={"#2e5984"}
                 w={"30%"}
@@ -254,6 +311,7 @@ export const NTStaffMembers = () => {
               </Flex>
             </Center>
           </WrapItem>
+
           <WrapItem
             boxShadow={"base"}
             flex={1}
@@ -261,7 +319,12 @@ export const NTStaffMembers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
                 bgColor={"teal"}
                 w={"30%"}
@@ -295,92 +358,36 @@ export const NTStaffMembers = () => {
         </Flex>
       </Box>
 
-      <Box>
+      <Flex>
         <Box
           w={"100%"}
           display={"flex"}
           alignItems={"center"}
-          justifyContent="space-between"
+          flexDirection={{ base: "column", lg: "row" }}
+          justifyContent="flex-end"
           h={70}
           p={5}
           pl={0}
           my={3}
         >
-          <Flex
-            mt={5}
-            pt={5}
-            align={"center"}
-            justify="center"
-            direction={"column"}
-          >
-            <Text
-              fontSize={25}
-              mt={4}
-              fontWeight={"bold"}
-              color={primaryColor.color}
-            >
-              List of Non Teaching Staff
-            </Text>
-            <Flex
-              p={3}
-              px={0}
-              h={"100%"}
-              direction="row"
-              align={"center"}
-              justify={"space-between"}
-            >
-              <Flex
-                mb={2}
-                p={3}
-                px={0}
-                w={"max-content"}
-                h={"100%"}
-                direction="row"
-                align={"center"}
-                justify={"flex-start"}
-              >
-                <Text
-                  ml={2}
-                  fontSize={17}
-                  fontWeight="bold"
-                  alignSelf={"flex-start"}
-                  color={"gray"}
-                  mb={3}
-                >
-                  Show
-                </Text>
-                <Select mx={2} mb={4} placeholder="10" size={"sm"}>
-                  <option value="option2">50</option>
-                  <option value="option3">100</option>
-                  <option value="option3">500</option>
-                </Select>
-                <Text
-                  fontSize={20}
-                  fontWeight="bold"
-                  alignSelf={"flex-start"}
-                  color={"gray"}
-                  mb={3}
-                >
-                  entries
-                </Text>
-              </Flex>
-            </Flex>
-          </Flex>
           <Box
             display="flex"
             alignItems={"center"}
             gap={2}
             justifyContent={"flex-end"}
           >
-            <Text>Search</Text>
+            <Text>Search:</Text>
             <Input
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value.toLowerCase())}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Search.."
             />
           </Box>
         </Box>
+      </Flex>
+
+      <Box>
         <Flex
           boxShadow="base"
           p={4}

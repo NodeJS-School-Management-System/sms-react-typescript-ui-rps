@@ -9,7 +9,7 @@ import {
   Heading,
   Input,
 } from "@chakra-ui/react";
-import { Class, ClassOutlined, Home } from "@mui/icons-material";
+import { ClassOutlined, Home } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
@@ -40,7 +40,6 @@ export const ManageClass = () => {
   };
   // ************************************************************************************
 
-  
   const [isLoading, setIsLoading] = useState(false);
   const [classNumeral, setClassNumeral] = useState("");
   const [className, setClassName] = useState("");
@@ -161,29 +160,35 @@ export const ManageClass = () => {
         justify="space-between"
         h={70}
         p={5}
-        my={3}
+        pt={0}
+        mb={3}
       >
         <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
             Manage Class
           </Heading>
-          <Text>SMS</Text>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <Class />
-          <Text fontWeight="bold" fontSize={14}>
-            Class
-          </Text>
-          <FaAngleRight />
-          <ClassOutlined />
-          <Text fontWeight="bold" fontSize={14}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <ClassOutlined style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
             Manage Class
           </Text>
         </Box>
@@ -198,9 +203,10 @@ export const ManageClass = () => {
           gap={2}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
+          
           <WrapItem
             flex={1}
-            gap={6}
+            gap={3}
             flexDirection={"column"}
             h={"max-content"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
@@ -403,9 +409,6 @@ export const ManageClass = () => {
               </Box>
             </Center>
           </WrapItem>
-
-
-
 
           <WrapItem
             flexDirection={"column"}

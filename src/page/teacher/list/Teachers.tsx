@@ -109,7 +109,8 @@ export const Teachers = () => {
 
   return (
     <>
-      <Box>
+      <Box>       
+
         <Flex
           w={"100%"}
           display={"flex"}
@@ -117,28 +118,40 @@ export const Teachers = () => {
           justify="space-between"
           h={70}
           p={5}
-          my={3}
+          pt={0}
+          mb={3}
         >
           <Box display={"flex"}>
-            <Heading as={"h5"} color={primaryColor.color}>
+            <Heading
+              as={"h5"}
+              fontSize={{ base: 22, md: 32, lg: 37 }}
+              color={primaryColor.color}
+            >
               Teachers
             </Heading>
-            <Text>SMS</Text>
+            <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
           </Box>
           <Box display={"flex"} alignItems="center" gap={2}>
-            <Home />
-            <Link to="/">
-              <Text fontWeight="bold" fontSize={14}>
-                Home
-              </Text>
-            </Link>
-            <FaAngleRight />
-            <Diversity3 />
-            <Text fontWeight="bold" fontSize={14}>
-              Teachers
+            <Box
+              display={{ base: "none", md: "flex" }}
+              alignItems="center"
+              gap={3}
+            >
+              <Home style={{ fontSize: 16 }} />
+              <Link to="/">
+                <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                  Home
+                </Text>
+              </Link>
+              <FaAngleRight />
+            </Box>
+            <Diversity3 style={{ fontSize: 16 }} />
+            <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+              Teachers' List
             </Text>
           </Box>
         </Flex>
+
         <Flex
           boxShadow="base"
           p={4}
@@ -155,7 +168,12 @@ export const Teachers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
                 bgColor={"#2e5984"}
                 color={"white"}
@@ -187,6 +205,7 @@ export const Teachers = () => {
               </Flex>
             </Center>
           </WrapItem>
+
           <WrapItem
             boxShadow={"base"}
             flex={1}
@@ -194,7 +213,12 @@ export const Teachers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
                 bgColor={"teal"}
                 w={"30%"}
@@ -219,6 +243,7 @@ export const Teachers = () => {
               </Flex>
             </Center>
           </WrapItem>
+
           <WrapItem
             boxShadow={"base"}
             flex={1}
@@ -226,9 +251,14 @@ export const Teachers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
-                bgColor={"#2e5984"}
+                bgColor={primaryColor.color}
                 w={"30%"}
                 h={"100%"}
                 alignItems={"center"}
@@ -251,6 +281,7 @@ export const Teachers = () => {
               </Flex>
             </Center>
           </WrapItem>
+
           <WrapItem
             boxShadow={"base"}
             flex={1}
@@ -258,9 +289,14 @@ export const Teachers = () => {
             flexDirection={"column"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Center flexDirection={"row"} w="100%" h="100%" boxShadow={"base"}>
+            <Center
+              flexDirection={"row"}
+              w="100%"
+              h={"110px"}
+              boxShadow={"base"}
+            >
               <Flex
-                bgColor={"teal"}
+                bgColor={"darkblue"}
                 w={"30%"}
                 h={"100%"}
                 alignItems={"center"}
@@ -292,8 +328,37 @@ export const Teachers = () => {
         </Flex>
       </Box>
 
-      <Box>
+      <Flex>
         <Box
+          w={"100%"}
+          display={"flex"}
+          alignItems={"center"}
+          flexDirection={{ base: "column", lg: "row" }}
+          justifyContent="flex-end"
+          h={70}
+          p={5}
+          pl={0}
+          my={3}
+        >
+          <Box
+            display="flex"
+            alignItems={"center"}
+            gap={2}
+            justifyContent={"flex-end"}
+          >
+            <Text>Search:</Text>
+            <Input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search.."
+            />
+          </Box>
+        </Box>
+      </Flex>
+
+      <Box>
+        {/* <Box
           w={"100%"}
           display={"flex"}
           alignItems={"center"}
@@ -377,7 +442,8 @@ export const Teachers = () => {
               placeholder="Search.."
             />
           </Box>
-        </Box>
+        </Box> */}
+
         <Flex
           boxShadow="base"
           p={4}

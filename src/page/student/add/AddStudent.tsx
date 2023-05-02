@@ -247,41 +247,7 @@ export const AddStudent = () => {
 
   return (
     <Box>
-      {/* <Flex
-        w={"100%"}
-        display={"flex"}
-        alignItems={"center"}
-        justify="space-between"
-        h={70}
-        p={5}
-        my={3}
-      >
-        <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
-            Student Registration
-          </Heading>
-          <Text>SMS</Text>
-        </Box>
-        <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <Person />
-          <Text fontWeight="bold" fontSize={14}>
-            Student
-          </Text>
-          <FaAngleRight />
-          <PersonAddAlt1 />
-          <Text fontWeight="bold" fontSize={14}>
-            Add Student
-          </Text>
-        </Box>
-      </Flex> */}
-
+      
       <Flex
         w={"100%"}
         display={"flex"}
@@ -336,6 +302,7 @@ export const AddStudent = () => {
             ***All the fields marked with * are required ***
           </Text>
         </Flex>
+        
         <form
           style={{
             display: "flex",
@@ -742,13 +709,13 @@ export const AddStudent = () => {
                 />
               </Center>
               {error && (
-                <Alert p={6} w={"90%"} status="error">
+                <Alert fontSize={{base: 12, md: 14, lg: 15}} p={6} w={"90%"} status="error">
                   <AlertIcon />
                   There was an error processing your request
                 </Alert>
               )}
               {success && (
-                <Alert p={6} w={"90%"} status="success">
+                <Alert p={6} w={"90%"} fontSize={{base: 12, md: 14, lg: 15}} status="success">
                   <AlertIcon />
                   Success, student has been added successfully!
                 </Alert>

@@ -6,12 +6,16 @@ import {
   WrapItem,
   Button,
   Select,
+  Heading,
 } from "@chakra-ui/react";
 import { FaAngleRight } from "react-icons/fa";
 import { useState, useEffect } from "react";
-// import axios from "axios";
 import CustomTable from "./CustomTable";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
+import { Home } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { MdBookmarks } from "react-icons/md";
+import useTheme from "../../../theme/useTheme";
 
 export const EntryMarks = () => {
   const token = localStorage.getItem("token");
@@ -100,25 +104,51 @@ export const EntryMarks = () => {
     getStudentss();
   }, [clas]);
 
+  const {
+    theme: { primaryColor },
+  } = useTheme();
+
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
-        <Text fontSize={25} fontWeight="bold" ml={3}>
-          Insert Marks
-        </Text>
-        <Flex flexDirection={"row"} gap={2} alignItems="center">
-          <Text fontSize={14} fontWeight="bold">
-            Home
-          </Text>
-          <FaAngleRight />
-          <Text fontSize={14} fontWeight="bold">
-            Exam
-          </Text>
-          <FaAngleRight />
-          <Text fontSize={14} fontWeight="bold">
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
+            color={primaryColor.color}
+          >
             Insert Marks
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <MdBookmarks style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Entry Marks
           </Text>
-        </Flex>
+        </Box>
       </Flex>
 
       <Box>
@@ -143,7 +173,6 @@ export const EntryMarks = () => {
               borderRadius={2}
               pb={4}
               borderTop="3px solid #ccc"
-              bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -152,7 +181,6 @@ export const EntryMarks = () => {
                 {/* Student class ************************************************* */}
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -191,7 +219,7 @@ export const EntryMarks = () => {
                 {/* Running term ************************************************** */}
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -224,7 +252,7 @@ export const EntryMarks = () => {
                 {/* ExamType******************************************* */}
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -260,7 +288,6 @@ export const EntryMarks = () => {
                 {/* Subject ***************************************************** */}
                 <Flex
                   p={3}
-                  bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -297,7 +324,8 @@ export const EntryMarks = () => {
                   variant={"solid"}
                   w="50%"
                   mx={3}
-                  colorScheme={"teal"}
+                  bgColor={primaryColor.color}
+                  color="white"
                   disabled={!clas || !subject || !exam}
                 >
                   Insert Marks
@@ -317,7 +345,7 @@ export const EntryMarks = () => {
               <Box
                 flexDirection={"column"}
                 boxShadow={"lg"}
-                bg={"blue"}
+                bg={primaryColor.color}
                 borderRadius={2}
                 py={4}
                 height="auto"
@@ -328,15 +356,15 @@ export const EntryMarks = () => {
                   <Flex
                     overflowX={"auto"}
                     alignItems="center"
-                    bg={"blue"}
+                    bg={primaryColor.color}
+                    color="white"
                     w="100%"
                     h="100%"
-                    color="white"
                     justifyContent="flex-start"
                     flexDirection="column"
                   >
                     <Box>
-                      <Text textAlign={"center"} fontWeight="bold">
+                      <Text textAlign={"center"} fontSize={{base: 13, md: 14, lg: 15}} px={5} fontWeight="bold">
                         Select class, exam and subject to insert marks
                       </Text>
                     </Box>

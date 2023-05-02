@@ -7,6 +7,7 @@ import {
   Button,
   Select,
   Input,
+  Heading,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
@@ -14,6 +15,8 @@ import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CalculateSharp, Home } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 export const PayFees = () => {
   const token = localStorage.getItem("token");
@@ -158,31 +161,53 @@ export const PayFees = () => {
 
   return (
     <Box>
-      <Flex justifyContent={"space-between"} pr={10}>
-        <Flex>
-          <Text
-            fontSize={25}
+  
+
+      <Flex
+        w={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justify="space-between"
+        h={70}
+        p={5}
+        pt={0}
+        mb={3}
+      >
+        <Box display={"flex"}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 30, lg: 35 }}
             color={primaryColor.color}
-            fontWeight="bold"
-            ml={3}
           >
-            Fees Payment
+            Pay Fees
+          </Heading>
+          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+        </Box>
+        <Box display={"flex"} alignItems="center" gap={2}>
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <CalculateSharp style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Pay Fees
           </Text>
-          <Text>sms</Text>
-        </Flex>
-        <Flex flexDirection={"row"} gap={2} alignItems="center">
-          <Text fontSize={14}>Home</Text>
-          <FaAngleRight />
-          <Text fontSize={14}>Accounting</Text>
-          <FaAngleRight />
-          <Text fontSize={14}>Pay Fees</Text>
-        </Flex>
+        </Box>
       </Flex>
 
       <Flex
         // boxShadow="md"
         p={4}
-        w="50%"
+        w={{ base: "100%", md: "60%" }}
         h="100%"
         gap={2}
         flexDirection={{ base: "column", md: "row", lg: "row" }}
@@ -400,7 +425,7 @@ export const PayFees = () => {
 
               <Button
                 variant={"solid"}
-                w="50%"
+                w={{ base: "90%", md: "50%" }}
                 mx={3}
                 bgColor={primaryColor.color}
                 color="white"
@@ -415,7 +440,6 @@ export const PayFees = () => {
                 <>
                   <Flex
                     p={3}
-                    // bg={"white"}
                     w={"100%"}
                     h={"100%"}
                     flexDirection="column"
@@ -446,7 +470,7 @@ export const PayFees = () => {
                     isDisabled={!paymentReference}
                     // onClick={addAccountDetails}
                   >
-                  Confirm &  Save
+                    Confirm & Save
                     {/* {isLoading ? "Saving.." : "Confirm &  Save"} */}
                   </Button>
                 </>

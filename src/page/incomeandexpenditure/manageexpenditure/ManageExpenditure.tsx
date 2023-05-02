@@ -181,25 +181,36 @@ const ManageExpenditure = () => {
           justify="space-between"
           h={70}
           p={5}
-          my={3}
+          pt={0}
+          mb={3}
         >
           <Box display={"flex"}>
-            <Heading as={"h5"} color={primaryColor.color}>
-              Manage Expenditure
+            <Heading
+              as={"h5"}
+              fontSize={{ base: 20, md: 30, lg: 35 }}
+              color={primaryColor.color}
+            >
+              Manage Expenses
             </Heading>
-            <Text>SMS</Text>
+            <Text fontSize={{ base: 10, lg: 16 }}>SMS</Text>
           </Box>
           <Box display={"flex"} alignItems="center" gap={2}>
-            <Home />
-            <Link to="/">
-              <Text fontWeight="bold" fontSize={14}>
-                Home
-              </Text>
-            </Link>
-            <FaAngleRight />
-            <Money />
-            <Text fontWeight="bold" fontSize={14}>
-              Manage Expenditure
+            <Box
+              display={{ base: "none", md: "flex" }}
+              alignItems="center"
+              gap={3}
+            >
+              <Home style={{ fontSize: 16 }} />
+              <Link to="/">
+                <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                  Home
+                </Text>
+              </Link>
+              <FaAngleRight />
+            </Box>
+            <Money style={{ fontSize: 16 }} />
+            <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+              Manage Expenses
             </Text>
           </Box>
         </Flex>
