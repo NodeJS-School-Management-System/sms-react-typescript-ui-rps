@@ -31,57 +31,66 @@ export const HomeComp = () => {
 
 export const Information = ({ student }: any) => {
   return (
-    <TableContainer>
-      <Table variant="simple">
-        <TableCaption>User Information</TableCaption>
-        <Thead>
-          <Tr>
-            <Th>Name</Th>
-            <Td textAlign={"left"}>
-              {student.firstname} {student.lastname}
-            </Td>
-          </Tr>
-        </Thead>
-        <Tbody>
-          <Tr>
-            <Th>Parent Name</Th>
-            <Td>{student.parentname}</Td>
-          </Tr>
-          <Tr>
-            <Th>Gender</Th>
-            <Td>{student.gender}</Td>
-          </Tr>
-          <Tr>
-            <Th>Transport</Th>
-            <Td>{student.transport ? student.transport : "N/A"}</Td>
-          </Tr>
-          <Tr>
-            <Th>Hostel</Th>
-            <Td>{student.hostel ? student.hostel : "N/A"}</Td>
-          </Tr>
-          <Tr>
-            <Th>Last Login</Th>
-            <Td>2022-08-02 12:07:18</Td>
-          </Tr>
-          <Tr>
-            <Th>Last Activity</Th>
-            <Td>2022-08-02 12:07:18</Td>
-          </Tr>
-          <Tr>
-            <Th>Last Login Attempt</Th>
-            <Td>N/A</Td>
-          </Tr>
-          <Tr>
-            <Th>IPAddress</Th>
-            <Td>192.168.14.1</Td>
-          </Tr>
-          <Tr>
-            <Th>Login Attempts</Th>
-            <Td>2</Td>
-          </Tr>
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <Flex
+      boxShadow={"base"}
+      w="100%"
+      // p={10}
+      h="max-content"
+      direction={"column"}
+      gap={2}
+    >
+      <TableContainer>
+        <Table variant="simple">
+          <TableCaption>User Information</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Td textAlign={"left"}>
+                {student.firstname} {student.lastname}
+              </Td>
+            </Tr>
+          </Thead>
+          <Tbody>
+            <Tr>
+              <Th>Parent Name</Th>
+              <Td>{student.parentname}</Td>
+            </Tr>
+            <Tr>
+              <Th>Gender</Th>
+              <Td>{student.gender}</Td>
+            </Tr>
+            <Tr>
+              <Th>Transport</Th>
+              <Td>{student.transport ? student.transport : "N/A"}</Td>
+            </Tr>
+            <Tr>
+              <Th>Hostel</Th>
+              <Td>{student.hostel ? student.hostel : "N/A"}</Td>
+            </Tr>
+            <Tr>
+              <Th>Last Login</Th>
+              <Td>2022-08-02 12:07:18</Td>
+            </Tr>
+            <Tr>
+              <Th>Last Activity</Th>
+              <Td>2022-08-02 12:07:18</Td>
+            </Tr>
+            <Tr>
+              <Th>Last Login Attempt</Th>
+              <Td>N/A</Td>
+            </Tr>
+            <Tr>
+              <Th>IPAddress</Th>
+              <Td>192.168.14.1</Td>
+            </Tr>
+            <Tr>
+              <Th>Login Attempts</Th>
+              <Td>N/A</Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </Flex>
   );
 };
 

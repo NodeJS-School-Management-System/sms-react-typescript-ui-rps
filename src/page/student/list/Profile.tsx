@@ -13,12 +13,7 @@ import {
   TabPanel,
   Heading,
 } from "@chakra-ui/react";
-import {
-  Home,
-  LocationOn,
-  PersonAddAlt1,
-  PersonOutline,
-} from "@mui/icons-material";
+import { Home, LocationOn, PersonAddAlt1 } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -70,27 +65,32 @@ export const Profile = ({ studentId }: any) => {
         my={3}
       >
         <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 25, lg: 30 }}
+            color={primaryColor.color}
+          >
             Student Profile
           </Heading>
-          <Text>SMS</Text>
+          <Text fontSize={12}>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <PersonOutline />
-          <Text fontWeight="bold" fontSize={14}>
-            Student
-          </Text>
-          <FaAngleRight />
-          <PersonAddAlt1 />
-          <Text fontWeight="bold" fontSize={14}>
-            {student.lastname}'s Profile
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <PersonAddAlt1 style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            Student List
           </Text>
         </Box>
       </Flex>
@@ -101,15 +101,15 @@ export const Profile = ({ studentId }: any) => {
           p={4}
           w="100%"
           h="100%"
-          gap={2}
-          flexDirection={{ base: "column", md: "row", lg: "row" }}
+          gap={1}
+          flexDirection={{ base: "column", md: "row" }}
         >
           <WrapItem
             flex={1}
             gap={2}
             flexDirection={"column"}
             height="max-content"
-            w={{ base: "100%", md: "50%", lg: "25%" }}
+            w={{ base: "100%", md: "50%", lg: "30%" }}
           >
             <Center
               flexDirection={"column"}
@@ -132,7 +132,6 @@ export const Profile = ({ studentId }: any) => {
                     alignItems="center"
                     justifyContent="center"
                     flexDirection="column"
-                    // p={3}
                   >
                     <Image
                       width={40}
@@ -163,8 +162,12 @@ export const Profile = ({ studentId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text mr={2}>Email </Text>
-                    <Text color={"#2e5984"}> {student.email}</Text>
+                    <Text fontSize={14} mr={2}>
+                      Email:
+                    </Text>
+                    <Text color={"#2e5984"} fontSize={{ base: 11, lg: 12 }}>
+                      {student.email}
+                    </Text>
                   </Flex>
                   <Flex
                     w={"100%"}
@@ -174,8 +177,10 @@ export const Profile = ({ studentId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>Contact </Text>
-                    <Text color={"#2e5984"}> {student.contact} </Text>
+                    <Text fontSize={14}>Contact: </Text>
+                    <Text fontSize={{ base: 11, lg: 12 }} color={"#2e5984"}>
+                      {student.contact || "N/A"}
+                    </Text>
                   </Flex>
                   <Flex
                     w={"100%"}
@@ -185,8 +190,10 @@ export const Profile = ({ studentId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>DOB</Text>
-                    <Text color={"#2e5984"}> {student.dateofbirth} </Text>
+                    <Text fontSize={14}>DOB</Text>
+                    <Text fontSize={{ base: 11, lg: 12 }} color={"#2e5984"}>
+                      {student.dateofbirth}
+                    </Text>
                   </Flex>
                   <Button
                     variant={"solid"}
@@ -222,17 +229,19 @@ export const Profile = ({ studentId }: any) => {
               <Flex
                 alignItems="flex-start"
                 gap="2"
-                justifyContent="flex-start"
+                // justifyContent="center"
                 flexDirection="row"
                 pb={3}
-                w="100%"
+                w="max-content"
+
               >
                 <Tabs variant="unstyled">
-                  <TabList>
+                  <TabList style={{ padding: "0px" }}>
                     <Tab
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Home
                     </Tab>
@@ -240,6 +249,7 @@ export const Profile = ({ studentId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 15 }}
                     >
                       Information
                     </Tab>
@@ -247,6 +257,7 @@ export const Profile = ({ studentId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Change Password
                     </Tab>
@@ -254,6 +265,7 @@ export const Profile = ({ studentId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 15 }}
                     >
                       Settings
                     </Tab>
@@ -263,9 +275,7 @@ export const Profile = ({ studentId }: any) => {
                       <HomeComp />
                     </TabPanel>
                     <TabPanel>
-                      <Box px={4} overflowX={"auto"}>
-                        <Information student={student} />
-                      </Box>
+                      <Information student={student} />
                     </TabPanel>
                     <TabPanel>
                       <ChangePassword student={student} />
