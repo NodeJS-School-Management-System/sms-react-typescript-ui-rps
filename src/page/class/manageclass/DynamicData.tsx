@@ -17,13 +17,12 @@ import {
 } from "@chakra-ui/react";
 import {
   LocationCity,
-  LockOpen,
   PersonOutlineOutlined,
   Phone,
 } from "@mui/icons-material";
 import { BiEnvelope } from "react-icons/bi";
 import useTheme from "../../../theme/useTheme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 export const HomeComp = () => {
   return <Box>Home</Box>;
@@ -85,107 +84,129 @@ export const Information = ({ teacher }: any) => {
   );
 };
 
-export const ChangePassword = ({ teacher }: any) => {
-  const token = localStorage.getItem("token");
-  const id = localStorage.getItem("teacherId");
-
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const updatePassword = async () => {
-    if (
-      oldPassword === teacher.password &&
-      confirmNewPassword === newPassword
-    ) {
-      const passwords = {
-        newPassword,
-      };
+export const Subjects = ({ className }: any) => {
+  // GET SUBJECTS FOR THE CLASS SELECTED **************************************************************
+  const [subjects, setSubjects] = useState([]);
+  useEffect(() => {
+    const getSubjects = async () => {
       try {
-        const res = await myAPIClient.put(`/teacher/${id}`, passwords, {
+        const res = await myAPIClient.get(`/subject/find/class/Primary Three`, {
           headers: {
-            token: `Bearer ${token}`,
+            token: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         console.log(res.data);
-        setNewPassword("");
-        setOldPassword("");
-        setConfirmNewPassword("");
+        setSubjects(res.data);
       } catch (err) {
         console.log(err);
       }
-    } else {
-      alert("CHeck passwords and try again");
-    }
-  };
-
-  const {
-    theme: { primaryColor },
-  } = useTheme();
+    };
+    getSubjects();
+  }, []);
 
   return (
-    <form
-      style={{
-        display: "flex",
-        width: "100%",
-        height: "max-content",
-        gap: "10",
-        flexDirection: "column",
-        boxShadow: "2p  2px 2px 2px rgba(0,0,0,0.4",
-      }}
+    <Flex
+      boxShadow={{ base: "none", md: "md" }}
+      w="100%"
+      p={10}
+      direction={"column"}
+      gap={2}
+      h={400}
+      overflowY="auto"
     >
-      <FormLabel>New Password</FormLabel>
-      <InputGroup>
-        <InputLeftElement
-          cursor={"pointer"}
-          pointerEvents="none"
-          color="gray.400"
-          width="2.5rem"
-          children={<LockOpen />}
-        />
-        <Input
-          isRequired
-          type="text"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="New Password"
-        />
-      </InputGroup>
-      <FormLabel>Confirm New Password</FormLabel>
-      <InputGroup>
-        <InputLeftElement
-          cursor={"pointer"}
-          pointerEvents="none"
-          color="gray.400"
-          width="2.5rem"
-          children={<LockOpen />}
-        />
-        <Input
-          isRequired
-          type="text"
-          onChange={(e) => setConfirmNewPassword(e.target.value)}
-          placeholder="Confirm New Password"
-        />
-      </InputGroup>
-      <FormLabel>Old Password</FormLabel>
-      <InputGroup>
-        <InputLeftElement
-          cursor={"pointer"}
-          pointerEvents="none"
-          color="gray.400"
-          width="2.5rem"
-          children={<LockOpen />}
-        />
-        <Input
-          isRequired
-          type="text"
-          onChange={(e) => setOldPassword(e.target.value)}
-          placeholder="Old Password"
-        />
-      </InputGroup>
-      <Button colorScheme={primaryColor.name} mt={4} onClick={updatePassword}>
-        Change Password
-      </Button>
-    </form>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          SUBJECT
+        </Box>
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          SUBJECT TEACHER
+        </Box>
+      </Flex>
+      {subjects?.map((sub: any) => (
+        <Flex
+          py={2}
+          borderBottom={"1px solid #aaa"}
+          justify={"space-between"}
+          w="100%"
+          gap={10}
+        >
+          <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{sub.subjectName}</Box>
+          <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+            {sub.subjectTeacher || "N/A"}
+          </Box>
+        </Flex>
+      ))}
+    </Flex>
+  );
+};
+
+export const Students = ({ className }: any) => {
+  // GET STUDENTS BY CLASSNAME FOR THE CLASS SELECTED **************************************************************
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    const getClass = async () => {
+      try {
+        const res = await myAPIClient.get(`/students/find/${className}`, {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setStudents(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getClass();
+  }, [className]);
+
+  return (
+    <Flex
+      boxShadow={{ base: "none", md: "md" }}
+      w="100%"
+      p={10}
+      direction={"column"}
+      gap={2}
+      h={400}
+      overflowY="auto"
+    >
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          STUDENT
+        </Box>
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          DATE OF BIRTH
+        </Box>
+      </Flex>
+      {students?.map((sub: any) => (
+        <Flex
+          py={2}
+          borderBottom={"1px solid #aaa"}
+          justify={"space-between"}
+          w="100%"
+          gap={10}
+        >
+          <Box fontSize={{ base: 12, md: 14, lg: 16 }}>
+            {sub.firstname} {sub.lastname}
+          </Box>
+          <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+            {sub.dateofbirth || "N/A"}
+          </Box>
+        </Flex>
+      ))}
+    </Flex>
   );
 };
 
