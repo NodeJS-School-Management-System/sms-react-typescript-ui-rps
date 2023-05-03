@@ -13,28 +13,62 @@ import {
   TabPanel,
   Heading,
 } from "@chakra-ui/react";
-import {
-  Home,
-  LocationOn,
-  PersonAddAlt1,
-  PersonOutline,
-} from "@mui/icons-material";
+import { ClassOutlined, Home } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useTheme from "../../../theme/useTheme";
+import { myAPIClient } from "../../auth/axiosInstance";
+import { GiLevelFour } from "react-icons/gi";
 // import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 
 export const Profile = ({ classroomId }: any) => {
-  // const id1 = localStorage.getItem("studentId");
   const id = classroomId;
 
-  useEffect(() => {
-    console.log(id);
-  }, []);
-
   // GET CLASSROOM BY ID **************************************************************
-  // const [classroom, setClassroom] = useState<any>({});
+  const [classroom, setClassroom] = useState<any>({});
+
+  useEffect(() => {
+    const getClassroom = async () => {
+      try {
+        const res = await myAPIClient.get(`/classroom/${id}`, {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setClassroom(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getClassroom();
+  }, [id]);
+
+  // GET TEACHER BY NAME **************************************************************
+  const [classTeacher, setClassTeacher] = useState<any>({});
+
+  useEffect(() => {
+    const getTeacher = async () => {
+      try {
+        const res = await myAPIClient.get(
+          `/teachers/find/${classroom.classTeacher}`,
+          {
+            headers: {
+              token: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(res.data, "tttttttttttttttt");
+        setClassTeacher(res.data);
+      } catch (err) {
+        console.log(err, "tttttttttttttttt");
+      }
+    };
+
+    classroom && classroom.classTeacher && getTeacher();
+  }, [classroom?.classTeacher]);
 
   const {
     theme: { primaryColor },
@@ -52,27 +86,32 @@ export const Profile = ({ classroomId }: any) => {
         my={3}
       >
         <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 25, lg: 30 }}
+            color={primaryColor.color}
+          >
             Class Profile
           </Heading>
-          <Text>SMS</Text>
+          <Text fontSize={12}>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <PersonOutline />
-          <Text fontWeight="bold" fontSize={14}>
-            Classroom
-          </Text>
-          <FaAngleRight />
-          <PersonAddAlt1 />
-          <Text fontWeight="bold" fontSize={14}>
-            P4
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <ClassOutlined style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            {classroom?.className}
           </Text>
         </Box>
       </Flex>
@@ -100,7 +139,7 @@ export const Profile = ({ classroomId }: any) => {
               p={4}
               borderTop="3px solid #2e5984"
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Box w={"100%"}>
@@ -109,19 +148,22 @@ export const Profile = ({ classroomId }: any) => {
                   justifyContent="center"
                   flexDirection="column"
                   px={5}
+                  w="100%"
                 >
                   <Flex
                     alignItems="center"
                     justifyContent="center"
                     flexDirection="column"
-                    // p={3}
                   >
                     <Image
                       width={40}
                       borderRadius="50%"
                       objectFit="cover"
                       height={40}
-                      src={`tes.png`}
+                      src={
+                        classTeacher?.profileimage ||
+                        "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683014096~exp=1683014696~hmac=21316efa5253c58a4501926c1c4c466c0e79f8d7704acf5f53030a5fc9fe5239"
+                      }
                     />
                     <Box>
                       <Text
@@ -130,10 +172,10 @@ export const Profile = ({ classroomId }: any) => {
                         fontSize={22}
                         fontWeight="bold"
                       >
-                        Primary Four
+                        {classroom?.classTeacher || "N/A"}
                       </Text>
                       <Text pb={2} textAlign="center" fontSize={17}>
-                        Student
+                        Class Teacher
                       </Text>
                     </Box>
                   </Flex>
@@ -145,8 +187,12 @@ export const Profile = ({ classroomId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text mr={2}>Email </Text>
-                    <Text color={"#2e5984"}> class@gmail.com</Text>
+                    <Text mr={2} fontSize={{ base: 10, lg: 14 }}>
+                      Email{" "}
+                    </Text>
+                    <Text fontSize={{ base: 10, lg: 14 }} color={"#2e5984"}>
+                      {classTeacher?.email || "N/A"}
+                    </Text>
                   </Flex>
                   <Flex
                     w={"100%"}
@@ -156,8 +202,10 @@ export const Profile = ({ classroomId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>Contact </Text>
-                    <Text color={"#2e5984"}> test </Text>
+                    <Text fontSize={{ base: 10, lg: 14 }}>Contact </Text>
+                    <Text fontSize={{ base: 10, lg: 14 }} color={"#2e5984"}>
+                      {classTeacher?.contact || "N/A"}
+                    </Text>
                   </Flex>
                   <Flex
                     w={"100%"}
@@ -167,16 +215,18 @@ export const Profile = ({ classroomId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>DOB</Text>
-                    <Text color={"#2e5984"}> test</Text>
+                    <Text fontSize={{ base: 10, lg: 14 }}>DOB</Text>
+                    <Text fontSize={{ base: 10, lg: 14 }} color={"#2e5984"}>
+                      {classTeacher?.dateofbirth || "N/A"}
+                    </Text>
                   </Flex>
                   <Button
                     variant={"solid"}
                     w="100%"
+                    fontSize={{ base: 13, md: 14, lg: 16 }}
                     colorScheme={primaryColor.name}
                   >
-                    {" "}
-                    Suspend test
+                    Remove From Class Teacher
                   </Button>
                 </Box>
               </Box>
@@ -198,16 +248,16 @@ export const Profile = ({ classroomId }: any) => {
               pb={0}
               borderTop="3px solid #2e5984"
               height="auto"
-              w="90%"
+              justifyContent="center"
+              w="100%"
               h="100%"
             >
               <Flex
                 alignItems="flex-start"
                 gap="2"
-                justifyContent="flex-start"
+                justifyContent="center"
                 flexDirection="row"
                 pb={3}
-                w="100%"
               >
                 <Tabs variant="unstyled">
                   <TabList>
@@ -215,6 +265,7 @@ export const Profile = ({ classroomId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Home
                     </Tab>
@@ -222,20 +273,34 @@ export const Profile = ({ classroomId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      display={{ base: "none", lg: "block" }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
-                      Information
+                      Subjects
                     </Tab>
                     <Tab
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
-                      Change Password
+                      Students
                     </Tab>
                     <Tab
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      // display={{ base: "none", lg: "block" }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
+                    >
+                      Attendence
+                    </Tab>
+                    <Tab
+                      _selected={{
+                        color: primaryColor.color,
+                      }}
+                      display={{ base: "none", lg: "block" }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Settings
                     </Tab>
@@ -254,6 +319,10 @@ export const Profile = ({ classroomId }: any) => {
                     <TabPanel>
                       {/* <ChangePassword student={student} /> */}
                       password
+                    </TabPanel>
+                    <TabPanel>
+                      {/* <Settings student={student} /> */}
+                      setigns
                     </TabPanel>
                     <TabPanel>
                       {/* <Settings student={student} /> */}
@@ -279,7 +348,7 @@ export const Profile = ({ classroomId }: any) => {
               p={4}
               borderTop="3px solid #2e5984"
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Box w={"100%"}>
@@ -290,11 +359,11 @@ export const Profile = ({ classroomId }: any) => {
                 >
                   <Box>
                     <Box>
-                      <Text p={2} fontSize={22} fontWeight="bold">
-                        About Primary FOur
-                      </Text>
                       <Text p={2} fontSize={19} fontWeight="bold">
-                        Education
+                        About {classroom.className}
+                      </Text>
+                      <Text p={2} fontSize={17} fontWeight="bold">
+                        Details
                       </Text>
                     </Box>
                   </Box>
@@ -307,13 +376,11 @@ export const Profile = ({ classroomId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text fontSize={17} fontWeight="bold">
+                    <Text fontSize={{ base: 15, lg: 17 }} fontWeight="bold">
                       Class
                     </Text>
-                    <Text fontSize={17} fontWeight="bold">
-                      Stream
-                    </Text>
-                    <Text fontSize={17} fontWeight="bold">
+
+                    <Text fontSize={{ base: 15, lg: 17 }} fontWeight="bold">
                       Year
                     </Text>
                   </Flex>
@@ -325,9 +392,14 @@ export const Profile = ({ classroomId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text fontSize={17}> P4</Text>
-                    <Text fontSize={17}>A</Text>
-                    <Text fontSize={17}> {new Date().getFullYear()} </Text>
+                    <Text fontSize={{ base: 15, lg: 17 }}>
+                      {" "}
+                      {classroom.classNumeral}
+                    </Text>
+
+                    <Text fontSize={{ base: 15, lg: 17 }}>
+                      {new Date().getFullYear()}
+                    </Text>
                   </Flex>
 
                   <Box
@@ -339,13 +411,13 @@ export const Profile = ({ classroomId }: any) => {
                     flexDirection="row"
                   >
                     <Flex flexDirection="row" alignItems={"center"} gap={2}>
-                      <LocationOn />
-                      <Text fontSize={18} fontWeight="bold">
-                        Location
+                      <GiLevelFour />
+                      <Text fontSize={{ base: 15, lg: 17 }} fontWeight="bold">
+                        Level
                       </Text>
                     </Flex>
-                    <Text fontSize={17} color="gray">
-                      test
+                    <Text ml={2} fontSize={{ base: 15, lg: 17 }} color="gray">
+                      N/A
                     </Text>
                   </Box>
                 </Flex>

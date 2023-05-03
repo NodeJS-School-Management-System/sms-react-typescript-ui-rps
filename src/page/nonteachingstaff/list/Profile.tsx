@@ -17,7 +17,6 @@ import {
   Home,
   LocationOn,
   PersonAddAlt1,
-  PersonOutline,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
@@ -29,7 +28,6 @@ import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 export const Profile = ({ nonteachingstaffId }: any) => {
   const token = localStorage.getItem("token");
   const id = nonteachingstaffId;
-  //   const id = localStorage.getItem("nonteachingstaffId");
 
   const [nonteachingstaff, setNonteachingstaff] = useState<any>({});
 
@@ -56,6 +54,8 @@ export const Profile = ({ nonteachingstaffId }: any) => {
 
   return (
     <Box>
+      
+
       <Flex
         w={"100%"}
         display={"flex"}
@@ -66,27 +66,32 @@ export const Profile = ({ nonteachingstaffId }: any) => {
         my={3}
       >
         <Box display={"flex"}>
-          <Heading as={"h5"} color={primaryColor.color}>
+          <Heading
+            as={"h5"}
+            fontSize={{ base: 20, md: 25, lg: 30 }}
+            color={primaryColor.color}
+          >
             Member Profile
           </Heading>
-          <Text>SMS</Text>
+          <Text fontSize={12}>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
-          <Home />
-          <Link to="/">
-            <Text fontWeight="bold" fontSize={14}>
-              Home
-            </Text>
-          </Link>
-          <FaAngleRight />
-          <PersonOutline />
-          <Text fontWeight="bold" fontSize={14}>
-            Member
-          </Text>
-          <FaAngleRight />
-          <PersonAddAlt1 />
-          <Text fontWeight="bold" fontSize={14}>
-            {nonteachingstaff.lastname}'s Profile
+          <Box
+            display={{ base: "none", md: "flex" }}
+            alignItems="center"
+            gap={3}
+          >
+            <Home style={{ fontSize: 16 }} />
+            <Link to="/">
+              <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+                Home
+              </Text>
+            </Link>
+            <FaAngleRight />
+          </Box>
+          <PersonAddAlt1 style={{ fontSize: 16 }} />
+          <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
+            {nonteachingstaff.username}
           </Text>
         </Box>
       </Flex>
@@ -114,7 +119,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
               p={4}
               borderTop="3px solid #2e5984"
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Box w={"100%"}>
@@ -157,9 +162,8 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>Email </Text>
-                    <Text fontSize={13} color={"#2e5984"}>
-                      {" "}
+                    <Text fontSize={{ base: 10, lg: 14 }}>Email </Text>
+                    <Text fontSize={{ base: 10, lg: 14 }} color={"#2e5984"}>
                       {nonteachingstaff?.email}
                     </Text>
                   </Flex>
@@ -171,8 +175,8 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>Contact </Text>
-                    <Text fontSize={13} color={"#2e5984"}>
+                    <Text fontSize={{ base: 10, lg: 14 }}>Contact </Text>
+                    <Text fontSize={{ base: 10, lg: 14 }} color={"#2e5984"}>
                       {" "}
                       {nonteachingstaff?.contact}
                     </Text>
@@ -185,8 +189,8 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text>DOB </Text>
-                    <Text fontSize={13} color={"#2e5984"}>
+                    <Text fontSize={{ base: 10, lg: 14 }}>DOB </Text>
+                    <Text fontSize={{ base: 10, lg: 14 }} color={"#2e5984"}>
                       {nonteachingstaff?.dateofbirth}
                     </Text>
                   </Flex>
@@ -217,13 +221,14 @@ export const Profile = ({ nonteachingstaffId }: any) => {
               pb={0}
               borderTop="3px solid #2e5984"
               height="auto"
-              w="90%"
+              justifyContent="center"
+              w="100%"
               h="100%"
             >
               <Flex
                 alignItems="flex-start"
                 gap="2"
-                justifyContent="flex-start"
+                justifyContent="center"
                 flexDirection="row"
                 pb={3}
               >
@@ -233,6 +238,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Home
                     </Tab>
@@ -240,6 +246,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Information
                     </Tab>
@@ -247,6 +254,8 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      display={{ base: "none", lg: "block" }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Change Password
                     </Tab>
@@ -254,6 +263,8 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                       _selected={{
                         color: primaryColor.color,
                       }}
+                      display={{ base: "none", lg: "block" }}
+                      fontSize={{ base: 12, md: 13, lg: 16 }}
                     >
                       Settings
                     </Tab>
@@ -263,7 +274,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                       <HomeComp />
                     </TabPanel>
                     <TabPanel>
-                      <Box px={4} overflowX={"auto"}>
+                      <Box>
                         <Information nonteachingstaff={nonteachingstaff} />
                       </Box>
                     </TabPanel>
@@ -293,7 +304,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
               p={4}
               borderTop="3px solid #2e5984"
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Box w={"100%"}>
@@ -304,10 +315,10 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                 >
                   <Box>
                     <Box>
-                      <Text p={2} fontSize={22} fontWeight="bold">
+                      <Text p={2} fontSize={19} fontWeight="bold">
                         About {nonteachingstaff.lastname}
                       </Text>
-                      <Text p={2} fontSize={19} fontWeight="bold">
+                      <Text p={2} fontSize={17} fontWeight="bold">
                         Education
                       </Text>
                     </Box>
@@ -321,13 +332,13 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text fontSize={17} fontWeight="bold">
+                    <Text fontSize={{ base: 15, lg: 17 }} fontWeight="bold">
                       Department
                     </Text>
-                    <Text fontSize={17} fontWeight="bold">
+                    <Text fontSize={{ base: 15, lg: 17 }} fontWeight="bold">
                       Rank
                     </Text>
-                    <Text fontSize={17} fontWeight="bold">
+                    <Text fontSize={{ base: 15, lg: 17 }} fontWeight="bold">
                       Year
                     </Text>
                   </Flex>
@@ -358,7 +369,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                         Location
                       </Text>
                     </Flex>
-                    <Text fontSize={14} color="gray">
+                    <Text ml={2} fontSize={13} color="gray">
                       {nonteachingstaff.address}
                     </Text>
                   </Box>

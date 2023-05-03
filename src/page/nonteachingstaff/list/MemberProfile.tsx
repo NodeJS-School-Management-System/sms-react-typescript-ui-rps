@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Profile } from "./Profile";
-//   import { Profile } from "./Profile";
 
 const MemberProfile = ({ isOpen, onClose, onOpen, id, user }: any) => {
   useEffect(() => {

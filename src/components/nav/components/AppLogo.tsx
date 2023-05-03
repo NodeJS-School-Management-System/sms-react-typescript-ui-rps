@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Box from "../../box/Box";
-import { Text } from "../../../ui";
+import { Text as CText } from "@chakra-ui/react";
 import Logo from "../../../assets/logo.png";
 
 const AppLogo = () => (
   <Link to="/dashboards/crm/">
     <Box display="flex" align="center" space={0.4}>
       <StyledLogo src={Logo} alt="app logo" />
-      <Text heading="h6" weight="bold" classes="app-text-logo">
-        RWEBIITA PREP. SCH.
-      </Text>
+      <CText fontSize={17} fontWeight="bold">
+        RWEBIITA PS.
+      </CText>
     </Box>
   </Link>
 );

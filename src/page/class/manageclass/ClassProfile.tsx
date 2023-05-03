@@ -20,7 +20,7 @@ const ClassProfile = ({ isOpen, onClose, onOpen, id, user }: any) => {
         <ModalHeader fontSize={22}></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Profile studentId={id} />
+          <Profile classroomId={id} />
         </ModalBody>
       </ModalContent>
     </Modal>

@@ -1,14 +1,6 @@
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
   Box,
-  Th,
   Flex,
-  Td,
-  TableCaption,
-  TableContainer,
   InputGroup,
   InputLeftElement,
   Input,
@@ -32,64 +24,128 @@ export const HomeComp = () => {
 export const Information = ({ student }: any) => {
   return (
     <Flex
-      boxShadow={"base"}
+      boxShadow={{ base: "none", md: "md" }}
       w="100%"
-      // p={10}
-      h="max-content"
+      p={10}
       direction={"column"}
       gap={2}
+      h={400}
+      overflowY="auto"
     >
-      <TableContainer>
-        <Table variant="simple">
-          <TableCaption>User Information</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Td textAlign={"left"}>
-                {student.firstname} {student.lastname}
-              </Td>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Th>Parent Name</Th>
-              <Td>{student.parentname}</Td>
-            </Tr>
-            <Tr>
-              <Th>Gender</Th>
-              <Td>{student.gender}</Td>
-            </Tr>
-            <Tr>
-              <Th>Transport</Th>
-              <Td>{student.transport ? student.transport : "N/A"}</Td>
-            </Tr>
-            <Tr>
-              <Th>Hostel</Th>
-              <Td>{student.hostel ? student.hostel : "N/A"}</Td>
-            </Tr>
-            <Tr>
-              <Th>Last Login</Th>
-              <Td>2022-08-02 12:07:18</Td>
-            </Tr>
-            <Tr>
-              <Th>Last Activity</Th>
-              <Td>2022-08-02 12:07:18</Td>
-            </Tr>
-            <Tr>
-              <Th>Last Login Attempt</Th>
-              <Td>N/A</Td>
-            </Tr>
-            <Tr>
-              <Th>IPAddress</Th>
-              <Td>192.168.14.1</Td>
-            </Tr>
-            <Tr>
-              <Th>Login Attempts</Th>
-              <Td>N/A</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </TableContainer>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          NAME
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {student.firstname} {student.lastname}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          ADDRESS
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{student.address}</Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          CLASS
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{student.clas}</Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          GENDER
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{student.gender}</Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          TRANSPORT
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {student.transport ? student.transport : "N/A"}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          PARENTNAME
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{student.parentname}</Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          HOSTEL
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {student.hostel ? student.hostel : "N/A"}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          LAST LOGIN
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>N/A</Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          IP ADDRESS
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>N/A</Box>
+      </Flex>
     </Flex>
   );
 };

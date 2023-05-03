@@ -1,19 +1,11 @@
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
   Box,
-  Th,
   Flex,
-  Td,
-  TableCaption,
-  TableContainer,
-  InputGroup,
   InputLeftElement,
   Input,
   FormLabel,
   Button,
+  InputGroup,
 } from "@chakra-ui/react";
 import {
   LocationCity,
@@ -31,61 +23,140 @@ export const HomeComp = () => {
 
 export const Information = ({ nonteachingstaff }: any) => {
   return (
-    <TableContainer>
-      <Table variant="simple">
-        <TableCaption>Member Information</TableCaption>
-        <Thead>
-          <Tr>
-            <Th>Name</Th>
-            <Td textAlign={"left"}>
-              {nonteachingstaff.firstname} {nonteachingstaff.lastname}
-            </Td>
-          </Tr>
-        </Thead>
-        <Tbody>
-          <Tr>
-            <Th>Address</Th>
-            <Td>{nonteachingstaff.address}</Td>
-          </Tr>
-          <Tr>
-            <Th>Gender</Th>
-            <Td>{nonteachingstaff.gender}</Td>
-          </Tr>
-          <Tr>
-            <Th>Department</Th>
-            <Td>
-              {nonteachingstaff.department
-                ? nonteachingstaff.department
-                : "N/A"}
-            </Td>
-          </Tr>
-          <Tr>
-            <Th>Rank</Th>
-            <Td>{nonteachingstaff.rank ? nonteachingstaff.rank : "N/A"}</Td>
-          </Tr>
-          <Tr>
-            <Th>Last Login</Th>
-            <Td>2022-08-02 12:07:18</Td>
-          </Tr>
-          <Tr>
-            <Th>Last Activity</Th>
-            <Td>2022-08-02 12:07:18</Td>
-          </Tr>
-          <Tr>
-            <Th>Last Login Attempt</Th>
-            <Td>N/A</Td>
-          </Tr>
-          <Tr>
-            <Th>IPAddress</Th>
-            <Td>192.168.14.1</Td>
-          </Tr>
-          <Tr>
-            <Th>Login Attempts</Th>
-            <Td>2</Td>
-          </Tr>
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <Flex
+      boxShadow={{ base: "none", md: "md" }}
+      w="100%"
+      p={10}
+      direction={"column"}
+      gap={2}
+      h={400}
+      overflowY="auto"
+    >
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          NAME
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {nonteachingstaff.firstname} {nonteachingstaff.lastname}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          ADDRESS
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {nonteachingstaff.address}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          DEPARTMENT
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {nonteachingstaff.department}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          GENDER
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {nonteachingstaff.gender}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          MARITAL STATUS
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {nonteachingstaff.maritalstatus
+            ? nonteachingstaff.maritalstatus
+            : "N/A"}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          RANK
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {nonteachingstaff.rank ? nonteachingstaff.rank : "N/A"}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          CONTACT
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {nonteachingstaff.contact ? nonteachingstaff.contact : "N/A"}
+        </Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          LAST LOGIN
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>N/A</Box>
+      </Flex>
+      <Flex
+        py={2}
+        borderBottom={"1px solid #aaa"}
+        justify={"space-between"}
+        w="100%"
+        gap={10}
+      >
+        <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
+          IP ADDRESS
+        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>N/A</Box>
+      </Flex>
+    </Flex>
   );
 };
 
