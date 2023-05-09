@@ -9,7 +9,7 @@ import {
   Input,
   Heading,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
@@ -109,23 +109,28 @@ export const PayFees = () => {
     };
     getClasses();
   }, []);
+
   // ****************************************************************************************************
 
+  // IFRAME OPENING
+  const [iframeUrl, setIframeUrl] = useState<any>("");
+  const iframeRef: any = useRef<any>();
+
+  useEffect(() => {
+    if (iframeUrl != "") {
+      iframeRef.current.src = iframeUrl;
+    }
+  }, [iframeUrl]);
   // INITIATE PAYMENT **********************************************************************************
   const [isLoading, setIsLoading] = useState(false);
   const initiatePayment = async () => {
     setIsLoading(true);
     try {
       const res = await myAPIClient.post(
-        "/fees/payment",
+        "/payments/initiatepayment",
         {
-          contact,
-          studentName: studentname,
-          class: clas,
+          phone_number: contact,
           amount,
-          scheme,
-          termname,
-          classFeesAMount: classfees?.amount,
         },
         {
           headers: {
@@ -133,7 +138,8 @@ export const PayFees = () => {
           },
         }
       );
-      console.log(res?.data);
+      console.log(res.data);
+      setIframeUrl(res.data.redirect_url);
       setIsLoading(false);
 
       toast.success(
@@ -161,8 +167,6 @@ export const PayFees = () => {
 
   return (
     <Box>
-  
-
       <Flex
         w={"100%"}
         display={"flex"}
@@ -207,7 +211,7 @@ export const PayFees = () => {
       <Flex
         // boxShadow="md"
         p={4}
-        w={{ base: "100%", md: "60%" }}
+        w={{ base: "100%", md: "100%" }}
         h="100%"
         gap={2}
         flexDirection={{ base: "column", md: "row", lg: "row" }}
@@ -477,6 +481,18 @@ export const PayFees = () => {
               )}
             </Box>
           </Center>
+        </WrapItem>
+        <WrapItem
+          boxShadow="md"
+          flex={1}
+          gap={1}
+          flexDirection={"column"}
+          w={{ base: "100%", md: "50%", lg: "50%" }}
+        >
+          <iframe
+            style={{ width: "100%", height: "100%" }}
+            ref={iframeRef}
+          ></iframe>
         </WrapItem>
       </Flex>
     </Box>
