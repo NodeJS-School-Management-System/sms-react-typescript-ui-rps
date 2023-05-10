@@ -46,6 +46,8 @@ import {
 } from "firebase/storage";
 import app from "../../../firebase/firebase";
 import { BsBoxArrowDownRight } from "react-icons/bs";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const AddStudent = () => {
   const token = localStorage.getItem("token");
@@ -93,20 +95,15 @@ export const AddStudent = () => {
     return otp;
   };
 
-  // STUDENT PASSCODE
-  const [passcode, setPasscode] = useState<any>(null);
-  // const passcode = generateOTP();
-
   // REGISTER NEW STUDENT *****************************************************************
   const addstudent = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setPasscode(generateOTP());
     e.preventDefault();
     const student: any = {
       username,
       firstname,
       lastname,
       email,
-      password: passcode,
+      password: generateOTP(),
       role,
       contact,
       gender,
@@ -170,20 +167,28 @@ export const AddStudent = () => {
             student.profileimage = downloadURL;
           });
           try {
-            await myAPIClient.post("/students", student, {
+            const res = await myAPIClient.post("/students", student, {
               headers: {
                 token: `token ${token}`,
               },
             });
+            console.log(res.data);
+            toast.success(
+              `Success! Student's passcode is ${res.data.student.password}`,
+              {
+                autoClose: false,
+              }
+            );
 
             // ALSO INTERACT WITH MONGODB********************************
             try {
-              await axios.post(
+              const res = await axios.post(
                 `${
-                  import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER_RESULTS
+                  import.meta.env.VITE_REACT_APP_MONGODB_API_URL
                 }auth/register`,
                 student
               );
+              console.log(res.data);
             } catch (err) {
               console.log(err);
             }
@@ -247,7 +252,6 @@ export const AddStudent = () => {
 
   return (
     <Box>
-      
       <Flex
         w={"100%"}
         display={"flex"}
@@ -302,7 +306,7 @@ export const AddStudent = () => {
             ***All the fields marked with * are required ***
           </Text>
         </Flex>
-        
+
         <form
           style={{
             display: "flex",
@@ -709,13 +713,23 @@ export const AddStudent = () => {
                 />
               </Center>
               {error && (
-                <Alert fontSize={{base: 12, md: 14, lg: 15}} p={6} w={"90%"} status="error">
+                <Alert
+                  fontSize={{ base: 12, md: 14, lg: 15 }}
+                  p={6}
+                  w={"90%"}
+                  status="error"
+                >
                   <AlertIcon />
                   There was an error processing your request
                 </Alert>
               )}
               {success && (
-                <Alert p={6} w={"90%"} fontSize={{base: 12, md: 14, lg: 15}} status="success">
+                <Alert
+                  p={6}
+                  w={"90%"}
+                  fontSize={{ base: 12, md: 14, lg: 15 }}
+                  status="success"
+                >
                   <AlertIcon />
                   Success, student has been added successfully!
                 </Alert>
@@ -745,7 +759,6 @@ export const AddStudent = () => {
                   "Add Student"
                 )}
               </Button>{" "}
-              {passcode && <span>Student passcode is {passcode}</span>}
             </WrapItem>
           </Flex>
         </form>

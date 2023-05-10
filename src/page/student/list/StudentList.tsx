@@ -49,6 +49,7 @@ export const StudentList = ({
                 <Th fontSize={14}>Full Name</Th>
                 <Th fontSize={14}>Username</Th>
                 <Th fontSize={14}>Profile Image</Th>
+                <Th fontSize={14}>Passcode</Th>
                 <Th fontSize={14}>Class</Th>
                 <Th fontSize={14}>Address</Th>
                 <Th fontSize={14}>Date of Birth</Th>
@@ -78,6 +79,7 @@ export const StudentList = ({
                         src={user.profileimage}
                       />
                     </Td>
+                    <Td>{user.password}</Td>
                     <Td>{user.clas}</Td>
                     <Td>{user.address}</Td>
                     <Td>{user.dateofbirth}</Td>
