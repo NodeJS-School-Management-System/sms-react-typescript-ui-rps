@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import useTheme from "../../../theme/useTheme";
 import { myAPIClient } from "../../auth/axiosInstance";
 import { GiLevelFour } from "react-icons/gi";
-import { Students, Subjects } from "./DynamicData";
+import { Attendence, Settings, Students, Subjects } from "./DynamicData";
 // import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 
 export const Profile = ({ classroomId }: any) => {
@@ -62,6 +62,7 @@ export const Profile = ({ classroomId }: any) => {
           }
         );
         setClassTeacher(res.data);
+        console.log(res.data);
       } catch (err) {
         console.log(err, "tttttttttttttttt");
       }
@@ -316,12 +317,10 @@ export const Profile = ({ classroomId }: any) => {
                       <Students className={classroom.classNumeral} />
                     </TabPanel>
                     <TabPanel>
-                      {/* <Settings student={student} /> */}
-                      setigns
+                      <Attendence className={classroom.classNumeral} />
                     </TabPanel>
                     <TabPanel>
-                      {/* <Settings student={student} /> */}
-                      setigns
+                      <Settings className={classroom.classNumeral} />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>

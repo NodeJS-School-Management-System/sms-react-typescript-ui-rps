@@ -31,6 +31,7 @@ import { Link } from "react-router-dom";
 export const ViewResult = () => {
   const reportRef = useRef<any>();
 
+  const [showReport, setShowReport] = useState(false);
   const handlePrint = useReactToPrint({
     content: () => reportRef.current,
     documentTitle: "Report",
@@ -277,6 +278,7 @@ export const ViewResult = () => {
                     onChange={(e) => {
                       // console.log(e.target.value);
                       setClas(e.target.value);
+                      setShowReport(false);
                     }}
                     w={"100%"}
                     value={clas}
@@ -386,7 +388,6 @@ export const ViewResult = () => {
                 flexDirection={"column"}
                 boxShadow={"lg"}
                 bg={primaryColor.color}
-
                 borderRadius={2}
                 py={4}
                 height="auto"
@@ -397,7 +398,6 @@ export const ViewResult = () => {
                   <Flex
                     alignItems="center"
                     bg={primaryColor.color}
-
                     w="100%"
                     h="100%"
                     color="white"
@@ -436,7 +436,14 @@ export const ViewResult = () => {
                   {/* <Button colorScheme="teal" onClick={openReportModal}>
                     Generate Reports
                   </Button> */}
-                  <Button m="auto" colorScheme="facebook" onClick={handlePrint}>
+                  <Button
+                    m="auto"
+                    colorScheme="facebook"
+                    onClick={() => {
+                      setShowReport(true);
+                      handlePrint();
+                    }}
+                  >
                     Generate Reports for {clas}
                   </Button>
 
@@ -463,7 +470,7 @@ export const ViewResult = () => {
         <Box
           className="printable-component"
           style={{
-            display: "flex",
+            display: showReport ? "flex" : "none",
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",

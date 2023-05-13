@@ -3,6 +3,8 @@ import { Add } from "@mui/icons-material";
 import axios from "axios";
 import { useState } from "react";
 import { MongoAPIClient } from "../../../components/auth/axiosInstance";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function InputField(props: any) {
   const PF = MongoAPIClient;
@@ -89,10 +91,10 @@ function InputField(props: any) {
     //   });
     try {
       await axios.post(`${PF}results`, newMark);
-      alert("Successfully added!");
+      toast.success("Successfully added marks!");
     } catch (err) {
       console.log(err);
-      alert("Something went wrong");
+      toast.error("Error, ");
     }
     // alert("Successfully added!");
     // } catch (err) {

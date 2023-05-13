@@ -26,7 +26,7 @@ export const ViewNoticeBoard = () => {
   const [title, setTitle] = useState("");
   const [info, setInfo] = useState("");
 
-  // const [notices, setNotices] = useState();
+  const [notices, setNotices] = useState();
   useEffect(() => {
     const getNotices = async () => {
       try {
@@ -35,7 +35,7 @@ export const ViewNoticeBoard = () => {
             token: `Bearer ${token}`,
           },
         });
-        // setNotices(res.data)
+        setNotices(res.data);
         console.log(res.data);
       } catch (err) {
         console.log(err);
@@ -244,7 +244,7 @@ export const ViewNoticeBoard = () => {
               w="90%"
               h="100%"
             >
-              <NoticeList />
+              <NoticeList list={notices} />
             </Box>
           </WrapItem>
         </Flex>

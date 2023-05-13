@@ -22,6 +22,8 @@ import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import app from "../../../firebase/firebase";
 import useTheme from "../../../theme/useTheme";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const ManageLibrary = () => {
   const token = localStorage.getItem("token");
@@ -159,16 +161,18 @@ export const ManageLibrary = () => {
             setPublication("");
             setBookTitle("");
             setClassName("");
+            toast.success("Book uploaded successfully!");
           } catch (err) {
             console.log(err);
             setIsLoading(false);
+            toast.error("Something went wrong uploading the book, Try again!");
           }
         }
       );
     }
   };
 
-  // ****************************************************************************************************
+  // *********************************************************************************************
   // UPDATE LIB BOOK *****************************************************************************
 
   const [classNameUpdate, setClassNameUpdate] = useState("");

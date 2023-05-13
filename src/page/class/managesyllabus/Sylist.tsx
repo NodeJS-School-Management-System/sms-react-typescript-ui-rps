@@ -24,7 +24,7 @@ export const Sylist = ({ list, deleteSylabus, downloadImage }: any) => {
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer w='100%'>
+        <TableContainer w="100%">
           <Table variant="simple">
             <TableCaption>Sylabus List</TableCaption>
             <Thead>
@@ -55,8 +55,13 @@ export const Sylist = ({ list, deleteSylabus, downloadImage }: any) => {
                       />
                     </Td>
                     <Td>{sylabus.className}</Td>
-                    <Td>
-                      <Td display={"flex"} gap={2}>
+                    <Td textAlign={"center"} m="auto">
+                      <Td
+                        textAlign={"center"}
+                        m="auto"
+                        display={"flex"}
+                        gap={2}
+                      >
                         <IconButton
                           colorScheme="red"
                           onClick={() => deleteSylabus(sylabus.sylabusId)}

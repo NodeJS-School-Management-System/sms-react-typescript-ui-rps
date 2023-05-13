@@ -217,7 +217,7 @@ const ManageIncome = () => {
     }
   };
 
-  // GET income ITEMS FROM DB ****************************************************************
+  // GET Income ITEMS FROM DB ****************************************************************
   const [incomeItems, setincomeItems] = useState([]);
   useEffect(() => {
     const getincome = async () => {

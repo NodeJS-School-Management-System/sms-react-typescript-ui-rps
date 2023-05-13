@@ -13,9 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { BiTrashAlt } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
-export const NoticeList = ({ list, query, isLoading, deleteClass }: any) => {
- 
-
+export const NoticeList = ({ list, query, isLoading }: any) => {
   return (
     <>
       {isLoading ? (
@@ -23,7 +21,7 @@ export const NoticeList = ({ list, query, isLoading, deleteClass }: any) => {
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer h={500} overflowY='auto'>
+        <TableContainer h={500} overflowY="auto">
           <Table variant="simple">
             <TableCaption>Notice Board</TableCaption>
             <Thead>
@@ -38,11 +36,11 @@ export const NoticeList = ({ list, query, isLoading, deleteClass }: any) => {
             </Thead>
 
             <Tbody>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((clas: any) => (
-                <Tr key={clas}>
-                  <Td>test</Td>
-                  <Td>test</Td>
-                  <Td>test</Td>
+              {list?.map((notice: any) => (
+                <Tr key={notice.noticeId}>
+                  <Td>{notice.title}</Td>
+                  <Td>{notice.info}</Td>
+                  <Td>{notice.username}</Td>
 
                   <Td
                     m="auto"

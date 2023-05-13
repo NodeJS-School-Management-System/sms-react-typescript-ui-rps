@@ -42,7 +42,7 @@ const ExamResultsTable = ({
           <tr key={exam.examname}>
             <td style={{ fontWeight: 700 }}>{exam.examname}</td>
             <ExamSubjectRow marks={exam.marks} />
-            <td>Excellent</td>
+            <td></td>
           </tr>
         ))}
         <tr>
@@ -57,11 +57,11 @@ const ExamResultsTable = ({
         </tr>
         <tr>
           <td>Aggregate</td>
-          <td>90</td>
+          <td></td>
         </tr>
         <tr>
           <td>Division</td>
-          <td>90</td>
+          <td></td>
         </tr>
         <tr>
           <td>Number of Pupils</td>

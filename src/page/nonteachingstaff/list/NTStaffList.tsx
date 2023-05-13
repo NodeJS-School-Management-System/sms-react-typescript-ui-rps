@@ -50,6 +50,7 @@ export const NTStaffList = ({
               <Tr>
                 <Th fontSize={14}>Full Name</Th>
                 <Th fontSize={14}>Profile Image</Th>
+                <Th fontSize={14}>username</Th>
                 <Th fontSize={14}>Department</Th>
                 <Th fontSize={14}>Date of Birth</Th>
                 <Th fontSize={14}>Contact</Th>
@@ -77,6 +78,7 @@ export const NTStaffList = ({
                         src={user.profileimage}
                       />
                     </Td>
+                    <Td>{user.username}</Td>
                     <Td>{user.department}</Td>
                     <Td>{user.dateofbirth}</Td>
                     <Td>{user.contact}</Td>

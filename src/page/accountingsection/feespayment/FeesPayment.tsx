@@ -398,7 +398,7 @@ export const FeesPayment = () => {
                   </Text>
 
                   <Select
-                    placeholder="Select Class"
+                    placeholder="Select Student"
                     value={studentname}
                     onChange={(e) => setStudentName(e.target.value)}
                     w={"100%"}

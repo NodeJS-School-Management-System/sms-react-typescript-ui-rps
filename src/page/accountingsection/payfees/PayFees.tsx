@@ -81,8 +81,7 @@ export const PayFees = () => {
       setIsLoading(false);
 
       toast.success(
-        `Success: A mobile money notification has been sent your phone. 
-        Approve with you pin to confirm and enter the payment reference below to save`,
+        `Success: Payment initiation in progress, confirm details on the right/down to proceed`,
         {
           autoClose: 25000,
         }

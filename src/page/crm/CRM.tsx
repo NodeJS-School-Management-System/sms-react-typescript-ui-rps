@@ -118,7 +118,49 @@ const CRM = () => {
     getClasses();
   }, [classes]);
 
+  // GET ALL LIB BOOKS **************************************************************************
+  const [books, setBooks] = useState([]);
+  useEffect(() => {
+    const getBooks = async () => {
+      try {
+        const res = await myAPIClient.get("/library", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setBooks(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getBooks();
+  }, []);
+
+  // GET income ITEMS FROM DB ****************************************************************
+  const [incomeItems, setincomeItems] = useState([]);
+  useEffect(() => {
+    const getincome = async () => {
+      try {
+        const res = await myAPIClient.get("/income", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setincomeItems(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getincome();
+  }, []);
+
   // UPDATE LIST OF DETAILS *****************************
+  const amountCollected = incomeItems.reduce(
+    (total: any, item: any) => total + item.amount,
+    0
+  );
 
   const homeAnalyticsRowOne = [
     {
@@ -144,7 +186,7 @@ const CRM = () => {
   const homeAnalyticsRowTwo = [
     {
       title: "Today's Attendence",
-      value: 7,
+      value: studentlist.length,
       icon: CalendarMonth,
       bgColor: "#586744",
     },
@@ -156,13 +198,13 @@ const CRM = () => {
     },
     {
       title: "Study Materials",
-      value: 53,
+      value: books.length,
       icon: LocalLibrary,
       bgColor: "teal",
     },
     {
-      title: "Fees Collected",
-      value: 100000,
+      title: "Gross Amount",
+      value: amountCollected,
       icon: AttachMoney,
       bgColor: "purple",
     },
@@ -353,6 +395,7 @@ const CRM = () => {
                   </FormLabel>
                   <Input
                     value={receiverName}
+                    color="black"
                     onChange={(e) => setReceiverName(e.target.value)}
                     type="text"
                     placeholder="Receiver"
@@ -377,6 +420,7 @@ const CRM = () => {
                   </FormLabel>
                   <Input
                     value={title}
+                    color="black"
                     onChange={(e) => setTitle(e.target.value)}
                     type="text"
                     placeholder="Subject"
@@ -401,6 +445,7 @@ const CRM = () => {
                   </FormLabel>
                   <Textarea
                     value={message}
+                    color="black"
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Body"
                   ></Textarea>

@@ -131,6 +131,27 @@ export const ManageFees = () => {
     }
   };
 
+  // const [bankname, setBankName] = useState("");
+
+  // const addBankName = async () => {
+  //   try {
+  //     const res = await myAPIClient.post(
+  //       "/bankname",
+  //       { bankname },
+  //       {
+  //         headers: {
+  //           token: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(res.data);
+  //     toast.success("Success, bank has been added!");
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast.error("Error, something went wrong, try again!");
+  //   }
+  // };
+
   return (
     <Box>
       {/* <Flex justifyContent={"space-between"} pr={10}>
@@ -391,6 +412,78 @@ export const ManageFees = () => {
                 </Button>
               </Box>
             </Center>
+            {/* <Center
+              flexDirection={"column"}
+              boxShadow={"lg"}
+              borderRadius={2}
+              pb={4}
+              borderTop="3px solid #ccc"
+              // bg={"white"}
+              height="auto"
+              w="90%"
+              h="100%"
+            >
+              <Flex
+                alignItems="center"
+                bg={primaryColor.color}
+                // color="white"
+                w="100%"
+                justifyContent="center"
+                flexDirection="column"
+              >
+                <Box>
+                  <Text
+                    p={2}
+                    color="white"
+                    textAlign="center"
+                    fontSize={22}
+                    fontWeight="bold"
+                  >
+                    Add Banks
+                  </Text>
+                </Box>
+              </Flex>
+
+              <Box w={"100%"}>
+                <Flex
+                  p={3}
+                  // bg={"white"}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text
+                    fontSize={20}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Bank Name
+                  </Text>
+                  <Input
+                    placeholder="Bank Name"
+                    value={bankname}
+                    onChange={(e) => setBankName(e.target.value)}
+                    w="100%"
+                  />
+                </Flex>
+
+                <Button
+                  variant={"solid"}
+                  w="50%"
+                  mx={3}
+                  color="white"
+                  bgColor={primaryColor.color}
+                  onClick={addBankName}
+                  disabled={!bankname}
+                >
+                  Add Account
+                </Button>
+              </Box>
+            </Center> */}
           </WrapItem>
 
           <WrapItem

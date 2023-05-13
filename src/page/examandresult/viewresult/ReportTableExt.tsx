@@ -34,9 +34,7 @@ const ReportTableExt = () => {
             <th style={{ textTransform: "uppercase" }}>
               Class Teacher's Comment
             </th>
-            <td style={{ borderRight: "1px solid transparent" }}>
-              A fairly good student with fair beaviour
-            </td>
+            <td style={{ borderRight: "1px solid transparent" }}></td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
@@ -72,9 +70,7 @@ const ReportTableExt = () => {
             <th style={{ textTransform: "uppercase" }}>
               Class Teacher's Remark
             </th>
-            <td style={{ borderRight: "1px solid transparent" }}>
-              Serious student but poor in maths
-            </td>
+            <td style={{ borderRight: "1px solid transparent" }}></td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
@@ -114,7 +110,7 @@ const ReportTableExt = () => {
             <td></td>
             <th style={{ textTransform: "uppercase" }}>Head Teacher's Name</th>
             <td style={{ borderRight: "1px solid transparent" }}>
-              Ashaba John Bosco
+              Prof. Katusiimeh Mesharch
             </td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
             <td style={{ borderRight: "1px solid transparent" }}></td>
