@@ -52,6 +52,7 @@ export const NTStaffList = ({
                 <Th fontSize={14}>Profile Image</Th>
                 <Th fontSize={14}>username</Th>
                 <Th fontSize={14}>Department</Th>
+                <Th fontSize={14}>Role</Th>
                 <Th fontSize={14}>Date of Birth</Th>
                 <Th fontSize={14}>Contact</Th>
                 <Th fontSize={14}>Address</Th>
@@ -80,9 +81,10 @@ export const NTStaffList = ({
                     </Td>
                     <Td>{user.username}</Td>
                     <Td>{user.department}</Td>
+                    <Td>{user.role}</Td>
                     <Td>{user.dateofbirth}</Td>
                     <Td>{user.contact}</Td>
-                    <Td>{user.address}</Td>
+                    <Td>{user?.address?.village}</Td>
                     <Td>
                       <Td display={"flex"} gap={2}>
                         <IconButton

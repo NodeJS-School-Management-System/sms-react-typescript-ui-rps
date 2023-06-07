@@ -1,4 +1,6 @@
-import { MongoAPIClient, myAPIClient } from "./axiosInstance";
+import { myAPIClient } from "./axiosInstance";
+import LoginImage from "../../assets/loginimg.jpg";
+import LogoImage from "../../assets/logo.png";
 import {
   Button,
   Checkbox,
@@ -20,7 +22,6 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import useTheme from "../../theme/useTheme";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import RecoverPassword from "./RecoverPassword";
 
 export function UserLogin() {
@@ -29,7 +30,7 @@ export function UserLogin() {
     theme: { primaryColor },
   } = useTheme();
 
-  const PF = MongoAPIClient;
+  // const PF = MongoAPIClient;
 
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -50,39 +51,23 @@ export function UserLogin() {
       const res = await myAPIClient.post("/auth/loginuser", user);
       console.log(res.data);
 
-      // Also interact with mongo ***************************************************
-      try {
-        const res = await axios.post(`${PF}staff/loginstaff`, user);
-        console.log(res.data);
-        res.data && localStorage.setItem("_id", res.data.staff._id);
-      } catch (err) {
-        console.log(err);
-        // toast.error("Error, something went wron, try again!");
-      }
-
       // teacher
       res.data?.user?.isTeacher &&
         localStorage.setItem("isTeacher", res.data.user.isTeacher);
       res.data?.user?.isTeacher &&
-        localStorage.setItem("teacherId", res.data.user.teacherId);
+        localStorage.setItem("teacherId", res.data.user._id);
 
       // student
       res.data?.user?.isStudent &&
-        localStorage.setItem("isStudent", res.data.user.isStudent);
-      res.data?.user?.studentId &&
-        localStorage.setItem("studentId", res.data.user.studentId);
+        localStorage.setItem("isStudent", res.data?.user?.isStudent);
+      res.data?.user?.isStudent &&
+        localStorage.setItem("studentId", res.data?.user?._id);
 
       // non teaching staff
-      res.data?.user?.isNonteachingstaff &&
-        localStorage.setItem(
-          "isNonteachingstaff",
-          res.data.user.isNonteachingstaff
-        );
-      res.data?.user?.nonteachingstaffId &&
-        localStorage.setItem(
-          "nonteachingstaffId",
-          res.data.user.nonteachingstaffId
-        );
+      res.data?.user?.isMember &&
+        localStorage.setItem("isNonteachingstaff", res.data.user.isMember);
+      res.data?.user?.isMember &&
+        localStorage.setItem("nonteachingstaffId", res.data.user._id);
 
       // Both
       res.data && localStorage.setItem("username", res.data?.user?.username);
@@ -92,11 +77,11 @@ export function UserLogin() {
       setIsLoading(false);
       setUsername("");
       setPassword("");
-      toast.success("Success, redirecting...");
+      toast.success("Login successful, redirecting...");
       setTimeout(() => {
         navigate("/dashboards/crm/");
         window.location.reload();
-      }, 5000);
+      }, 3000);
     } catch (err) {
       console.log(err);
       setIsLoading(false);
@@ -133,6 +118,10 @@ export function UserLogin() {
             align={"center"}
           >
             <Stack p={8} spacing={4} w={"full"} maxW={"md"}>
+              <Image
+                src={LogoImage}
+                style={{ width: "100px", margin: "auto", marginLeft: "10px" }}
+              />
               <Heading
                 overflowY={"hidden"}
                 fontSize={{ base: "2xl", lg: "3xl" }}
@@ -251,9 +240,10 @@ export function UserLogin() {
         <Image
           alt={"Login Image"}
           objectFit={"cover"}
-          src={
-            "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
-          }
+          src={LoginImage}
+          // src={
+          //   "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+          // }
         />
       </Flex>
     </Stack>

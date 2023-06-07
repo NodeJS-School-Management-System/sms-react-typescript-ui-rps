@@ -52,7 +52,7 @@ export const StudentList = ({
                 <Th fontSize={14}>Passcode</Th>
                 <Th fontSize={14}>Class</Th>
                 <Th fontSize={14}>Address</Th>
-                <Th fontSize={14}>Date of Birth</Th>
+                {/* <Th fontSize={14}>Date of Birth</Th> */}
                 <Th fontSize={14}>Parent Name</Th>
                 <Th fontSize={14}>Parent Contact</Th>
                 <Th fontSize={14} m="auto" textAlign={"center"}>
@@ -80,9 +80,9 @@ export const StudentList = ({
                       />
                     </Td>
                     <Td>{user.password}</Td>
-                    <Td>{user.clas}</Td>
+                    <Td>{user.studentclass}</Td>
                     <Td>{user.address}</Td>
-                    <Td>{user.dateofbirth}</Td>
+                    {/* <Td>{user.dateofbirth}</Td> */}
                     <Td>{user.parentname}</Td>
                     <Td>{user.parentcontact}</Td>
                     {/* <Td>{user.address}</Td> */}

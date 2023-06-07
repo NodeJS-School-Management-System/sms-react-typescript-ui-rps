@@ -22,6 +22,8 @@ import {
   FormatIndentIncreaseTwoTone,
   Home,
   HomeOutlined,
+  IndeterminateCheckBox,
+  Numbers,
   Person,
   PersonAddAlt1,
   PersonOutline,
@@ -37,7 +39,6 @@ import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
-import axios from "axios";
 import {
   getStorage,
   ref,
@@ -48,6 +49,7 @@ import app from "../../../firebase/firebase";
 import { BsBoxArrowDownRight } from "react-icons/bs";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { OptionalMaker } from "../../../components/student/add/AddStudent";
 
 export const AddStudent = () => {
   const token = localStorage.getItem("token");
@@ -69,8 +71,10 @@ export const AddStudent = () => {
   const [parentname, setParentname] = useState("");
   const [parentcontact, setParentcontact] = useState("");
   const [parentEmail, setParentEmail] = useState("");
-  const [nin, setNin] = useState("");
+  const [studentnin, setStudentNin] = useState("");
+  const [parentnin, setParentNin] = useState("");
   const [status, setStatus] = useState("");
+  const [indexnumber, setIndexnumber] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -104,17 +108,19 @@ export const AddStudent = () => {
       lastname,
       email,
       password: generateOTP(),
-      role,
+      studentrole: role,
       contact,
       gender,
-      nin,
+      studentnin,
+      parentnin,
       parentEmail,
-      status,
+      day_or_border: status,
       address,
       parentcontact,
       parentname,
-      clas,
-      stream,
+      // studentclass: clas,
+      studentclass: "P5",
+      studentstream: stream,
       hostel,
       transport,
       dateofbirth,
@@ -167,31 +173,22 @@ export const AddStudent = () => {
             student.profileimage = downloadURL;
           });
           try {
-            const res = await myAPIClient.post("/students", student, {
-              headers: {
-                token: `token ${token}`,
-              },
-            });
+            const res = await myAPIClient.post(
+              "/users/students/register",
+              student,
+              {
+                headers: {
+                  token: `token ${token}`,
+                },
+              }
+            );
             console.log(res.data);
             toast.success(
-              `Success! Student's passcode is ${res.data.student.password}`,
+              `Success! Student's passcode is ${res.data.savedStudent.password}`,
               {
                 autoClose: false,
               }
             );
-
-            // ALSO INTERACT WITH MONGODB********************************
-            try {
-              const res = await axios.post(
-                `${
-                  import.meta.env.VITE_REACT_APP_MONGODB_API_URL
-                }auth/register`,
-                student
-              );
-              console.log(res.data);
-            } catch (err) {
-              console.log(err);
-            }
 
             setEmail("");
             setUsername("");
@@ -211,12 +208,15 @@ export const AddStudent = () => {
             setAddress("");
             setStatus("");
             setParentEmail("");
-            setNin("");
+            setStudentNin("");
+            setParentNin("");
 
             setIsLoading(false);
             setSuccess(true);
             setError(false);
+            console.log("issuccesful");
           } catch (err) {
+            console.log(err);
             setError(true);
             setSuccess(false);
             setIsLoading(false);
@@ -349,6 +349,7 @@ export const AddStudent = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Last Name<span style={{ color: "red" }}>*</span>
@@ -370,6 +371,7 @@ export const AddStudent = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Username<span style={{ color: "red" }}>*</span>
@@ -391,8 +393,12 @@ export const AddStudent = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Email</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Email
+                  <OptionalMaker />
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -432,7 +438,10 @@ export const AddStudent = () => {
               </Center>
 
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Stream</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Stream
+                  <OptionalMaker />
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -452,45 +461,34 @@ export const AddStudent = () => {
               </Center>
 
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Role</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Gender<span style={{ color: "red" }}>*</span>
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
                     pointerEvents="none"
                     color="gray.400"
                     width="2.5rem"
-                    children={<ClassOutlined />}
+                    children={<WcOutlined />}
                   />
                   <Input
                     isRequired
                     type="text"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    placeholder="Role"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    placeholder="Gender"
                   />
                 </InputGroup>
               </Center>
+            </WrapItem>
 
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Status</FormLabel>
-                <InputGroup>
-                  <InputLeftElement
-                    cursor={"pointer"}
-                    pointerEvents="none"
-                    color="gray.400"
-                    width="2.5rem"
-                    children={<BsBoxArrowDownRight />}
-                  />
-                  <Input
-                    isRequired
-                    type="text"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    placeholder="Status e.g Day Scholar"
-                  />
-                </InputGroup>
-              </Center>
-
+            <WrapItem
+              flex={1}
+              gap={2}
+              flexDirection={"column"}
+              w={{ base: "100%", md: "50%", lg: "50%" }}
+            >
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Parent Contact<span style={{ color: "red" }}>*</span>
@@ -513,14 +511,7 @@ export const AddStudent = () => {
                   />
                 </InputGroup>
               </Center>
-            </WrapItem>
 
-            <WrapItem
-              flexDirection={"column"}
-              gap={2}
-              flex={1}
-              w={{ base: "100%", md: "50%", lg: "50%" }}
-            >
               <Center flexDirection={"column"} mt={2} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Parent Name<span style={{ color: "red" }}>*</span>
@@ -542,8 +533,12 @@ export const AddStudent = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Parent Email</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Parent Email
+                  <OptionalMaker />
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -561,6 +556,101 @@ export const AddStudent = () => {
                   />
                 </InputGroup>
               </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Parent NIN<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<Numbers />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={parentnin}
+                    maxLength={14}
+                    onChange={(e) => setParentNin(e.target.value)}
+                    placeholder="Parent NIN"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Role <OptionalMaker />
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<ClassOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    placeholder="Role e.g Head Prefect"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Status</FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<BsBoxArrowDownRight />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    placeholder="Status e.g Border"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Student Index Number <OptionalMaker />
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<IndeterminateCheckBox />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={indexnumber}
+                    onChange={(e) => setIndexnumber(e.target.value)}
+                    placeholder="Index Number(Candidates Only)"
+                  />
+                </InputGroup>
+              </Center>
+            </WrapItem>
+
+            <WrapItem
+              flexDirection={"column"}
+              gap={2}
+              flex={1}
+              w={{ base: "100%", md: "50%", lg: "50%" }}
+            >
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Address<span style={{ color: "red" }}>*</span>
@@ -583,7 +673,10 @@ export const AddStudent = () => {
                 </InputGroup>
               </Center>
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Student NIN</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Student NIN
+                  <OptionalMaker />
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -595,14 +688,17 @@ export const AddStudent = () => {
                   <Input
                     isRequired
                     type="text"
-                    value={nin}
-                    onChange={(e) => setNin(e.target.value)}
+                    value={studentnin}
+                    onChange={(e) => setStudentNin(e.target.value)}
                     placeholder="Student NIN"
                   />
                 </InputGroup>
               </Center>
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Student Contact</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Student Contact
+                  <OptionalMaker />
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -635,7 +731,7 @@ export const AddStudent = () => {
                   />
                   <Input
                     isRequired
-                    type="text"
+                    type="date"
                     value={dateofbirth}
                     onChange={(e) => setDateofbirth(e.target.value)}
                     placeholder="Date of Birth"
@@ -644,27 +740,9 @@ export const AddStudent = () => {
               </Center>
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
-                  Gender<span style={{ color: "red" }}>*</span>
+                  Hostel/Dormitory
+                  <OptionalMaker />
                 </FormLabel>
-                <InputGroup>
-                  <InputLeftElement
-                    cursor={"pointer"}
-                    pointerEvents="none"
-                    color="gray.400"
-                    width="2.5rem"
-                    children={<WcOutlined />}
-                  />
-                  <Input
-                    isRequired
-                    type="text"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                    placeholder="Gender"
-                  />
-                </InputGroup>
-              </Center>
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Hostel/Dormitory</FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -683,7 +761,10 @@ export const AddStudent = () => {
                 </InputGroup>
               </Center>
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Transport</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Transport
+                  <OptionalMaker />
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -748,7 +829,6 @@ export const AddStudent = () => {
                   !address ||
                   !dateofbirth ||
                   !profileimage ||
-                  !clas ||
                   !parentname ||
                   !parentcontact
                 }

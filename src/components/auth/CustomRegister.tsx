@@ -1,4 +1,5 @@
-import { MongoAPIClient, myAPIClient } from "./axiosInstance";
+import { myAPIClient } from "./axiosInstance";
+import LoginImage from "../../assets/loginimg.jpg";
 import {
   Button,
   Flex,
@@ -19,7 +20,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import useTheme from "../../theme/useTheme";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+// import axios from "axios";
 
 export function CustomRegister() {
   // GLOBAL THEME ****************************************************************
@@ -27,7 +28,7 @@ export function CustomRegister() {
     theme: { primaryColor },
   } = useTheme();
 
-  const PF = MongoAPIClient;
+  // const PF = MongoAPIClient;
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -55,23 +56,12 @@ export function CustomRegister() {
       setEmail("");
       setFirstname("");
       setLastname("");
-
-      // Also interact with mongo ***************************************************
-      try {
-        const res = await axios.post(`${PF}staff/registerstaff`, user);
-        console.log(res.data);
-
-        toast.success("Success, redirecting...");
-        setTimeout(() => {
-          navigate("/auth/login/");
-          // window.location.reload();
-        }, 4000);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-        toast.error("Error, something went wrong, try again!");
-        setIsLoading(false);
-      }
+      toast.success("Success, redirecting...");
+      setTimeout(() => {
+        navigate("/auth/login/");
+        window.location.reload();
+      }, 3000);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
       toast.error("Error, something went wrong, try again!");
@@ -119,6 +109,10 @@ export function CustomRegister() {
         align={"center"}
       >
         <Stack p={8} spacing={4} w={"full"} maxW={"md"}>
+          {/* <Image
+            src={LogoImage}
+            style={{ width: "100px", margin: "auto", marginLeft: "10px" }}
+          /> */}
           <Heading overflowY={"hidden"} fontSize={{ base: "2xl", lg: "3xl" }}>
             Create an Account
           </Heading>
@@ -263,9 +257,10 @@ export function CustomRegister() {
         <Image
           alt={"Login Image"}
           objectFit={"cover"}
-          src={
-            "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
-          }
+          src={LoginImage}
+          // src={
+          //   "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+          // }
         />
       </Flex>
     </Stack>

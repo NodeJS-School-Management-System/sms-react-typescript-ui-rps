@@ -17,16 +17,24 @@ import {
 } from "@chakra-ui/react";
 import {
   ClassOutlined,
+  Countertops,
   DateRange,
+  DepartureBoard,
+  DirectionsTransit,
   Home,
+  HomeMax,
+  House,
+  LocalActivity,
+  Money,
+  MoneyOff,
+  NavigateNextSharp,
   Person,
   PersonAddAlt1,
   PersonOutline,
   PersonOutlineOutlined,
   Phone,
   PhoneOutlined,
-  SchoolOutlined,
-  ViewStreamOutlined,
+  StarOutlineSharp,
   WcOutlined,
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
@@ -35,41 +43,189 @@ import { FaAngleRight } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
-import { MongoAPIClient, myAPIClient } from "../../auth/axiosInstance";
+import { myAPIClient } from "../../auth/axiosInstance";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import app from "../../../firebase/firebase";
+import { OptionalMaker } from "../../../components/student/add/AddStudent";
+import AddTeacherEducation from "../../../components/teacher/AddTeacherEducation";
+import ClassesTaught from "../../../components/teacher/AddClassesTaught";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 export const AddTeacher = () => {
-  const PF = MongoAPIClient;
-
   const token = localStorage.getItem("token");
 
+  // BIO DATA
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [contact, setContact] = useState("");
-  const [address, setAddress] = useState("");
   const [gender, setGender] = useState("");
   const [maritalstatus, setMaritalstatus] = useState("");
   const [dateofbirth, setDateofbirth] = useState("");
-  const [stream, setStream] = useState("");
   const [profileimage, setProfileimage] = useState<any>(undefined);
   const [role, setRole] = useState("");
-  const [subject, setSubject] = useState("");
-  const [educationlevel, setEducationlevel] = useState("");
   const [password, setpassword] = useState("");
-  const [clas, setClas] = useState("");
+  const [nin, setNin] = useState("");
+  const [department, setDepartment] = useState("");
+  const [allowancerate, setAllowancerate] = useState("");
+  const [allowance_amount, setAllowances] = useState<any>(0);
+  const [salary, setSalary] = useState<any>(0);
+
+  // Education Details
+  const [institution, setInstitution] = useState("");
+  const [institution_type, setInstitutionType] = useState("");
+  const [certificate_obtained, setCertificateObtained] = useState("");
+  const [certificate_number, setCertificateNumber] = useState("");
+  const [period_from, setPeriodFrom] = useState("");
+  const [period_to, setPeriodTo] = useState("");
+  const [is_highest_qualification, setIsHighestQualification] = useState(false);
+  const [educationDetails, setEducationDetails] = useState<any>([]);
+
+  // Classes taught
+  const [stream, setStream] = useState("");
+  const [classname, setClassname] = useState("");
+  const [subject, setSubject] = useState("");
+  const [isSubjectTeacher, setIsSubjectTeacher] = useState(false);
+  const [classesTaught, setClassesTaught] = useState<any>([]);
+
+  // ADDRESS
+  const [country, setCountry] = useState("");
+  const [district, setDistrict] = useState("");
+  const [county, setCounty] = useState("");
+  const [subcounty, setSubCounty] = useState("");
+  const [parish, setParish] = useState("");
+  const [village, setVillage] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  // OBJECT CONTAINING CLASSES TAUGHT IS UPDATED HERE *********************
+
+  const addNewEducation = () => {
+    const isEducationExists = educationDetails.some(
+      (item: any) =>
+        item.certificate_number === certificate_number &&
+        item.certificate_obtained === certificate_obtained &&
+        item.institution === institution &&
+        item.institution_type === institution_type &&
+        item.is_highest_qualification === is_highest_qualification &&
+        item.period_to === period_to &&
+        item.period_from === period_from
+    );
+
+    if (isEducationExists) {
+      toast.error(
+        "Provided details already exist, try again with atleast one item different!"
+      );
+      return;
+    }
+
+    const newEducation = {
+      institution,
+      institution_type,
+      certificate_number,
+      certificate_obtained,
+      is_highest_qualification,
+      period_from,
+      period_to,
+      id: uuidv4(),
+    };
+    setEducationDetails((prevEducation: any) => [
+      ...prevEducation,
+      newEducation,
+    ]);
+
+    console.log(educationDetails);
+
+    toast.success("Success, education has been added!");
+
+    setInstitution("");
+    setInstitutionType("");
+    setPeriodFrom("");
+    setCertificateObtained("");
+    setCertificateNumber("");
+    setPeriodTo("");
+  };
+
+  // DELETE CLASS DETAILS BY CLICKING DELETE ICON *********************
+  const deleteClass = (id: any) => {
+    setClassesTaught((prevClassesTaught: any) =>
+      prevClassesTaught.filter((item: any) => item.id !== id)
+    );
+    toast.info("Success, class has been deleted!");
+  };
+
+  // OBJECT CONTAINING ACADEMIC DETAILS  IS UPDATED HERE *********************
+
+  const addNewClass = () => {
+    const isClassExists = classesTaught.some(
+      (item: any) =>
+        item.classname === classname &&
+        item.subject === subject &&
+        item.stream === stream &&
+        item.isSubjectTeacher === isSubjectTeacher
+    );
+
+    if (isClassExists) {
+      toast.error(
+        "Provided details already exist, try again with atleast one item different!"
+      );
+      return;
+    }
+
+    const newClass = {
+      classname,
+      stream,
+      subject,
+      isSubjectTeacher,
+      id: uuidv4(),
+    };
+    setClassesTaught((prevClassesTaught: any) => [
+      ...prevClassesTaught,
+      newClass,
+    ]);
+
+    toast.success("Success, class has been added!");
+
+    setClassname("");
+    setStream("");
+    setSubject("");
+  };
+
+  // DELETE CLASS DETAILS BY CLICKING DELETE ICON *********************
+  const deleteEducation = (id: any) => {
+    setEducationDetails((prevEducation: any) =>
+      prevEducation.filter((item: any) => item.id !== id)
+    );
+    toast.info("Success, class has been deleted!");
+  };
+
+  // GET ALL COUNTRIES *************************************
+  const [countryList, setCountryList] = useState([]);
+  useEffect(() => {
+    const getCountries = async () => {
+      try {
+        const res = await axios.get("https://restcountries.com/v3.1/all");
+
+        setCountryList(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getCountries();
+  }, []);
+
+  // ONCHANGE OF PROFILE IMAGE ***************************************
 
   const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -80,6 +236,7 @@ export const AddTeacher = () => {
     }
   };
 
+  // ADD NEW TEACHER *************************************
   const addTeacher = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const teacher = {
@@ -90,15 +247,24 @@ export const AddTeacher = () => {
       password,
       role,
       maritalstatus,
-      subject,
       contact,
       gender,
-      address,
-      educationlevel,
-      stream,
       dateofbirth,
-      class: clas,
+      department,
       profileimage,
+      NIN: nin,
+      allowance_amount,
+      allowance_type: allowancerate,
+      classes_taught: classesTaught,
+      educationdetails: educationDetails,
+      address: {
+        country,
+        district,
+        subcounty,
+        county,
+        parish,
+        village,
+      },
     };
 
     setIsLoading(true);
@@ -146,21 +312,17 @@ export const AddTeacher = () => {
             teacher.profileimage = downloadURL;
           });
           try {
-            const res = await myAPIClient.post("/teachers", teacher, {
-              headers: {
-                token: `token ${token}`,
-              },
-            });
+            const res = await myAPIClient.post(
+              "/users/teachers/register",
+              teacher,
+              {
+                headers: {
+                  token: `token ${token}`,
+                },
+              }
+            );
 
             console.log(res.data);
-
-            // Also interact with mongo ***************************************************
-            try {
-              const res = await axios.post(`${PF}staff/registerstaff`, teacher);
-              console.log(res.data);
-            } catch (err) {
-              console.log(err);
-            }
 
             setSuccess(true);
             setError(false);
@@ -171,8 +333,7 @@ export const AddTeacher = () => {
             setUsername("");
             setpassword("");
             setGender("");
-            setClas("");
-            setEducationlevel("");
+            setClassname("");
             setDateofbirth("");
             setFirstname("");
             setLastname("");
@@ -181,8 +342,19 @@ export const AddTeacher = () => {
             setSubject("");
             setProfileimage("");
             setContact("");
-            setAddress("");
+            setNin("");
+            setSalary("");
+            setProfileimage("");
+            setAllowances("");
             setMaritalstatus("");
+            setCountry("");
+            setCounty("");
+            setParish("");
+            setSubCounty("");
+            setVillage("");
+            setDistrict("");
+            setClassesTaught([]);
+            setEducationDetails([]);
           } catch (err) {
             setError(true);
             setSuccess(false);
@@ -190,19 +362,6 @@ export const AddTeacher = () => {
           }
         }
       );
-
-      // Upload IMage to uploads folder on the backend **********************************************
-      // This will be replaced by firebase and then commented out later *****************************
-      // try {
-      //   await myAPIClient.post("/upload", datai, {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   });
-      // } catch (err) {
-      //   setError(true);
-      //   setSuccess(false);
-      // }
     }
   };
 
@@ -250,8 +409,7 @@ export const AddTeacher = () => {
   } = useTheme();
 
   return (
-    <Box>  
-      
+    <Box>
       <Flex
         w={"100%"}
         display={"flex"}
@@ -305,7 +463,7 @@ export const AddTeacher = () => {
         >
           <Text
             textAlign={"center"}
-            color="white"
+            // color=""
             fontSize={{ base: 10, md: 13, lg: 16 }}
           >
             ***All the fields marked with * are required ***
@@ -322,13 +480,27 @@ export const AddTeacher = () => {
             w={"100%"}
             justifyContent={"space-around"}
             flexDirection={{ base: "column", md: "row" }}
+            gap={4}
           >
             <WrapItem
               flex={1}
               gap={2}
+              // h="max-content"
               flexDirection={"column"}
               w={{ base: "100%", md: "50%", lg: "50%" }}
             >
+              <Box my={3} color={primaryColor.color} fontSize={19}>
+                <span
+                  style={{ borderBottom: `3px solid ${primaryColor.color}` }}
+                >
+                  {" "}
+                  Bio
+                </span>{" "}
+                Data
+              </Box>
+
+              <Box color={primaryColor.color}>Bio:</Box>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   First Name<span style={{ color: "red" }}>*</span>
@@ -354,6 +526,7 @@ export const AddTeacher = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Last Name<span style={{ color: "red" }}>*</span>
@@ -375,6 +548,7 @@ export const AddTeacher = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Username<span style={{ color: "red" }}>*</span>
@@ -396,8 +570,11 @@ export const AddTeacher = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Email</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Email<span style={{ color: "red" }}>*</span>
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -415,6 +592,7 @@ export const AddTeacher = () => {
                   />
                 </InputGroup>
               </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Date of Birth<span style={{ color: "red" }}>*</span>
@@ -429,13 +607,82 @@ export const AddTeacher = () => {
                   />
                   <Input
                     isRequired
-                    type="text"
+                    type="date"
                     value={dateofbirth}
                     onChange={(e) => setDateofbirth(e.target.value)}
                     placeholder="Date of Birth"
                   />
                 </InputGroup>
               </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  NIN<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<NavigateNextSharp />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={nin}
+                    maxLength={14}
+                    onChange={(e) => setNin(e.target.value)}
+                    placeholder="NIN Number"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Department
+                  <OptionalMaker />
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<DepartureBoard />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    placeholder="Department"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Marital Status<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<StarOutlineSharp />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={maritalstatus}
+                    onChange={(e) => setMaritalstatus(e.target.value)}
+                    placeholder="Marital Status"
+                  />
+                </InputGroup>
+              </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Gender<span style={{ color: "red" }}>*</span>
@@ -457,46 +704,7 @@ export const AddTeacher = () => {
                   />
                 </InputGroup>
               </Center>
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Role</FormLabel>
-                <InputGroup>
-                  <InputLeftElement
-                    cursor={"pointer"}
-                    pointerEvents="none"
-                    color="gray.400"
-                    width="2.5rem"
-                    children={<ClassOutlined />}
-                  />
-                  <Input
-                    isRequired
-                    type="text"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    placeholder="Role"
-                  />
-                </InputGroup>
-              </Center>
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>
-                  Address<span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <InputGroup>
-                  <InputLeftElement
-                    cursor={"pointer"}
-                    pointerEvents="none"
-                    color="gray.400"
-                    width="2.5rem"
-                    children={<Home />}
-                  />
-                  <Input
-                    isRequired
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Address"
-                  />
-                </InputGroup>
-              </Center>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Contact<span style={{ color: "red" }}>*</span>
@@ -511,122 +719,41 @@ export const AddTeacher = () => {
                   />
                   <Input
                     isRequired
-                    type="text"
+                    type="number"
+                    maxLength={10}
                     value={contact}
                     onChange={(e) => setContact(e.target.value)}
-                    placeholder="Phone"
+                    placeholder="Phone Number"
                   />
-                </InputGroup>
-              </Center>
-            </WrapItem>
-
-            <WrapItem
-              flexDirection={"column"}
-              gap={2}
-              flex={1}
-              w={{ base: "100%", md: "50%", lg: "50%" }}
-            >
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Stream</FormLabel>
-                <InputGroup>
-                  <InputLeftElement
-                    cursor={"pointer"}
-                    pointerEvents="none"
-                    color="gray.400"
-                    width="2.5rem"
-                    children={<ViewStreamOutlined />}
-                  />
-                  <Input
-                    isRequired
-                    type="text"
-                    value={stream}
-                    onChange={(e) => setStream(e.target.value)}
-                    placeholder="Stream"
-                  />
-                </InputGroup>
-              </Center>
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>
-                  Education Level<span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <InputGroup>
-                  <InputLeftElement
-                    cursor={"pointer"}
-                    pointerEvents="none"
-                    color="gray.400"
-                    width="2.5rem"
-                    children={<SchoolOutlined />}
-                  />
-                  <Input
-                    isRequired
-                    type="text"
-                    value={educationlevel}
-                    onChange={(e) => setEducationlevel(e.target.value)}
-                    placeholder="Education Level"
-                  />
-                </InputGroup>
-              </Center>
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>
-                  Marital Status<span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <InputGroup>
-                  <InputLeftElement
-                    cursor={"pointer"}
-                    pointerEvents="none"
-                    color="gray.400"
-                    width="2.5rem"
-                    children={<PhoneOutlined />}
-                  />
-                  <Input
-                    isRequired
-                    type="text"
-                    value={maritalstatus}
-                    onChange={(e) => setMaritalstatus(e.target.value)}
-                    placeholder="Marital Status"
-                  />
-                </InputGroup>
-              </Center>
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>
-                  Class<span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <InputGroup>
-                  <Select
-                    placeholder="Select Class"
-                    value={clas}
-                    onChange={(e) => setClas(e.target.value)}
-                  >
-                    {classes.map((c: any) => (
-                      <option key={c.classroomId} value={c.className}>
-                        {c.className}
-                      </option>
-                    ))}
-                  </Select>
-                </InputGroup>
-              </Center>
-              <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>
-                  Subject<span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <InputGroup>
-                  <Select
-                    placeholder="Select Subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                  >
-                    {subjects.map((s: any) => (
-                      <option key={s.subjectId} value={s.subjectName}>
-                        {s.subjectName}
-                      </option>
-                    ))}
-                  </Select>
                 </InputGroup>
               </Center>
 
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
-                  password<span style={{ color: "red" }}>*</span>
+                  Role
+                  <OptionalMaker />
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<ClassOutlined />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    placeholder="Role e.g Games Teacher"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Password<span style={{ color: "red" }}>*</span>
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement
@@ -640,8 +767,7 @@ export const AddTeacher = () => {
                     isRequired
                     type="text"
                     value={password}
-                    // onChange={(e) => setpassword(e.target.value)}
-                    placeholder="password"
+                    placeholder="Password"
                     onChange={(e) => {
                       setError(false);
                       setSuccess(false);
@@ -650,17 +776,314 @@ export const AddTeacher = () => {
                   />
                 </InputGroup>
               </Center>
+            </WrapItem>
+
+            <WrapItem
+              flexDirection={"column"}
+              gap={2}
+              flex={1}
+              w={{ base: "100%", md: "50%", lg: "50%" }}
+              // h={"max-content"}
+            >
+              <Box my={3} color={primaryColor.color} fontSize={19}>
+                <span
+                  style={{ borderBottom: `3px solid ${primaryColor.color}` }}
+                >
+                  Compensation
+                </span>{" "}
+                & Other Details
+              </Box>
+
+              <Box color={primaryColor.color}>Address:</Box>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>Country</FormLabel>
+                <InputGroup>
+                  <Select
+                    placeholder="Select Country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    w={"100%"}
+                  >
+                    {countryList?.map((country: any) => (
+                      <option
+                        key={country.name.common}
+                        value={country.name.common}
+                      >
+                        {country.name.common}
+                      </option>
+                    ))}
+                  </Select>
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  District<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<DirectionsTransit />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={district}
+                    onChange={(e) => setDistrict(e.target.value)}
+                    placeholder="District"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  County<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<House />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={county}
+                    placeholder="County"
+                    onChange={(e) => {
+                      setError(false);
+                      setSuccess(false);
+                      setCounty(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Sub - County<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<Countertops />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={subcounty}
+                    placeholder="Sub - County"
+                    onChange={(e) => {
+                      setError(false);
+                      setSuccess(false);
+                      setSubCounty(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Parish<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<LocalActivity />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={parish}
+                    placeholder="Parish"
+                    onChange={(e) => {
+                      setError(false);
+                      setSuccess(false);
+                      setParish(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Village<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<HomeMax />}
+                  />
+                  <Input
+                    isRequired
+                    type="text"
+                    value={village}
+                    placeholder="Village"
+                    onChange={(e) => {
+                      setError(false);
+                      setSuccess(false);
+                      setVillage(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </Center>
+
+              <Box color={primaryColor.color}>Compesation:</Box>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Base Salary(UGX)<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<Money />}
+                  />
+                  <Input
+                    isRequired
+                    type="number"
+                    value={salary}
+                    placeholder="Base Salary"
+                    onChange={(e) => {
+                      setError(false);
+                      setSuccess(false);
+                      setSalary(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </Center>
+
+              <Box color={primaryColor.color}>Allowances:</Box>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Allowance Rate
+                  <OptionalMaker />
+                </FormLabel>
+                <InputGroup>
+                  <Select
+                    placeholder="Allowance Rate"
+                    w="100%"
+                    value={allowancerate}
+                    onChange={(e) => setAllowancerate(e.target.value)}
+                  >
+                    <option value={"Yearly"}>Yearly</option>
+                    <option value={"Monthly"}>Monthly</option>
+                    <option value={"Weekly"}>Weekly</option>
+                    <option value={"Daily"}>Daily</option>
+                  </Select>
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Allowances(UGX)
+                  <OptionalMaker />
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<MoneyOff />}
+                  />
+                  <Input
+                    isRequired
+                    type="number"
+                    value={allowance_amount}
+                    placeholder="Allowances"
+                    onChange={(e) => {
+                      setError(false);
+                      setSuccess(false);
+                      setAllowances(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </Center>
+
+              <Box color={primaryColor.color}>Other Details:</Box>
+
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Profile Image<span style={{ color: "red" }}>*</span>
                 </FormLabel>
-                <Input
-                  border={"none"}
-                  onChange={onUploadImage}
-                  isRequired
-                  type="file"
-                />
+                <Input onChange={onUploadImage} isRequired type="file" />
               </Center>
+            </WrapItem>
+
+            <WrapItem
+              flex={1}
+              gap={2}
+              h="max-content"
+              flexDirection={"column"}
+              w={{ base: "100%", md: "50%", lg: "50%" }}
+            >
+              <Box my={3} color={primaryColor.color} fontSize={19}>
+                <span
+                  style={{ borderBottom: `3px solid ${primaryColor.color}` }}
+                >
+                  {" "}
+                  Education
+                </span>{" "}
+                & Classes Taught
+              </Box>
+
+              {/* Classes taught */}
+              <Box color={primaryColor.color}>Classes Taught:</Box>
+              <ClassesTaught
+                subject={subject}
+                setSubject={setSubject}
+                classname={classname}
+                setClassname={setClassname}
+                stream={stream}
+                setStream={setStream}
+                isSubjectTeacher={isSubjectTeacher}
+                setIsSubjectTeacher={setIsSubjectTeacher}
+                classesTaught={classesTaught}
+                addNewClass={addNewClass}
+                deleteClass={deleteClass}
+              />
+
+              {/* Teacher's education */}
+              <Box color={primaryColor.color}>Education:</Box>
+              <AddTeacherEducation
+                setPeriodTo={setPeriodTo}
+                educationDetails={educationDetails}
+                setIsHighestQualification={setIsHighestQualification}
+                is_highest_qualification={is_highest_qualification}
+                setPeriodFrom={setPeriodFrom}
+                setCertificateNumber={setCertificateNumber}
+                certificate_number={certificate_number}
+                period_from={period_from}
+                period_to={period_to}
+                institution_type={institution_type}
+                setInstitutionType={setInstitutionType}
+                setInstitution={setInstitution}
+                institution={institution}
+                setCertificateObtained={setCertificateObtained}
+                certificate_obtained={certificate_obtained}
+                deleteEducation={deleteEducation}
+                addNewEducation={addNewEducation}
+              />
 
               {error && (
                 <Alert p={6} w={"90%"} status="error">
@@ -688,13 +1111,18 @@ export const AddTeacher = () => {
                   !firstname ||
                   !lastname ||
                   !gender ||
-                  !educationlevel ||
                   !maritalstatus ||
-                  !address ||
                   !dateofbirth ||
                   !profileimage ||
                   !contact ||
-                  !subject
+                  !country ||
+                  !county ||
+                  !parish ||
+                  !district ||
+                  !subcounty ||
+                  !village ||
+                  !salary ||
+                  educationDetails.length < 0
                 }
               >
                 {isLoading ? (

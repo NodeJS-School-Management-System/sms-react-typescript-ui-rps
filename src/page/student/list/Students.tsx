@@ -53,7 +53,7 @@ export const Students = () => {
     const getStudents = async () => {
       setIsFetching(true);
       try {
-        const res = await myAPIClient.get("/students", {
+        const res = await myAPIClient.get("/users/students/all", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -110,10 +110,33 @@ export const Students = () => {
     theme: { primaryColor },
   } = useTheme();
 
+  // Filter students with search
+  const keys = [
+    "firstname",
+    "lastname",
+    "studentclass",
+    "gender",
+    "dateofbirth",
+    "contact",
+    "address",
+    "parentname",
+    "parentcontact",
+  ];
+
+  // FILTER STUDENTS
+  const filterStudents = (students: any) => {
+    return students?.filter((student: any) => {
+      return keys?.some(
+        (key: any) =>
+          typeof student[key] === "string" &&
+          student[key].toLowerCase().includes(query)
+      );
+    });
+  };
+
   return (
     <>
       <Box>
-        
         <Flex
           w={"100%"}
           display={"flex"}
@@ -390,22 +413,7 @@ export const Students = () => {
           <StudentList
             deleteStudent={deleteStudent}
             isFetching={isFetching}
-            list={
-              query
-                ? studentlist.filter(
-                    (student: any) =>
-                      student.firstname.toLowerCase().includes(query) ||
-                      student.lastname.toLowerCase().includes(query) ||
-                      student.parentname.toLowerCase().includes(query) ||
-                      student.parentcontact.toLowerCase().includes(query) ||
-                      student.clas.toLowerCase().includes(query) ||
-                      student.gender.toLowerCase().includes(query) ||
-                      student.username.toLowerCase().includes(query) ||
-                      student.address.toLowerCase().includes(query) ||
-                      student.contact.toLowerCase().includes(query)
-                  )
-                : studentlist
-            }
+            list={query ? filterStudents(studentlist) : studentlist}
             query={query}
           />
         </Flex>

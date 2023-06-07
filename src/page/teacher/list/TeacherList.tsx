@@ -50,8 +50,8 @@ export const TeacherList = ({
                 <Th fontSize={14}>Full Name</Th>
                 <Th fontSize={14}>Username</Th>
                 <Th fontSize={14}>Profile Image</Th>
-                <Th fontSize={14}>Class</Th>
-                <Th fontSize={14}>Stream</Th>
+                {/* <Th fontSize={14}>NIN</Th> */}
+                <Th fontSize={14}>Department</Th>
                 <Th fontSize={14}>Date of Birth</Th>
                 <Th fontSize={14}>Contact</Th>
                 <Th fontSize={14}>Address</Th>
@@ -68,9 +68,7 @@ export const TeacherList = ({
                     <Td>
                       {user.firstname} {user.lastname}
                     </Td>
-                    <Td>
-                      {user.username}
-                    </Td>
+                    <Td>{user.username}</Td>
                     <Td textAlign={"center"} margin="auto" p={0}>
                       <Image
                         w={45}
@@ -81,12 +79,11 @@ export const TeacherList = ({
                         src={user.profileimage}
                       />
                     </Td>
-                    <Td>{user.class}</Td>
-                    <Td>{user.stream ? user.stream : "N/A"}</Td>
+                    {/* <Td>{user.NIN}</Td> */}
+                    <Td>{user.department ? user.department : "N/A"}</Td>
                     <Td>{user.dateofbirth}</Td>
-                    {/* <Td>{user.parentname}</Td> */}
                     <Td>{user.contact}</Td>
-                    <Td>{user.address}</Td>
+                    <Td>{user.address.village}</Td>
                     <Td>
                       <Td display={"flex"} gap={2}>
                         <IconButton

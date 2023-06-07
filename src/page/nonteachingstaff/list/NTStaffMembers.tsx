@@ -51,7 +51,7 @@ export const NTStaffMembers = () => {
     const getMembers = async () => {
       setIsFetching(true);
       try {
-        const res = await myAPIClient.get("/nonteachingstaff", {
+        const res = await myAPIClient.get("/users/members/all", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -98,10 +98,14 @@ export const NTStaffMembers = () => {
     "contact",
     "address",
   ];
+  
+  // FILTER MEMBERS
   const filterMembers = (members: any) => {
     return members?.filter((member: any) => {
-      return keys?.some((key: any) =>
-        member[key]?.toLowerCase().includes(query)
+      return keys?.some(
+        (key: any) =>
+          typeof member[key] === "string" &&
+          member[key].toLowerCase().includes(query)
       );
     });
   };

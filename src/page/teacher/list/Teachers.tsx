@@ -48,7 +48,7 @@ export const Teachers = () => {
     const getTeachers = async () => {
       setIsFetching(true);
       try {
-        const res = await myAPIClient.get("/teachers", {
+        const res = await myAPIClient.get("/users/teachers/all", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -56,8 +56,6 @@ export const Teachers = () => {
         setTeacherslist(res.data);
         console.log(res.data);
         setIsFetching(false);
-
-        // setMale(0);
       } catch (err) {
         console.log(err);
         setIsFetching(false);
@@ -95,10 +93,22 @@ export const Teachers = () => {
     "contact",
     "address",
   ];
+
+  // const filterTeachers = (teachers: any) => {
+  //   return teachers?.filter((teacher: any) => {
+  //     return keys?.some((key: any) =>
+  //       teacher[key]?.toLowerCase().includes(query)
+  //     );
+  //   });
+  // };
+
+  // FILTER TEACHERS
   const filterTeachers = (teachers: any) => {
     return teachers?.filter((teacher: any) => {
-      return keys?.some((key: any) =>
-        teacher[key]?.toLowerCase().includes(query)
+      return keys?.some(
+        (key: any) =>
+          typeof teacher[key] === "string" &&
+          teacher[key].toLowerCase().includes(query)
       );
     });
   };
@@ -109,8 +119,7 @@ export const Teachers = () => {
 
   return (
     <>
-      <Box>       
-
+      <Box>
         <Flex
           w={"100%"}
           display={"flex"}

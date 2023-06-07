@@ -25,8 +25,6 @@ export const ManageSubject = () => {
   const [subjectTeacher, setSubjectTeacher] = useState("");
   const [subjectlist, setSubjectlist] = useState([]);
   const [teacher, setTeacher] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [classNumeral, setClassNumeral] = useState("");
   const [classUpdate, setClassUpdate] = useState("");
   const [classTeacher, setClassTeacher] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
