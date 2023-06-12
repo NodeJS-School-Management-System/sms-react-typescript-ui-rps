@@ -15,8 +15,13 @@ import {
 } from "@chakra-ui/react";
 import { Download } from "@mui/icons-material";
 
-export const Sylist = ({ list, deleteSylabus, downloadImage }: any) => {
-  const isLoading = false;
+export const Sylist = ({
+  list,
+  isLoading,
+  deleteSylabus,
+  downloadImage,
+}: any) => {
+  // const isLoading = false;
   return (
     <>
       {isLoading ? (
@@ -41,11 +46,11 @@ export const Sylist = ({ list, deleteSylabus, downloadImage }: any) => {
             <Tbody>
               {list &&
                 list.map((sylabus: any) => (
-                  <Tr key={sylabus.sylabusId}>
-                    <Td>{sylabus.subjectName}</Td>
+                  <Tr key={sylabus._id}>
+                    <Td>{sylabus.subjectname}</Td>
                     <Td>
                       <Image
-                        src={sylabus.subjectFile}
+                        src={sylabus.sylabusfile}
                         alt=""
                         borderRadius={"50%"}
                         width={25}
@@ -54,29 +59,27 @@ export const Sylist = ({ list, deleteSylabus, downloadImage }: any) => {
                         objectFit="cover"
                       />
                     </Td>
-                    <Td>{sylabus.className}</Td>
-                    <Td textAlign={"center"} m="auto">
-                      <Td
-                        textAlign={"center"}
-                        m="auto"
-                        display={"flex"}
-                        gap={2}
-                      >
+                    <Td>{sylabus.classname}</Td>
+                    <Td textAlign={"center"}>
+                      <Flex align={"center"} justify="center" gap={2}>
                         <IconButton
                           colorScheme="red"
-                          onClick={() => deleteSylabus(sylabus.sylabusId)}
+                          size={"sm"}
+                          onClick={() => deleteSylabus(sylabus._id)}
                           aria-label="Delete from database"
                           icon={<DeleteIcon />}
+                          mr={2}
                         />
                         <IconButton
                           colorScheme="blue"
                           aria-label="Download from database"
                           icon={<Download />}
+                          size={"sm"}
                           onClick={() =>
-                            downloadImage(sylabus.subjectFile, "sylabus")
+                            downloadImage(sylabus.sylabusfile, "sylabus")
                           }
                         />
-                      </Td>
+                      </Flex>
                     </Td>
                   </Tr>
                 ))}

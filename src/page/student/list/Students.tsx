@@ -71,29 +71,29 @@ export const Students = () => {
 
   //*******************************************************************************************/
 
-  // GET ALL CLASSNAMES*************************************************************************
-  const [classes, setClasses] = useState([]);
+  // GET ALL CLASSES
+  const [classlist, setClasslist] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
       try {
-        const res = await myAPIClient.get("/classroom", {
+        const res = await myAPIClient.get("/classrooms/findall", {
           headers: {
-            token: `Bearer ${token}`,
+            token: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        setClasses(res.data);
+        setClasslist(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getClasses();
-  }, [clas]);
+  }, []);
 
   // Filter students by classname************************************************************
   useEffect(() => {
     const getStudents = async () => {
       try {
-        const res = await myAPIClient.get(`/students/find/${clas}`, {
+        const res = await myAPIClient.get(`/users/students/find/${clas}`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -270,12 +270,12 @@ export const Students = () => {
                 <Select
                   placeholder="Select Class"
                   value={clas}
-                  onChange={(e) => setClas(e.target.value)}
+                  onChange={(e) => e.target.value && setClas(e.target.value)}
                   size={"lg"}
                 >
-                  {classes.map((c: any) => (
-                    <option key={c.classroomId} value={c.classNumeral}>
-                      {c.classNumeral}
+                  {classlist.map((c: any) => (
+                    <option key={c._id} value={c.classnumeral}>
+                      {c.classnumeral}
                     </option>
                   ))}
                 </Select>

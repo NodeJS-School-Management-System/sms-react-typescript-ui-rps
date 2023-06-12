@@ -16,6 +16,7 @@ import {
   // Email,
   StoreMallDirectory,
   ExpandCircleDownOutlined,
+  Payment,
 } from "@mui/icons-material";
 
 const format = (label: string, path: string, icon?: ReactNode): NavItemType => {
@@ -79,6 +80,7 @@ const navList: NavOptions[] = [
     childrens: [
       format("Manage Exam", "/examsection/manageexam/"),
       format("Entry Marks", "/examsection/entrymarks/"),
+      format("View Result", "/examandresult/viewresult/"),
     ],
   },
   {
@@ -115,8 +117,16 @@ const navList: NavOptions[] = [
     childrens: [
       format("Manage Fees", "/accountingsection/managefees/"),
       format("Fees Payments", "/accountingsection/feespayment/"),
-      format("Pay Fees", "/accountingsection/payfees/"),
+      // format("Pay Fees", "/accountingsection/payfees/"),
     ],
+  },
+  {
+    parent: formatGroupButton(
+      "Pay Fees",
+      <Payment />,
+      "/accountingsection/"
+    ),
+    childrens: [format("Pay Fees", "/accountingsection/payfees/")],
   },
   {
     parent: formatGroupButton(

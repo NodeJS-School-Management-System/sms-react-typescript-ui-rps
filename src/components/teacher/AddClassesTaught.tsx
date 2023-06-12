@@ -8,7 +8,9 @@ import {
   InputGroup,
   Select,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import useTheme from "../../theme/useTheme";
+import { myAPIClient } from "../auth/axiosInstance";
 import { OptionalMaker } from "../student/add/AddStudent";
 import ListOfClassesTaught from "./ListOfClassesTaught";
 
@@ -29,6 +31,41 @@ const AddClassesTaught = ({
     theme: { primaryColor },
   } = useTheme();
 
+  const [classlist, setClasslist] = useState([]);
+  useEffect(() => {
+    const getClasses = async () => {
+      try {
+        const res = await myAPIClient.get("/classrooms/findall", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setClasslist(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getClasses();
+  }, []);
+
+  // Get all subjects **************************************************************************
+  const [subjectlist, setSubjectlist] = useState([]);
+  useEffect(() => {
+    const getSubjects = async () => {
+      try {
+        const res = await myAPIClient.get("/subjects/findall", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setSubjectlist(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getSubjects();
+  }, []);
+
   return (
     <Box w={"100%"}>
       <Flex gap={2} flexDirection={{ base: "column", lg: "row" }}>
@@ -47,10 +84,11 @@ const AddClassesTaught = ({
               value={classname}
               onChange={(e) => setClassname(e.target.value)}
             >
-              <option value={"P1"}>P1</option>
-              <option value={"P2"}>P2</option>
-              <option value={"P3"}>P3</option>
-              <option value={"P4"}>P4</option>
+              {classlist?.map((c: any) => (
+                <option key={c.classnumeral} value={c.classnumeral}>
+                  {c.classnumeral}
+                </option>
+              ))}
             </Select>
           </InputGroup>
         </Center>
@@ -70,9 +108,11 @@ const AddClassesTaught = ({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
             >
-              <option value={"English"}>English</option>
-              <option value={"Maths"}>Maths</option>
-              <option value={"Science"}>Science</option>
+              {subjectlist?.map((subject: any) => (
+                <option key={subject._id} value={subject.subjectname}>
+                  {subject.subjectname}
+                </option>
+              ))}
             </Select>
           </InputGroup>
         </Center>

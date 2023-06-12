@@ -37,9 +37,9 @@ export const CustomTable = ({ results }: any) => {
               </Tr>
             </Thead>
             <Tbody>
-              {results.map((res: any) => (
-                <Tr key={res.resultsId}>
-                  <Td>{res.firstname}</Td>
+              {results?.map((res: any) => (
+                <Tr key={res._id}>
+                  <Td>{res.studentname}</Td>
                   <Td>{res.lastname}</Td>
                   <Td>{res.examresults[0].marks[0].marks}</Td>
                   <Td>{res.examresults[0].marks[0].grade}</Td>

@@ -39,9 +39,7 @@ export const StudentList = ({
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer
-        // h={700} overflowY={"auto"}
-        >
+        <TableContainer overflowY={"auto"}>
           <Table variant="simple">
             <TableCaption>Student's List</TableCaption>
             <Thead>
@@ -93,12 +91,14 @@ export const StudentList = ({
                           aria-label="Delete database"
                           onClick={() => deleteStudent(user.studentId)}
                           icon={<BiTrashAlt />}
+                          size="sm"
                         />
                         <IconButton
                           colorScheme="blue"
                           onClick={() => openModal(user.studentId)}
                           aria-label="Edit database"
                           icon={<BsEye />}
+                          size="sm"
                         />
                         <Box>
                           {isOpen ? (

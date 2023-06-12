@@ -15,6 +15,8 @@ import { ClassOutlined, Home } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { myAPIClient } from "../../auth/axiosInstance";
 import {
   getDownloadURL,
@@ -33,7 +35,7 @@ export const ManageSyllabus = () => {
   useEffect(() => {
     const getClasses = async () => {
       try {
-        const res = await myAPIClient.get("/classroom", {
+        const res = await myAPIClient.get("/classrooms/findall", {
           headers: {
             token: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -52,11 +54,12 @@ export const ManageSyllabus = () => {
   useEffect(() => {
     const getSubjects = async () => {
       try {
-        const res = await myAPIClient.get("/subject", {
+        const res = await myAPIClient.get("/subjects/findall", {
           headers: {
             token: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        console.log(res.data);
         setSubjectlist(res.data);
       } catch (err) {
         console.log(err);
@@ -66,6 +69,8 @@ export const ManageSyllabus = () => {
   }, []);
 
   const [subjectName, setSubjectName] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // IMAGE UPLOAD ***************************************************
   const [fileImg, setFileImg] = useState<any>(undefined);
   const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,11 +81,12 @@ export const ManageSyllabus = () => {
   };
 
   // CREATE SYLABUS ************************************************************************
+  // const [isCreating, setIsCreating] = useState(false)
   const addSylabus = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const sylabus: any = {
-      className: classUpdate,
-      subjectName,
+      classname: classUpdate,
+      subjectname: subjectName,
     };
 
     if (fileImg !== null) {
@@ -88,7 +94,6 @@ export const ManageSyllabus = () => {
       const fileName = Date.now() + fileImg.name;
       datai.append("name", fileName);
       datai.append("file", fileImg);
-      // student.profileimage = fileName;
 
       // Upload image to firebase storage ******************************************************************
       const storage = getStorage(app);
@@ -125,30 +130,35 @@ export const ManageSyllabus = () => {
           await getDownloadURL(uploadTask.snapshot.ref).then(
             (downloadURL: any) => {
               console.log(downloadURL);
-              sylabus.subjectFile = downloadURL;
+              sylabus.sylabusfile = downloadURL;
             }
           );
           try {
-            const res = await myAPIClient.post("/sylabus", sylabus, {
+            const res = await myAPIClient.post("/sylabus/create", sylabus, {
               headers: {
                 token: `token ${localStorage.getItem("token")}`,
               },
             });
             console.log(res.data);
+            toast.success("Success, sylabus had been added!");
+            setIsDeleting(!isDeleting);
             setClassUpdate("");
             setSubjectName("");
-          } catch (err) {}
+          } catch (err) {
+            toast.error(
+              "Sorry, something went wrong adding sylabus, try again or contact admin!"
+            );
+          }
         }
       );
     }
   };
 
   // DELETE SYLABUS *************************************************************
-  const [isDeleting, setIsDeleting] = useState(false);
   const deleteSylabus = async (id: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`/sylabus/${id}`, {
+      const res = await myAPIClient.delete(`/sylabus/remove/${id}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
@@ -163,19 +173,22 @@ export const ManageSyllabus = () => {
 
   // GET ALL SULABUS ************************************************************************
   const [sylist, setSylist] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const getSylabus = async () => {
+      setIsLoading(true);
       try {
-        const res = await myAPIClient.get("/sylabus", {
+        const res = await myAPIClient.get("/sylabus/findall", {
           headers: {
             token: `token ${localStorage.getItem("token")}`,
           },
         });
         console.log(res.data);
         setSylist(res.data);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
+        setIsLoading(false);
       }
     };
     getSylabus();
@@ -292,7 +305,7 @@ export const ManageSyllabus = () => {
                     w={"100%"}
                   >
                     {classlist?.map((c: any) => (
-                      <option key={c.classroomId}>{c.className}</option>
+                      <option key={c._id}>{c.classnumeral}</option>
                     ))}
                   </Select>
                 </Flex>
@@ -323,11 +336,8 @@ export const ManageSyllabus = () => {
                     w={"100%"}
                   >
                     {subjectlist.map((subject: any) => (
-                      <option
-                        key={subject.subjectId}
-                        value={subject.subjectName}
-                      >
-                        {subject.subjectName}
+                      <option key={subject._id} value={subject.subjectname}>
+                        {subject.subjectname}
                       </option>
                     ))}
                   </Select>
@@ -404,6 +414,7 @@ export const ManageSyllabus = () => {
                     downloadImage={downloadImage}
                     deleteSylabus={deleteSylabus}
                     list={sylist}
+                    isLoading={isLoading}
                   />
                 </Flex>
               </Box>

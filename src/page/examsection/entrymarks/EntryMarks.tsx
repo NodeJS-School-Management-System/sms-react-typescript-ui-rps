@@ -33,7 +33,7 @@ export const EntryMarks = () => {
   useEffect(() => {
     const getClasses = async () => {
       try {
-        const res = await myAPIClient.get(`/classroom`, {
+        const res = await myAPIClient.get(`/classrooms/findall`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -52,7 +52,7 @@ export const EntryMarks = () => {
   useEffect(() => {
     const getExams = async () => {
       try {
-        const res = await myAPIClient.get(`/exams`, {
+        const res = await myAPIClient.get("/exams/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -71,7 +71,7 @@ export const EntryMarks = () => {
   useEffect(() => {
     const getSubjects = async () => {
       try {
-        const res = await myAPIClient.get(`/subject`, {
+        const res = await myAPIClient.get(`/subjects/findall`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -90,7 +90,7 @@ export const EntryMarks = () => {
   useEffect(() => {
     const getStudentss = async () => {
       try {
-        const res = await myAPIClient.get(`/students/find/${clas}`, {
+        const res = await myAPIClient.get(`/users/students/find/${clas}`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -206,11 +206,8 @@ export const EntryMarks = () => {
                     value={clas}
                   >
                     {classes.map((clasi: any) => (
-                      <option
-                        key={clasi.classroomId}
-                        value={clasi.classNumeral}
-                      >
-                        {clasi.classNumeral}
+                      <option key={clasi._id} value={clasi.classnumeral}>
+                        {clasi.classnumeral}
                       </option>
                     ))}
                   </Select>
@@ -278,7 +275,7 @@ export const EntryMarks = () => {
                     value={exam}
                   >
                     {exams.map((exam: any) => (
-                      <option key={exam.examId} value={exam.examName}>
+                      <option key={exam._id} value={exam.examName}>
                         {exam.examName}
                       </option>
                     ))}
@@ -312,8 +309,8 @@ export const EntryMarks = () => {
                     w={"100%"}
                   >
                     {subjects.map((sub: any) => (
-                      <option key={sub.subjectId} value={sub.subjectName}>
-                        {sub.subjectName}
+                      <option key={sub._id} value={sub.subjectname}>
+                        {sub.subjectname}
                       </option>
                     ))}
                   </Select>
@@ -364,7 +361,12 @@ export const EntryMarks = () => {
                     flexDirection="column"
                   >
                     <Box>
-                      <Text textAlign={"center"} fontSize={{base: 13, md: 14, lg: 15}} px={5} fontWeight="bold">
+                      <Text
+                        textAlign={"center"}
+                        fontSize={{ base: 13, md: 14, lg: 15 }}
+                        px={5}
+                        fontWeight="bold"
+                      >
                         Select class, exam and subject to insert marks
                       </Text>
                     </Box>

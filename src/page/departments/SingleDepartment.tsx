@@ -35,6 +35,7 @@ import useTheme from "../../theme/useTheme";
 import { myAPIClient } from "../auth/axiosInstance";
 const SingleDepartment = ({ d }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const isAdmin = localStorage.getItem("isAdmin");
 
   const [name, setName] = useState("");
   const [image, setImage] = useState<any>(undefined);
@@ -251,30 +252,32 @@ const SingleDepartment = ({ d }: any) => {
           </List>
         </Box>
       </Box>
-      <Box
-        display="flex"
-        gap={2}
-        justifyContent="flex-end"
-        mr={4}
-        alignItems="flex-end"
-      >
-        <IconButton
-          backgroundColor={primaryColor.color}
-          color="white"
-          size="sm"
-          onClick={onOpen}
-          aria-label="Edit database"
-          icon={<Edit />}
-        />
-        <IconButton
-          backgroundColor="#f98"
-          color="white"
-          size="sm"
-          onClick={deleteDept}
-          aria-label="Delete database"
-          icon={<Delete />}
-        />
-      </Box>
+      {isAdmin && (
+        <Box
+          display="flex"
+          gap={2}
+          justifyContent="flex-end"
+          mr={4}
+          alignItems="flex-end"
+        >
+          <IconButton
+            backgroundColor={primaryColor.color}
+            color="white"
+            size="sm"
+            onClick={onOpen}
+            aria-label="Edit database"
+            icon={<Edit />}
+          />
+          <IconButton
+            backgroundColor="#f98"
+            color="white"
+            size="sm"
+            onClick={deleteDept}
+            aria-label="Delete database"
+            icon={<Delete />}
+          />
+        </Box>
+      )}
 
       <>
         <Modal isCentered isOpen={isOpen} onClose={onClose}>

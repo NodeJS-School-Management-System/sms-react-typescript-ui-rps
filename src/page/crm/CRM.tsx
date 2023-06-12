@@ -64,7 +64,7 @@ const CRM = () => {
   useEffect(() => {
     const getStudents = async () => {
       try {
-        const res = await myAPIClient.get("/students", {
+        const res = await myAPIClient.get("/users/students/all", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -85,7 +85,7 @@ const CRM = () => {
   useEffect(() => {
     const getTeachers = async () => {
       try {
-        const res = await myAPIClient.get("/teachers", {
+        const res = await myAPIClient.get("/users/teachers/all", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -105,7 +105,7 @@ const CRM = () => {
   useEffect(() => {
     const getClasses = async () => {
       try {
-        const res = await myAPIClient.get("/classroom", {
+        const res = await myAPIClient.get("/classrooms/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -118,24 +118,43 @@ const CRM = () => {
     getClasses();
   }, [classes]);
 
-  // GET ALL LIB BOOKS **************************************************************************
-  const [books, setBooks] = useState([]);
+  // ****************************************************************************************
+  // Get all SYLABUS
+  const [sylabus, setSylabus] = useState([]);
   useEffect(() => {
-    const getBooks = async () => {
+    const getClasses = async () => {
       try {
-        const res = await myAPIClient.get("/library", {
+        const res = await myAPIClient.get("/sylabus/findall", {
           headers: {
-            token: `Bearer ${localStorage.getItem("token")}`,
+            token: `Bearer ${token}`,
           },
         });
-        console.log(res.data);
-        setBooks(res.data);
+        setSylabus(res.data);
       } catch (err) {
         console.log(err);
       }
     };
-    getBooks();
-  }, []);
+    getClasses();
+  }, [classes]);
+
+  // GET ALL LIB BOOKS **************************************************************************
+  // const [books, setBooks] = useState([]);
+  // useEffect(() => {
+  //   const getBooks = async () => {
+  //     try {
+  //       const res = await myAPIClient.get("/library", {
+  //         headers: {
+  //           token: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       });
+  //       console.log(res.data);
+  //       setBooks(res.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getBooks();
+  // }, []);
 
   // GET income ITEMS FROM DB ****************************************************************
   const [incomeItems, setincomeItems] = useState([]);
@@ -198,7 +217,7 @@ const CRM = () => {
     },
     {
       title: "Study Materials",
-      value: books.length,
+      value: sylabus.length,
       icon: LocalLibrary,
       bgColor: "teal",
     },

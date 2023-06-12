@@ -14,15 +14,11 @@ import ReportModal from "./ReportModal";
 import Logo from "../../../assets/logo.png";
 import { FaAngleRight } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 
 import { useReactToPrint } from "react-to-print";
 import ReportTableExt from "./ReportTableExt";
 import ExamResultsTable from "./ExamResultsTable";
-import {
-  MongoAPIClient,
-  myAPIClient,
-} from "../../../components/auth/axiosInstance";
+import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
 import { CustomTable } from "./CustomTable";
 import { ClassOutlined, Home } from "@mui/icons-material";
@@ -63,7 +59,7 @@ export const ViewResult = () => {
   useEffect(() => {
     const getClasses = async () => {
       try {
-        const res = await myAPIClient.get(`/classroom`, {
+        const res = await myAPIClient.get(`/classrooms/findall`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -84,7 +80,7 @@ export const ViewResult = () => {
   useEffect(() => {
     const getExams = async () => {
       try {
-        const res = await myAPIClient.get(`/exams`, {
+        const res = await myAPIClient.get(`/exams/findall`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -105,7 +101,7 @@ export const ViewResult = () => {
   useEffect(() => {
     const getSubjects = async () => {
       try {
-        const res = await myAPIClient.get(`/subject`, {
+        const res = await myAPIClient.get(`/subjects/findall`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -123,15 +119,17 @@ export const ViewResult = () => {
 
   // Get results by classname(selecting a class from dropdown)***********************
   const [results, setResults] = useState([]);
-  const PF = MongoAPIClient;
   useEffect(() => {
     const getResults = async () => {
       try {
-        const res = await axios.get(`${PF}results/Term One/${clas}`, {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
+        const res = await myAPIClient.get(
+          `/marks/findbyclassandterm/${clas}/Term Two`,
+          {
+            headers: {
+              token: `Bearer ${token}`,
+            },
+          }
+        );
         console.log(res.data);
         setResults(res.data);
       } catch (err) {
@@ -284,11 +282,8 @@ export const ViewResult = () => {
                     value={clas}
                   >
                     {classes.map((clasi: any) => (
-                      <option
-                        key={clasi.classroomId}
-                        value={clasi.classNumeral}
-                      >
-                        {clasi.classNumeral}
+                      <option key={clasi._id} value={clasi.classnumeral}>
+                        {clasi.classnumeral}
                       </option>
                     ))}
                   </Select>
@@ -321,7 +316,7 @@ export const ViewResult = () => {
                     value={exam}
                   >
                     {exams.map((exam: any) => (
-                      <option key={exam.examId} value={exam.examName}>
+                      <option key={exam._id} value={exam.examName}>
                         {exam.examName}
                       </option>
                     ))}
@@ -354,8 +349,8 @@ export const ViewResult = () => {
                     w={"100%"}
                   >
                     {subjects.map((sub: any) => (
-                      <option key={sub.subjectId} value={sub.subjectName}>
-                        {sub.subjectName}
+                      <option key={sub._id} value={sub.subjectname}>
+                        {sub.subjectname}
                       </option>
                     ))}
                   </Select>
@@ -420,7 +415,7 @@ export const ViewResult = () => {
                   margin="auto"
                   fontWeight="bold"
                 >
-                  {exam} {subject} Marks - For {clas}
+                  {exam} {subject} Results - For {clas}
                 </Text>
                 <Box m="auto">
                   <CustomTable results={results} />

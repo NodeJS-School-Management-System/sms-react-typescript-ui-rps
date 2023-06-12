@@ -5,6 +5,7 @@ import { useState } from "react";
 import { MongoAPIClient } from "../../../components/auth/axiosInstance";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { myAPIClient } from "../../auth/axiosInstance";
 
 function InputField(props: any) {
   const PF = MongoAPIClient;
@@ -65,18 +66,11 @@ function InputField(props: any) {
   //   Add marks to the results api
   const addMarks = async () => {
     const newMark = {
-      exam,
       examname: exam,
-      mark: formValues[data._id],
-      marks: formValues[data._id],
-      firstname: data.firstname,
-      lastname: data.lastname,
-      attendence: isAttendee ? "Attended" : "Missed",
-      class: clas,
+      marks: Number(formValues[data._id]),
+      studentname: `${data.firstname} ${data.lastname}`,
       classname: clas,
-      subject,
-      examId: exam,
-      term,
+      subjectname: subject,
       termname: term,
       grade:
         clas === "P7"
@@ -90,11 +84,15 @@ function InputField(props: any) {
     //     },
     //   });
     try {
-      await axios.post(`${PF}results`, newMark);
+      await myAPIClient.post("/marks/create", newMark, {
+        headers: {
+          token: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       toast.success("Successfully added marks!");
     } catch (err) {
       console.log(err);
-      toast.error("Error, ");
+      toast.error("Error, something went wrong adding marks!");
     }
     // alert("Successfully added!");
     // } catch (err) {
@@ -128,9 +126,11 @@ function InputField(props: any) {
     >
       <input
         type="text"
+        placeholder="00"
         style={{
           width: "70px",
           height: "40px",
+          color: "gray",
           paddingLeft: "10px",
           paddingRight: "5px",
         }}

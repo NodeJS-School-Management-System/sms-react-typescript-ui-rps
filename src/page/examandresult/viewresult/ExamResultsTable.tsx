@@ -19,7 +19,7 @@ const ExamResultsTable = ({
   allresults,
   getTotalMarksForSubject,
 }: any) => {
-  const subjects = results.examresults[0].marks.map(
+  const subjects = results?.marks[0]?.map(
     (mark: any) => mark.subject
   );
 

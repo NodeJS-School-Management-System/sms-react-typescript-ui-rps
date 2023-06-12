@@ -89,6 +89,24 @@ export const AddStudent = () => {
     }
   };
 
+  // GET ALL CLASSES
+  const [classlist, setClasslist] = useState([]);
+  useEffect(() => {
+    const getClasses = async () => {
+      try {
+        const res = await myAPIClient.get("/classrooms/findall", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setClasslist(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getClasses();
+  }, []);
+
   // SYSTEM GENERATED STUDENT PASSWORD *****************************************************
   const generateOTP = () => {
     let otp = "";
@@ -118,8 +136,7 @@ export const AddStudent = () => {
       address,
       parentcontact,
       parentname,
-      // studentclass: clas,
-      studentclass: "P5",
+      studentclass: clas,
       studentstream: stream,
       hostel,
       transport,
@@ -227,24 +244,6 @@ export const AddStudent = () => {
   };
 
   // REGISTER STUDENT ENDS HERE *********************************************************************
-
-  // Get all classes
-  const [classes, setClasses] = useState<any>([]);
-  useEffect(() => {
-    const getClasses = async () => {
-      try {
-        const res = await myAPIClient.get("/classroom", {
-          headers: {
-            token: `token ${token}`,
-          },
-        });
-        setClasses(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getClasses();
-  }, []);
 
   const {
     theme: { primaryColor },
@@ -428,9 +427,9 @@ export const AddStudent = () => {
                     onChange={(e) => setClass(e.target.value)}
                     w={"100%"}
                   >
-                    {classes?.map((c: any) => (
-                      <option key={c.classNumeral} value={c.classNumeral}>
-                        {c.classNumeral}
+                    {classlist?.map((c: any) => (
+                      <option key={c.classnumeral} value={c.classnumeral}>
+                        {c.classnumeral}
                       </option>
                     ))}
                   </Select>

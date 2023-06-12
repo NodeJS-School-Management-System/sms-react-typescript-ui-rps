@@ -31,7 +31,7 @@ const CustomTable = ({ list, exam, clas, subject, term }: any) => {
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Attendence</th>
+            <th>Passcode</th>
             <th>Marks</th>
             {/* <th>Action</th> */}
           </tr>
@@ -40,11 +40,12 @@ const CustomTable = ({ list, exam, clas, subject, term }: any) => {
               <td>{listItem.firstname}</td>
               <td>{listItem.lastname}</td>
               <td>
-                <input
+                {/* <input
                   type="checkbox"
                   checked={formValuesc[listItem._id] || false}
                   onChange={(e) => handleInputChange(e, listItem._id)}
-                />
+                /> */}
+                {listItem.password}
               </td>
 
               <td>

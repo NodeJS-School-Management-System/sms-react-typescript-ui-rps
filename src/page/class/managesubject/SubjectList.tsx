@@ -45,8 +45,9 @@ export const SubjectList = ({ list, deleteSubject }: any) => {
             <Thead>
               <Tr>
                 <Th fontSize={14}>Subject Name</Th>
-                <Th fontSize={14}>Class</Th>
-                <Th fontSize={14}>Subject Teacher</Th>
+                <Th fontSize={14}>Subject Shorthand</Th>
+                {/* <Th fontSize={14}>Class</Th> */}
+                {/* <Th fontSize={14}>Subject Teacher</Th> */}
                 <Th fontSize={14} m="auto" textAlign={"center"}>
                   Action
                 </Th>
@@ -56,23 +57,26 @@ export const SubjectList = ({ list, deleteSubject }: any) => {
             <Tbody>
               {list &&
                 list.map((subj: any) => (
-                  <Tr key={subj.subjectId}>
-                    <Td>{subj.subjectName}</Td>
-                    <Td>{subj.className || "N/A"}</Td>
-                    <Td>{subj.subjectTeacher || "N/A"}</Td>
+                  <Tr key={subj._id}>
+                    <Td>{subj.subjectname}</Td>
+                    <Td>{subj.subjectshorthand}</Td>
+                    {/* <Td>{subj.classname || "N/A"}</Td> */}
+                    {/* <Td>{subj.subjectteacher || "N/A"}</Td> */}
                     <Td>
                       <Td display={"flex"} gap={2}>
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          onClick={() => deleteSubject(subj.subjectId)}
+                          onClick={() => deleteSubject(subj._id)}
                           icon={<BiTrashAlt />}
+                          size="sm"
                         />
                         <IconButton
                           colorScheme="blue"
                           // onClick={() => openModal(subj.classroomId)}
                           aria-label="Edit database"
                           icon={<Edit />}
+                          size="sm"
                         />
                       </Td>
                     </Td>

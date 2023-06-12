@@ -14,14 +14,6 @@ import {
 import { Download } from "@mui/icons-material";
 import { BiTrashAlt } from "react-icons/bi";
 export const ExamList = ({ list, query, deleteExam }: any) => {
-  // const { isOpen, onOpen, onClose } = useDisclosure();
-  // const [clickedId, setClickedId] = useState("");
-
-  // const openModal = (id: any) => {
-  //   setClickedId(id);
-  //   onOpen();
-  // };
-
   const isLoading = false;
 
   // DOWNLOAD FILE *********************************************************************
@@ -46,7 +38,7 @@ export const ExamList = ({ list, query, deleteExam }: any) => {
             <TableCaption>Exam List</TableCaption>
             <Thead>
               <Tr>
-                <Th style={{fontSize: 10}}>Exam Name</Th>
+                <Th style={{ fontSize: 10 }}>Exam Name</Th>
                 <Th fontSize={14}>Exam Date</Th>
                 <Th fontSize={14}>Running Term</Th>
                 <Th fontSize={14} m="auto" textAlign={"center"}>
@@ -67,7 +59,7 @@ export const ExamList = ({ list, query, deleteExam }: any) => {
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          onClick={() => deleteExam(exam.examId)}
+                          onClick={() => deleteExam(exam._id)}
                           icon={<BiTrashAlt />}
                         />
                         <IconButton

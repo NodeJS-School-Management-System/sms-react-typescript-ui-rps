@@ -13,6 +13,8 @@ import { FaAngleRight } from "react-icons/fa";
 import { ExamList } from "./ExamList";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   getDownloadURL,
   getStorage,
@@ -47,6 +49,7 @@ export const ManageExam = () => {
   };
 
   // Add new exam and its details ********************************************************************
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const addExam = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -59,7 +62,7 @@ export const ManageExam = () => {
 
     if (examTimetable !== null) {
       const datai = new FormData();
-      const fileName = Date.now() + examTimetable.name;
+      const fileName = Date.now() + examTimetable?.name;
       datai.append("name", fileName);
       datai.append("file", examTimetable);
       // student.profileimage = fileName;
@@ -102,20 +105,25 @@ export const ManageExam = () => {
             newExam.examTimetable = downloadURL;
           });
           try {
-            const res = await myAPIClient.post("/exams", newExam, {
+            const res = await myAPIClient.post("/exams/create", newExam, {
               headers: {
                 token: `Bearer ${token}`,
               },
             });
             console.log(res.data);
+            toast.success("Success, exam had been added!");
             setExamDate("");
             setRunningTerm("");
             setExamName("");
             setTimeTable("");
             setIsLoading(false);
+            setIsDeleting(!isDeleting);
           } catch (err) {
             console.log(err);
             setIsLoading(false);
+            toast.error(
+              "Sorry, something went wrong adding exam, try again or contact admin!"
+            );
           }
         }
       );
@@ -124,11 +132,10 @@ export const ManageExam = () => {
   // **********************************************************************************************
 
   // DELETE EXAM *********************************************************************
-  const [isDeleting, setIsDeleting] = useState(false);
   const deleteExam = async (examId: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`exams/${examId}`, {
+      const res = await myAPIClient.delete(`/exams/remove/${examId}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
@@ -147,12 +154,13 @@ export const ManageExam = () => {
   useEffect(() => {
     const getExams = async () => {
       try {
-        const res = await myAPIClient.get("/exams", {
+        const res = await myAPIClient.get("/exams/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
         });
         setExams(res.data);
+        console.log(exams);
       } catch (err) {
         console.log(err);
       }
@@ -264,7 +272,7 @@ export const ManageExam = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Exam Name
+                    Exam Name<span style={{ color: "red" }}>*</span>
                   </Text>
                   <Input
                     isRequired
@@ -291,7 +299,7 @@ export const ManageExam = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Exam Date
+                    Exam Date<span style={{ color: "red" }}>*</span>
                   </Text>
                   <Input
                     isRequired
@@ -318,7 +326,7 @@ export const ManageExam = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Exam Time Table
+                    Exam Time Table<span style={{ color: "red" }}>*</span>
                   </Text>
                   <Input
                     isRequired
@@ -344,7 +352,7 @@ export const ManageExam = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Running Term
+                    Running Term<span style={{ color: "red" }}>*</span>
                   </Text>
                   <Input
                     isRequired
@@ -363,6 +371,7 @@ export const ManageExam = () => {
                   p={2}
                   backgroundColor={primaryColor.color}
                   onClick={addExam}
+                  isDisabled={!examDate || !examTimetable || !examName}
                   color="white"
                 >
                   {isLoading ? "Adding.." : "Add Exam"}

@@ -9,6 +9,8 @@ import {
   Heading,
   Input,
 } from "@chakra-ui/react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ClassOutlined, Home } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -21,12 +23,18 @@ import { myAPIClient } from "../../../components/auth/axiosInstance";
 export const ManageClass = () => {
   const token = localStorage.getItem("token");
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [classNumeral, setClassNumeral] = useState("");
+  const [className, setClassName] = useState("");
+  const [classUpdate, setClassUpdate] = useState("");
+  const [classTeacher, setClassTeacher] = useState("");
+
   // DELETE CLASS FROM DB ***************************************************************
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteClass = async (classroomId: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`classroom/${classroomId}`, {
+      const res = await myAPIClient.delete(`/classrooms/remove/${classroomId}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
@@ -40,18 +48,12 @@ export const ManageClass = () => {
   };
   // ************************************************************************************
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [classNumeral, setClassNumeral] = useState("");
-  const [className, setClassName] = useState("");
-  const [classUpdate, setClassUpdate] = useState("");
-  const [classTeacher, setClassTeacher] = useState("");
-
   // Get all teachers ***********************************************************************
   const [teacher, setTeacher] = useState([]);
   useEffect(() => {
     const getTeachers = async () => {
       try {
-        const res = await myAPIClient.get("/teachers", {
+        const res = await myAPIClient.get("/users/teachers/all", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -66,12 +68,13 @@ export const ManageClass = () => {
 
   // Get all classes registered *************************************************************
   const [classlist, setClasslist] = useState([]);
+  const [refetching, setRefetching] = useState(false);
 
   useEffect(() => {
     const getClasses = async () => {
       setIsLoading(true);
       try {
-        const res = await myAPIClient.get("/classroom", {
+        const res = await myAPIClient.get("/classrooms/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -85,24 +88,28 @@ export const ManageClass = () => {
       }
     };
     getClasses();
-  }, [isDeleting]);
+  }, [isDeleting, refetching]);
 
   // Add a new classroom
   const addClass = async () => {
     const newClass = {
-      classNumeral,
-      className,
+      classnumeral: classNumeral,
+      classname: className,
     };
+
     try {
-      await myAPIClient.post("/classroom", newClass, {
+      await myAPIClient.post("/classrooms/create", newClass, {
         headers: {
           token: `Bearer ${token}`,
         },
       });
+      toast.success("Success, class has been created!");
       setClassName("");
       setClassNumeral("");
+      setRefetching(true);
     } catch (err) {
       console.log(err);
+      toast.error("Sorry, error adding class, try again or contact admin!");
     }
   };
 
@@ -111,7 +118,7 @@ export const ManageClass = () => {
   useEffect(() => {
     const getClass = async () => {
       try {
-        const res = await myAPIClient.get(`/classroom/find/${classUpdate}`, {
+        const res = await myAPIClient.get(`/classrooms/find/${classUpdate}`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -121,29 +128,30 @@ export const ManageClass = () => {
         console.log(err);
       }
     };
-    getClass();
+  classUpdate &&  getClass();
   }, [classUpdate]);
 
   // Update classroom according to the id of the selected class
   const updateClassroom = async () => {
     try {
-      const updatedClassroom = {
-        className: classUpdate,
-        classTeacher,
-      };
       await myAPIClient.put(
-        `/classroom/${selectedClass.classroomId}`,
-        updatedClassroom,
+        `/classrooms/updateclass/${selectedClass.classnumeral}`,
+        { classteacher: classTeacher },
         {
           headers: {
             token: `Bearer ${token}`,
           },
         }
       );
+      setRefetching(!refetching);
+      toast.success("Success, class teacher has been assigned!");
       setClassTeacher("");
       setClassUpdate("");
     } catch (err) {
       console.log(err);
+      toast.error(
+        "Sorry, error assigning class teacher, try again or contact admin!"
+      );
     }
   };
 
@@ -203,7 +211,6 @@ export const ManageClass = () => {
           gap={2}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
-          
           <WrapItem
             flex={1}
             gap={3}
@@ -358,7 +365,7 @@ export const ManageClass = () => {
                     w={"100%"}
                   >
                     {classlist?.map((c: any) => (
-                      <option key={c.classroomId}>{c.className}</option>
+                      <option key={c._id}>{c.classnumeral}</option>
                     ))}
                   </Select>
                 </Flex>
@@ -389,8 +396,11 @@ export const ManageClass = () => {
                     }}
                   >
                     {teacher.map((option: any) => (
-                      <option key={option.teacherId} value={option.firstname}>
-                        {option.firstname}
+                      <option
+                        key={option._id}
+                        value={`${option.firstname} ${option.lastname}`}
+                      >
+                        {option.firstname} {option.lastname}
                       </option>
                     ))}
                   </Select>
@@ -398,7 +408,7 @@ export const ManageClass = () => {
 
                 <Button
                   variant={"solid"}
-                  w="50%"
+                  w={"70%"}
                   mx={3}
                   colorScheme={primaryColor.name}
                   onClick={updateClassroom}

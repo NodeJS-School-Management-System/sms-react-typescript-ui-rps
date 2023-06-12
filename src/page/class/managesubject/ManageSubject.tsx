@@ -14,6 +14,8 @@ import { Home, SubjectOutlined } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { SubjectList } from "./SubjectList";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
@@ -29,16 +31,18 @@ export const ManageSubject = () => {
   const [classTeacher, setClassTeacher] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [classlist, setClasslist] = useState([]);
+  const [refetching, setRefetching] = useState(false);
 
   // Get all teachers****************************************************************
   useEffect(() => {
     const getTeachers = async () => {
       try {
-        const res = await myAPIClient.get("/teachers", {
+        const res = await myAPIClient.get("/users/teachers/all", {
           headers: {
             token: `Bearer ${token}`,
           },
         });
+        console.log(res.data);
         setTeacher(res.data);
       } catch (err) {
         console.log(err);
@@ -48,11 +52,11 @@ export const ManageSubject = () => {
   }, []);
 
   // GET SUBJECT BY SUBJECTNAME *******************************************
-  const [targetSubject, setTargetSubject] = useState<any>([]);
+  const [targetSubject, setTargetSubject] = useState<any>({});
   useEffect(() => {
     const getSubject = async () => {
       try {
-        const res = await myAPIClient.get(`/subject/find/${selectedSubject}`, {
+        const res = await myAPIClient.get(`/subjects/find/${selectedSubject}`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -67,37 +71,41 @@ export const ManageSubject = () => {
   }, [selectedSubject]);
 
   // UPDATE SUBJECT BY ID ***************************************************************
-  const updateSubject = async () => {
-    try {
-      const updatedSubject = {
-        subjectName: selectedSubject,
-        subjectTeacher,
-        className: classUpdate,
-      };
-      const res = await myAPIClient.put(
-        `/subject/${targetSubject.subjectId}`,
-        updatedSubject,
-        {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(res.data);
-      setClassTeacher("");
-      setClassUpdate("");
-      setSelectedSubject("");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const updateSubject = async () => {
+  //   try {
+  //     const updatedSubject = {
+  //       subjectteacher: subjectTeacher,
+  //       classname: classUpdate,
+  //     };
+  //     const res = await myAPIClient.put(
+  //       `/subjects/assignteacher/${targetSubject._id}`,
+  //       updatedSubject,
+  //       {
+  //         headers: {
+  //           token: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(res.data);
+  //     setRefetching(!refetching);
+  //     toast.success("Success, subject teacher has been assigned!");
+  //     setClassTeacher("");
+  //     setClassUpdate("");
+  //     setSelectedSubject("");
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast.error(
+  //       "Sorry, something went wrong assigning subject teacher, try again or contact admin!"
+  //     );
+  //   }
+  // };
 
-  // Get all teachers ***************************************************************
+  // Get all classes ***************************************************************
   // const [classlist, setClasslist] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
       try {
-        const res = await myAPIClient.get("/classroom", {
+        const res = await myAPIClient.get("/classrooms/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -111,19 +119,19 @@ export const ManageSubject = () => {
   }, []);
 
   // DELETE SUBJECT *************************************************************
-  const [isDeleting, setIsDeleting] = useState(false);
+
   const deleteSubject = async (id: any) => {
-    setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`/subject/${id}`, {
+      const res = await myAPIClient.delete(`/subjects/remove/${id}`, {
         headers: {
           token: `token ${localStorage.getItem("token")}`,
         },
       });
       console.log(res.data);
-      setIsDeleting(false);
+      setRefetching(!refetching);
     } catch (err) {
-      setIsDeleting(false);
+      toast.error("Sorry, something went wrong deleting subject!");
+
       console.log(err);
     }
   };
@@ -132,7 +140,7 @@ export const ManageSubject = () => {
   useEffect(() => {
     const getSubjects = async () => {
       try {
-        const res = await myAPIClient.get("/subject", {
+        const res = await myAPIClient.get("/subjects/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -143,28 +151,29 @@ export const ManageSubject = () => {
       }
     };
     getSubjects();
-  }, [isDeleting]);
+  }, [refetching]);
 
   // Add a new classroom
   const addSubject = async () => {
     const newSubject = {
-      subjectName,
-      subjectAbbrev,
-      subjectTeacher,
-      // className,
+      subjectname: subjectName,
+      subjectshorthand: subjectAbbrev,
     };
     try {
-      await myAPIClient.post("/subject", newSubject, {
+      const res = await myAPIClient.post("/subjects/create", newSubject, {
         headers: {
           token: `Bearer ${token}`,
         },
       });
+      console.log(res.data);
+      setRefetching(!refetching);
+      toast.success("Success, subject has been added!");
       setSubjectTeacher("");
       setSubjectAbbrev("");
       setSubjectName("");
-      // setClassName("");
     } catch (err) {
       console.log(err);
+      toast.error("Sorry, something went wrong adding subject!");
     }
   };
 
@@ -324,7 +333,8 @@ export const ManageSubject = () => {
                 </Button>
               </Box>
             </Center>
-            <Center
+
+            {/* <Center
               flexDirection={"column"}
               boxShadow={"base"}
               borderRadius={2}
@@ -379,8 +389,8 @@ export const ManageSubject = () => {
                     w={"100%"}
                   >
                     {classlist?.map((c: any) => (
-                      <option key={c.classroomId} value={c.className}>
-                        {c.className}
+                      <option key={c._id} value={c.classnumeral}>
+                        {c.classnumeral}
                       </option>
                     ))}
                   </Select>
@@ -408,12 +418,14 @@ export const ManageSubject = () => {
                     onChange={(e) => {
                       if (e.target.value) {
                         setSelectedSubject(e.target.value);
+                      } else {
+                        console.log("no sb");
                       }
                     }}
                   >
                     {subjectlist.map((option: any) => (
-                      <option key={option.subjectId} value={option.subjectName}>
-                        {option.subjectName}
+                      <option key={option._id} value={option.subjectname}>
+                        {option.subjectname}
                       </option>
                     ))}
                   </Select>
@@ -445,8 +457,11 @@ export const ManageSubject = () => {
                     }}
                   >
                     {teacher.map((option: any) => (
-                      <option key={option.teacherId} value={option.firstname}>
-                        {option.firstname}
+                      <option
+                        key={option._id}
+                        value={`${option.firstname} ${option.lastname}`}
+                      >
+                        {option.firstname} {option.lastname}
                       </option>
                     ))}
                   </Select>
@@ -463,7 +478,7 @@ export const ManageSubject = () => {
                   Assign Teacher
                 </Button>
               </Box>
-            </Center>
+            </Center> */}
           </WrapItem>
 
           <WrapItem

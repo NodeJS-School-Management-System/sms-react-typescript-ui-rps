@@ -33,7 +33,7 @@ export const ClassList = ({ list, query, isLoading, deleteClass }: any) => {
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer>
+        <TableContainer overflowX={{ base: "auto" }}>
           <Table variant="simple">
             <TableCaption>Class List</TableCaption>
             <Thead>
@@ -50,23 +50,25 @@ export const ClassList = ({ list, query, isLoading, deleteClass }: any) => {
             <Tbody>
               {list &&
                 list.map((clas: any) => (
-                  <Tr key={clas.classId}>
-                    <Td>{clas.className}</Td>
-                    <Td>{clas.classNumeral}</Td>
-                    <Td>{clas.classTeacher || "N/A"}</Td>
+                  <Tr key={clas._id}>
+                    <Td>{clas.classname}</Td>
+                    <Td>{clas.classnumeral}</Td>
+                    <Td>{clas.classteacher || "N/A"}</Td>
                     <Td>
                       <Td display={"flex"} gap={2}>
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          onClick={() => deleteClass(clas.classroomId)}
+                          onClick={() => deleteClass(clas._id)}
                           icon={<BiTrashAlt />}
+                          size="sm"
                         />
                         <IconButton
                           colorScheme="blue"
-                          onClick={() => openModal(clas.classroomId)}
+                          onClick={() => openModal(clas._id)}
                           aria-label="Edit database"
                           icon={<BsEye />}
+                          size="sm"
                         />
                         <Box>
                           {isOpen ? (

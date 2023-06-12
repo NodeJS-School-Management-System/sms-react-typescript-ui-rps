@@ -150,7 +150,7 @@ const Departments = () => {
   useEffect(() => {
     const getDepts = async () => {
       try {
-        const res = await myAPIClient.get("/departments", {
+        const res = await myAPIClient.get("/departments/findall", {
           headers: {
             token: `Bearer ${localStorage.getItem("token")}`,
           },
