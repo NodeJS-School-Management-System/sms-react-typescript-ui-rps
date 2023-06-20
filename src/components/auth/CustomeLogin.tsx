@@ -1,5 +1,5 @@
 import { myAPIClient } from "./axiosInstance";
-import LoginImage from "../../assets/loginimg.jpg";
+import LoginImage from "../../assets/loginimg.png";
 import LogoImage from "../../assets/logo.png";
 import {
   Button,
