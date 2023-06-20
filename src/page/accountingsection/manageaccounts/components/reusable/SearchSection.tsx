@@ -136,7 +136,11 @@ const SearchSection = ({
                 fontSize={13}
                 placeholder="Select Class"
                 value={classnumeral}
-                onChange={(e) => setClassNumeral(e.target.value)}
+                onChange={(e) => {
+                  if (setClassNumeral) {
+                    setClassNumeral(e.target.value);
+                  }
+                }}
                 w={"100%"}
               >
                 {classlist?.map((c: any) => (

@@ -5,7 +5,6 @@ import {
   Flex,
   WrapItem,
   Button,
-  Select,
   Heading,
   Input,
   // useDisclosure,
@@ -24,13 +23,13 @@ export const ManageSubject = () => {
   const token = localStorage.getItem("token");
   const [subjectName, setSubjectName] = useState("");
   const [subjectAbbrev, setSubjectAbbrev] = useState("");
-  const [subjectTeacher, setSubjectTeacher] = useState("");
+  // const [subjectTeacher, setSubjectTeacher] = useState("");
   const [subjectlist, setSubjectlist] = useState([]);
-  const [teacher, setTeacher] = useState([]);
-  const [classUpdate, setClassUpdate] = useState("");
-  const [classTeacher, setClassTeacher] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [classlist, setClasslist] = useState([]);
+  // const [teacher, setTeacher] = useState([]);
+  // const [classUpdate, setClassUpdate] = useState("");
+  // const [classTeacher, setClassTeacher] = useState("");
+  // const [selectedSubject, setSelectedSubject] = useState("");
+  // const [classlist, setClasslist] = useState([]);
   const [refetching, setRefetching] = useState(false);
 
   // Get all teachers****************************************************************
@@ -43,7 +42,7 @@ export const ManageSubject = () => {
           },
         });
         console.log(res.data);
-        setTeacher(res.data);
+        // setTeacher(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -52,23 +51,23 @@ export const ManageSubject = () => {
   }, []);
 
   // GET SUBJECT BY SUBJECTNAME *******************************************
-  const [targetSubject, setTargetSubject] = useState<any>({});
-  useEffect(() => {
-    const getSubject = async () => {
-      try {
-        const res = await myAPIClient.get(`/subjects/find/${selectedSubject}`, {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
-        console.log(res.data);
-        setTargetSubject(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getSubject();
-  }, [selectedSubject]);
+  // const [targetSubject, setTargetSubject] = useState<any>({});
+  // useEffect(() => {
+  //   const getSubject = async () => {
+  //     try {
+  //       const res = await myAPIClient.get(`/subjects/find/${selectedSubject}`, {
+  //         headers: {
+  //           token: `Bearer ${token}`,
+  //         },
+  //       });
+  //       console.log(res.data);
+  //       // setTargetSubject(res.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getSubject();
+  // }, [selectedSubject]);
 
   // UPDATE SUBJECT BY ID ***************************************************************
   // const updateSubject = async () => {
@@ -110,7 +109,8 @@ export const ManageSubject = () => {
             token: `Bearer ${token}`,
           },
         });
-        setClasslist(res.data);
+        console.log(res.data);
+        // setClasslist(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -168,7 +168,7 @@ export const ManageSubject = () => {
       console.log(res.data);
       setRefetching(!refetching);
       toast.success("Success, subject has been added!");
-      setSubjectTeacher("");
+      // setSubjectTeacher("");
       setSubjectAbbrev("");
       setSubjectName("");
     } catch (err) {

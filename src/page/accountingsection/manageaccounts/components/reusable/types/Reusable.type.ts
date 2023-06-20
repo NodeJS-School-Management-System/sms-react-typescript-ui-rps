@@ -6,7 +6,7 @@ export interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
   renderSelectClass: boolean;
   headingText: string;
   classnumeral?: string;
-  setClassNumeral: React.Dispatch<React.SetStateAction<string>>;
+  setClassNumeral?: React.Dispatch<React.SetStateAction<string>>;
   isEmployee?: boolean;
 }
 
@@ -15,6 +15,8 @@ export type DataTableProps = {
   captionText: string;
   students?: object[];
   employees?: object[];
+  data?: object[];
+  emailAvailable?: boolean;
 };
 
 export type ReusableAnalyticsProps = {

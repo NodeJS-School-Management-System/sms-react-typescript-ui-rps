@@ -1,21 +1,21 @@
 import "./CustomTable.css";
 import { Flex } from "@chakra-ui/react";
-import { useState } from "react";
+// import { useState } from "react";
 import InputField from "./InputField";
 
 const CustomTable = ({ list, exam, clas, subject, term }: any) => {
-  const [formValuesc, setFormValuesc] = useState<any>({});
+  // const [formValuesc, setFormValuesc] = useState<any>({});
 
-  const handleInputChange = (event: any, id: any) => {
-    const value =
-      event.target.type === "checkbox"
-        ? event.target.checked
-        : event.target.value;
-    setFormValuesc((prevValues: any) => ({
-      ...prevValues,
-      [id]: value,
-    }));
-  };
+  // const handleInputChange = (event: any, id: any) => {
+  //   const value =
+  //     event.target.type === "checkbox"
+  //       ? event.target.checked
+  //       : event.target.value;
+  //   setFormValuesc((prevValues: any) => ({
+  //     ...prevValues,
+  //     [id]: value,
+  //   }));
+  // };
 
   return (
     <div
@@ -56,7 +56,7 @@ const CustomTable = ({ list, exam, clas, subject, term }: any) => {
                     clas={clas}
                     term={term}
                     subject={subject}
-                    isAttendee={formValuesc}
+                    // isAttendee={formValuesc}
                     clickedId={listItem._id}
                   />
                 </Flex>
