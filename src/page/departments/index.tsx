@@ -161,7 +161,7 @@ const Departments = () => {
       }
     };
     getDepts();
-  });
+  }, []);
 
   const {
     theme: { primaryColor },

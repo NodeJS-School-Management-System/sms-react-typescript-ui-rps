@@ -19,6 +19,7 @@ import {
   AirportShuttleOutlined,
   ClassOutlined,
   DateRange,
+  FeedSharp,
   FormatIndentIncreaseTwoTone,
   Home,
   HomeOutlined,
@@ -75,6 +76,8 @@ export const AddStudent = () => {
   const [parentnin, setParentNin] = useState("");
   const [status, setStatus] = useState("");
   const [indexnumber, setIndexnumber] = useState("");
+  const [scheme, setScheme] = useState("");
+  const [currentfees, setCurrentFees] = useState<any>(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -105,6 +108,25 @@ export const AddStudent = () => {
       }
     };
     getClasses();
+  }, []);
+
+  // GET PAYMENT SCHEMES BARSARY SCHEMES
+  const [schemes, setSchemes] = useState([]);
+  useEffect(() => {
+    const getSchemes = async () => {
+      try {
+        const res = await myAPIClient.get("/feesmanager/schemes", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setSchemes(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getSchemes();
   }, []);
 
   // SYSTEM GENERATED STUDENT PASSWORD *****************************************************
@@ -141,6 +163,8 @@ export const AddStudent = () => {
       hostel,
       transport,
       dateofbirth,
+      bursary_scheme: scheme,
+      currentfees,
       // profileimage,
     };
 
@@ -227,7 +251,8 @@ export const AddStudent = () => {
             setParentEmail("");
             setStudentNin("");
             setParentNin("");
-
+            setScheme("");
+            setCurrentFees(0);
             setIsLoading(false);
             setSuccess(true);
             setError(false);
@@ -461,6 +486,55 @@ export const AddStudent = () => {
 
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
+                  Scheme <span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <Select
+                    placeholder="Select Scheme"
+                    value={scheme}
+                    onChange={(e) => setScheme(e.target.value)}
+                    w={"100%"}
+                  >
+                    {schemes?.map((c: any) => (
+                      <option key={c._id} value={c.scheme}>
+                        {c.scheme}
+                      </option>
+                    ))}
+                  </Select>
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Current Fees<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<FeedSharp />}
+                  />
+                  <Input
+                    isRequired
+                    type="number"
+                    value={currentfees}
+                    onChange={(e) => setCurrentFees(e.target.value)}
+                    placeholder="Current Fees"
+                  />
+                </InputGroup>
+              </Center>
+            </WrapItem>
+
+            <WrapItem
+              flex={1}
+              gap={2}
+              flexDirection={"column"}
+              w={{ base: "100%", md: "50%", lg: "50%" }}
+            >
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
                   Gender<span style={{ color: "red" }}>*</span>
                 </FormLabel>
                 <InputGroup>
@@ -480,14 +554,7 @@ export const AddStudent = () => {
                   />
                 </InputGroup>
               </Center>
-            </WrapItem>
 
-            <WrapItem
-              flex={1}
-              gap={2}
-              flexDirection={"column"}
-              w={{ base: "100%", md: "50%", lg: "50%" }}
-            >
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
                   Parent Contact<span style={{ color: "red" }}>*</span>
@@ -602,7 +669,9 @@ export const AddStudent = () => {
               </Center>
 
               <Center flexDirection={"column"} w="90%" h="100%">
-                <FormLabel alignSelf={"flex-start"}>Status</FormLabel>
+                <FormLabel alignSelf={"flex-start"}>
+                  Status<span style={{ color: "red" }}>*</span>
+                </FormLabel>
                 <InputGroup>
                   <InputLeftElement
                     cursor={"pointer"}
@@ -829,7 +898,10 @@ export const AddStudent = () => {
                   !dateofbirth ||
                   !profileimage ||
                   !parentname ||
-                  !parentcontact
+                  !parentcontact ||
+                  !currentfees ||
+                  !scheme ||
+                  !status
                 }
               >
                 {isLoading ? (

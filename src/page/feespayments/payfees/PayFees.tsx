@@ -29,26 +29,6 @@ export const PayFees = () => {
   const [scheme, setScheme] = useState("");
   const [contact, setContact] = useState("");
 
-  // GET CLASS FEES******************************************************************************************
-  // const [classfees, setClassFees] = useState<any>({});
-  // useEffect(() => {
-  //   // const getClassFees = async () => {
-  //   //   try {
-  //   //     const res = await myAPIClient.get(`/classfee/findbyclass/${clasn}`, {
-  //   //       headers: {
-  //   //         token: `Bearer ${token}`,
-  //   //       },
-  //   //     });
-  //   //     console.log(res.data);
-  //   //     setClassFees(res.data);
-  //   //   } catch (err) {
-  //   //     console.log(err);
-  //   //   }
-  //   // };
-  //   // getClassFees();
-  // }, [clas]);
-  // *********************************************************************************************************
-
   // IFRAME OPENING
   const [iframeUrl, setIframeUrl] = useState<any>("");
   const iframeRef: any = useRef<any>();
@@ -64,7 +44,7 @@ export const PayFees = () => {
     setIsLoading(true);
     try {
       const res = await myAPIClient.post(
-        "/payments/initiatepayment",
+        `/users/students/initiatepayment/${passcode}`,
         {
           phone_number: contact,
           amount,
@@ -95,24 +75,27 @@ export const PayFees = () => {
     }
   };
 
-  const [passcode, setPasscode] = useState("");
+  const [passcode, setPasscode] = useState<any>(null);
   const [detailsRevealed, setDetailsRevealed] = useState(false);
+  const [isRevealing, setIsRevealing] = useState(false);
 
   // ****************************************************************************************************
   // GET STUDENT DETAILS BY PASSCODE
   const [student, setStudent] = useState<any>({});
   const getStudentByPasscode = async () => {
+    setIsRevealing(true);
     try {
       const res = await myAPIClient.get(
-        `/students/find/getbypasscode/${passcode}`,
+        `/users/students/getbypasscode/${passcode}`,
         {
           headers: {
             token: `Bearer ${token}`,
           },
         }
       );
-      console.log(student);
       setStudent(res.data);
+      console.log(student);
+      setIsRevealing(false);
 
       // GET FEES OF STUDENT"S CLASS******************
       //  ***WILL BE HERE *****
@@ -122,6 +105,7 @@ export const PayFees = () => {
     } catch (err) {
       setDetailsRevealed(false);
       console.log(err);
+      setIsRevealing(false);
     }
   };
 
@@ -230,6 +214,7 @@ export const PayFees = () => {
                 <Input
                   placeholder="Enter student passcode"
                   value={passcode}
+                  type="number"
                   w={{ base: "100%", md: "50%" }}
                   onChange={(e) => setPasscode(e.target.value)}
                 />
@@ -237,9 +222,10 @@ export const PayFees = () => {
                   bg={primaryColor.color}
                   color="white"
                   mx={3}
+                  disabled={!passcode || passcode.length < 4}
                   onClick={getStudentByPasscode}
                 >
-                  Get Student Details
+                  {isRevealing ? "Fetching.." : "Get Student Details"}
                 </Button>
               </Flex>
 
@@ -290,7 +276,7 @@ export const PayFees = () => {
 
                     <Input
                       placeholder="Enter student passcode"
-                      value={student?.clas}
+                      value={student?.studentclass}
                       fontWeight={"bold"}
                       disabled
                       style={{ cursor: "default" }}
@@ -321,7 +307,6 @@ export const PayFees = () => {
                     </Text>
 
                     <Input
-                      placeholder="Enter student passcode"
                       value={student?.address}
                       fontWeight={"bold"}
                       disabled

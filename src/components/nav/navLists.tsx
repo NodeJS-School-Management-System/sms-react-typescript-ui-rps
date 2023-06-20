@@ -9,7 +9,6 @@ import {
   Class,
   Person,
   Note,
-  NoteAlt,
   LocalLibrary,
   AttachMoney,
   Upcoming,
@@ -17,6 +16,7 @@ import {
   StoreMallDirectory,
   ExpandCircleDownOutlined,
   Payment,
+  Email,
 } from "@mui/icons-material";
 
 const format = (label: string, path: string, icon?: ReactNode): NavItemType => {
@@ -80,16 +80,16 @@ const navList: NavOptions[] = [
     childrens: [
       format("Manage Exam", "/examsection/manageexam/"),
       format("Entry Marks", "/examsection/entrymarks/"),
-      format("View Result", "/examandresult/viewresult/"),
+      format("View Result", "/examsection/viewresult/"),
     ],
   },
-  {
-    parent: formatGroupButton("Exam Results", <NoteAlt />, "/examandresult/"),
-    childrens: [
-      // format("Exam Routine", "/examandresult/examroutine/"),
-      format("View Result", "/examandresult/viewresult/"),
-    ],
-  },
+  // {
+  //   parent: formatGroupButton("Exam Results", <NoteAlt />, "/examandresult/"),
+  //   childrens: [
+  //     // format("Exam Routine", "/examandresult/examroutine/"),
+  //     format("View Result", "/examandresult/viewresult/"),
+  //   ],
+  // },
   {
     parent: formatGroupButton("Library", <LocalLibrary />, "/library/"),
     childrens: [
@@ -97,36 +97,33 @@ const navList: NavOptions[] = [
       format("View Library", "/library/view/"),
     ],
   },
+  // {
+  //   parent: formatGroupButton(
+  //     "Income & Expenditure",
+  //     <ExpandCircleDownOutlined />,
+  //     "/incomeandexpenditure/"
+  //   ),
+  //   childrens: [
+  //     format("Manage Income", "/incomeandexpenditure/manageincome/"),
+  //     format("Manage Expenses", "/incomeandexpenditure/manageexpenditure/"),
+  //   ],
+  // },
   {
     parent: formatGroupButton(
-      "Income & Expenditure",
-      <ExpandCircleDownOutlined />,
-      "/incomeandexpenditure/"
-    ),
-    childrens: [
-      format("Manage Income", "/incomeandexpenditure/manageincome/"),
-      format("Manage Expenses", "/incomeandexpenditure/manageexpenditure/"),
-    ],
-  },
-  {
-    parent: formatGroupButton(
-      "Accounting Section",
+      "Accounting",
       <AttachMoney />,
       "/accountingsection/"
     ),
     childrens: [
-      format("Manage Fees", "/accountingsection/managefees/"),
-      format("Fees Payments", "/accountingsection/feespayment/"),
-      // format("Pay Fees", "/accountingsection/payfees/"),
+      format("Manage Accounts", "/accountingsection/manageaccounts/"),
+      // format("Fees Payments", "/accountingsection/feespayment/"),
+      // format("Manage Income", "/incomeandexpenditure/manageincome/"),
+      // format("Manage Expenses", "/incomeandexpenditure/manageexpenditure/"),
     ],
   },
   {
-    parent: formatGroupButton(
-      "Pay Fees",
-      <Payment />,
-      "/accountingsection/"
-    ),
-    childrens: [format("Pay Fees", "/accountingsection/payfees/")],
+    parent: formatGroupButton("Pay Fees", <Payment />, "/feespayments/"),
+    childrens: [format("Pay Fees", "/feespayments/payfees/")],
   },
   {
     parent: formatGroupButton(
@@ -143,9 +140,9 @@ const navList: NavOptions[] = [
     parent: formatGroupButton("Notice Board", <Upcoming />, "/noticeboard/"),
     childrens: [format("View", "/noticeboard/view/")],
   },
-  // {
-  //   parent: formatGroupButton("Message", <Email />, "/message/"),
-  //   childrens: [format("View", "/message/view/")],
-  // },
+  {
+    parent: formatGroupButton("Message", <Email />, "/message/"),
+    childrens: [format("View", "/message/view/")],
+  },
 ];
 export default navList;

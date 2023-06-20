@@ -9,7 +9,7 @@ const AppLogo = () => (
     <Box display="flex" align="center" space={0.4}>
       <StyledLogo src={Logo} alt="app logo" />
       <CText fontSize={17} fontWeight="bold">
-        RWEBIITA PS.
+        RWEBIITA PS
       </CText>
     </Box>
   </Link>

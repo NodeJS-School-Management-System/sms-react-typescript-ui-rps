@@ -9,6 +9,7 @@ import { Flex } from "../components/layout";
 import AppLayout from "../components/layout/AppLayout";
 import PageLoading from "../components/loading/PageLoading";
 import Nav from "../components/nav/Nav";
+import { PayFees } from "./feespayments/payfees/PayFees";
 import StoreManager from "./storemanager";
 const PageNotFound = lazy(() => import("./404/PageNotFound"));
 const CRM = lazy(() => import("./crm/CRM"));
@@ -17,7 +18,7 @@ const Student = lazy(() => import("./student"));
 const Teacher = lazy(() => import("./teacher"));
 const Class = lazy(() => import("./class"));
 const ExamSection = lazy(() => import("./examsection"));
-const ExamAndResult = lazy(() => import("./examandresult"));
+// const ExamAndResult = lazy(() => import("./examandresult"));
 const NTStaffMembers = lazy(() => import("./nonteachingstaff"));
 const AccountingSection = lazy(() => import("./accountingsection"));
 const IncomeAndExpenditure = lazy(() => import("./incomeandexpenditure"));
@@ -59,10 +60,11 @@ const Home = () => {
                 path="/accountingsection/*"
                 element={<AccountingSection />}
               />
+              <Route path="/feespayments/*" element={<PayFees />} />
               <Route path="/storemanager/*" element={<StoreManager />} />
               <Route path="/library/*" element={<Library />} />
               <Route path="/examsection/*" element={<ExamSection />} />
-              <Route path="/examandresult/*" element={<ExamAndResult />} />
+              {/* <Route path="/examandresult/*" element={<ExamAndResult />} /> */}
               <Route path="/message/*" element={<Message />} />
               <Route path="/noticeboard/*" element={<NoticeBoard />} />
 

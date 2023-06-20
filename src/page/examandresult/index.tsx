@@ -3,7 +3,6 @@ import PageNotFound from "../404/PageNotFound";
 import { ExamRoutine } from "./examroutine/ExamRoutine";
 import { ViewResult } from "./viewresult/ViewResult";
 const ExamAndResult = () => {
-
   return (
     <Routes>
       <Route path="/examroutine/" element={<ExamRoutine />} />

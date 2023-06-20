@@ -1,15 +1,12 @@
 import { IconButton } from "@chakra-ui/react";
 import { Add } from "@mui/icons-material";
-import axios from "axios";
 import { useState } from "react";
-import { MongoAPIClient } from "../../../components/auth/axiosInstance";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { myAPIClient } from "../../auth/axiosInstance";
 
 function InputField(props: any) {
-  const PF = MongoAPIClient;
-  const { data, clas, term, isAttendee, subject, exam } = props;
+  const { data, clas, term, subject, exam } = props;
   // const token = localStorage.getItem("token");
   const [formValues, setFormValues] = useState<any>({});
 

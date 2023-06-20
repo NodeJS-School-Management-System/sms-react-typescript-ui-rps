@@ -195,11 +195,7 @@ export function UserLogin() {
                   isDisabled={!username || !password}
                   onClick={handleSubmit}
                 >
-                  {isLoading ? (
-                    <CircularProgress isIndeterminate size="24px" />
-                  ) : (
-                    " Sign In"
-                  )}
+                  {isLoading ? <CircularProgress size="24px" /> : " Sign In"}
                 </Button>
               </Stack>
             </Stack>

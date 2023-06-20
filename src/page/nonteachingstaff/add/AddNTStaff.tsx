@@ -33,7 +33,6 @@ import {
   PersonOutline,
   PersonOutlineOutlined,
   Phone,
-  PhoneOutlined,
   StarOutlineSharp,
   WcOutlined,
 } from "@mui/icons-material";
@@ -200,8 +199,11 @@ export const AddNTStaff = () => {
       department,
       profileimage,
       NIN: nin,
-      allowance_amount,
-      allowance_type: allowancerate,
+      salary_and_payment_info: {
+        salary_amount: salary,
+        allowance_amount,
+        allowance_type: allowancerate,
+      },
       educationdetails: educationDetails,
       address: {
         country,
@@ -308,43 +310,6 @@ export const AddNTStaff = () => {
   };
 
   // REGISTER TEACHER ENDS HERE *********************************************************************
-
-  // Get all classNames
-  const [classes, setClasses] = useState<any>([]);
-  useEffect(() => {
-    const getClasses = async () => {
-      try {
-        const res = await myAPIClient.get("/classroom", {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
-        setClasses(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getClasses();
-  }, []);
-
-  // Get all subjectNames
-  const [subjects, setSubjects] = useState<any>([]);
-  useEffect(() => {
-    const getSubjects = async () => {
-      try {
-        const res = await myAPIClient.get("/subject", {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
-        console.log(res.data);
-        setSubjects(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getSubjects();
-  }, []);
 
   const {
     theme: { primaryColor },
@@ -1047,7 +1012,7 @@ export const AddNTStaff = () => {
                   !subcounty ||
                   !village ||
                   !salary ||
-                  educationDetails.length < 0
+                  educationDetails.length < 1
                 }
               >
                 {isLoading ? (

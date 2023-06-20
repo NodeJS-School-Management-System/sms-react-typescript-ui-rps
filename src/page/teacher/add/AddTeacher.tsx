@@ -20,6 +20,7 @@ import {
   Countertops,
   DateRange,
   DepartureBoard,
+  DesignServices,
   DirectionsTransit,
   Home,
   HomeMax,
@@ -33,7 +34,6 @@ import {
   PersonOutline,
   PersonOutlineOutlined,
   Phone,
-  PhoneOutlined,
   StarOutlineSharp,
   WcOutlined,
 } from "@mui/icons-material";
@@ -50,7 +50,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import app from "../../../firebase/firebase";
 import { OptionalMaker } from "../../../components/student/add/AddStudent";
@@ -89,6 +89,7 @@ export const AddTeacher = () => {
   const [period_to, setPeriodTo] = useState("");
   const [is_highest_qualification, setIsHighestQualification] = useState(false);
   const [educationDetails, setEducationDetails] = useState<any>([]);
+  const [designation, setDesignation] = useState("");
 
   // Classes taught
   const [stream, setStream] = useState("");
@@ -252,11 +253,15 @@ export const AddTeacher = () => {
       dateofbirth,
       department,
       profileimage,
+      designation,
       NIN: nin,
-      allowance_amount,
-      allowance_type: allowancerate,
       classes_taught: classesTaught,
       educationdetails: educationDetails,
+      salary_and_payment_info: {
+        salary_amount: salary,
+        allowance_amount,
+        allowance_type: allowancerate,
+      },
       address: {
         country,
         district,
@@ -339,6 +344,7 @@ export const AddTeacher = () => {
             setLastname("");
             setRole("");
             setStream("");
+            setDesignation("");
             setSubject("");
             setProfileimage("");
             setContact("");
@@ -366,43 +372,6 @@ export const AddTeacher = () => {
   };
 
   // REGISTER TEACHER ENDS HERE *********************************************************************
-
-  // Get all classNames
-  const [classes, setClasses] = useState<any>([]);
-  useEffect(() => {
-    const getClasses = async () => {
-      try {
-        const res = await myAPIClient.get("/classroom", {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
-        setClasses(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getClasses();
-  }, []);
-
-  // Get all subjectNames
-  const [subjects, setSubjects] = useState<any>([]);
-  useEffect(() => {
-    const getSubjects = async () => {
-      try {
-        const res = await myAPIClient.get("/subject", {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
-        console.log(res.data);
-        setSubjects(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getSubjects();
-  }, []);
 
   const {
     theme: { primaryColor },
@@ -747,6 +716,29 @@ export const AddTeacher = () => {
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="Role e.g Games Teacher"
+                  />
+                </InputGroup>
+              </Center>
+
+              <Center flexDirection={"column"} w="90%" h="100%">
+                <FormLabel alignSelf={"flex-start"}>
+                  Designation<span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <InputGroup>
+                  <InputLeftElement
+                    cursor={"pointer"}
+                    pointerEvents="none"
+                    color="gray.400"
+                    width="2.5rem"
+                    children={<DesignServices />}
+                  />
+
+                  <Input
+                    isRequired
+                    type="text"
+                    value={designation}
+                    onChange={(e) => setDesignation(e.target.value)}
+                    placeholder="Designation e.g Eng Tr. P6"
                   />
                 </InputGroup>
               </Center>

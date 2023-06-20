@@ -34,6 +34,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SpinnerIcon } from "@chakra-ui/icons";
 import EditModal from "./EditModal";
+
 const ManageExpenditure = () => {
   const {
     theme: { primaryColor },
