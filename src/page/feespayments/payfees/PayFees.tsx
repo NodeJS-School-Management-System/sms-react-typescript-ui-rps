@@ -21,12 +21,10 @@ import { Link } from "react-router-dom";
 export const PayFees = () => {
   const token = localStorage.getItem("token");
 
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
   // const [clas, setClas] = useState("");
   const [termname, setTermname] = useState("");
   const [amount, setAmount] = useState("");
-  const [paymentReference, setPaymentReference] = useState("");
-  const [scheme, setScheme] = useState("");
+
   const [contact, setContact] = useState("");
 
   // IFRAME OPENING
@@ -38,7 +36,25 @@ export const PayFees = () => {
       iframeRef.current.src = iframeUrl;
     }
   }, [iframeUrl]);
+
   // INITIATE PAYMENT **********************************************************************************
+
+  // ****************************************************************************************************
+
+  // GET TODAYS DATE
+
+  const today = new Date();
+
+  // Get the day, month, and year
+  const day = String(today.getDate()).padStart(2, "0");
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+  const year = today.getFullYear();
+
+  // Format the date
+  const formattedDate = `${month}/${day}/${year}`;
+
+  // ****************************************************************************************************
+
   const [isLoading, setIsLoading] = useState(false);
   const initiatePayment = async () => {
     setIsLoading(true);
@@ -48,6 +64,8 @@ export const PayFees = () => {
         {
           phone_number: contact,
           amount,
+          currentterm: termname,
+          currentdate: formattedDate,
         },
         {
           headers: {
@@ -63,10 +81,9 @@ export const PayFees = () => {
       toast.success(
         `Success: Payment initiation in progress, confirm details on the right/down to proceed`,
         {
-          autoClose: 25000,
+          autoClose: 30000,
         }
       );
-      setPaymentSuccess(true);
     } catch (err) {
       console.log(err);
       setIsLoading(false);
@@ -96,16 +113,14 @@ export const PayFees = () => {
       setStudent(res.data);
       console.log(student);
       setIsRevealing(false);
-
-      // GET FEES OF STUDENT"S CLASS******************
-      //  ***WILL BE HERE *****
-
-      // ******************
       setDetailsRevealed(true);
     } catch (err) {
       setDetailsRevealed(false);
       console.log(err);
       setIsRevealing(false);
+      toast.error(
+        "Sorry, something went wrong retrieving students details, check your passcode and try again!"
+      );
     }
   };
 
@@ -241,7 +256,7 @@ export const PayFees = () => {
                 >
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
@@ -265,7 +280,7 @@ export const PayFees = () => {
 
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
@@ -297,7 +312,7 @@ export const PayFees = () => {
                 >
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
@@ -315,7 +330,7 @@ export const PayFees = () => {
                   </Flex>
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
@@ -347,7 +362,7 @@ export const PayFees = () => {
                 >
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
@@ -368,24 +383,22 @@ export const PayFees = () => {
                   </Flex>
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
                       mb={3}
                     >
-                      Sponsorship Scheme <span style={{ color: "red" }}>*</span>
+                      Sponsorship Scheme
                     </Text>
-                    <Select
-                      placeholder="Select Scheme"
-                      value={scheme}
-                      onChange={(e) => setScheme(e.target.value)}
-                      w={"100%"}
-                    >
-                      <option value="Self">Self</option>
-                      <option value="Half Barsary">Half Barsary</option>
-                      <option value="Full Barsary">Full Barsary</option>
-                    </Select>
+
+                    <Input
+                      placeholder="Enter student passcode"
+                      value={student?.status_and_payment_info?.bursary_scheme}
+                      fontWeight={"bold"}
+                      disabled
+                      style={{ cursor: "default" }}
+                    />
                   </Flex>
                 </Flex>
               )}
@@ -402,7 +415,7 @@ export const PayFees = () => {
                 >
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
@@ -418,7 +431,7 @@ export const PayFees = () => {
                   </Flex>
                   <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                     <Text
-                      fontSize={20}
+                      fontSize={16}
                       fontWeight="bold"
                       alignSelf={"flex-start"}
                       color={"gray"}
@@ -449,50 +462,11 @@ export const PayFees = () => {
                   mx={3}
                   bgColor={primaryColor.color}
                   color="white"
-                  isDisabled={!amount || !termname || !scheme || !contact}
+                  isDisabled={!amount || !termname || !contact}
                   onClick={initiatePayment}
                 >
                   {isLoading ? "Initiating.." : "Initiate Payment"}
                 </Button>
-              )}
-              {paymentSuccess && (
-                <>
-                  <Flex
-                    p={3}
-                    w={"100%"}
-                    h={"100%"}
-                    flexDirection="column"
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                  >
-                    <Text
-                      fontSize={20}
-                      fontWeight="bold"
-                      alignSelf={"flex-start"}
-                      color={"gray"}
-                      mb={3}
-                    >
-                      Payment Reference
-                    </Text>
-                    <Input
-                      placeholder="Payment Reference"
-                      value={paymentReference}
-                      onChange={(e) => setPaymentReference(e.target.value)}
-                    />
-                  </Flex>
-                  <Button
-                    variant={"solid"}
-                    w="50%"
-                    mx={3}
-                    bgColor={primaryColor.color}
-                    color="white"
-                    isDisabled={!paymentReference}
-                    // onClick={addAccountDetails}
-                  >
-                    Confirm & Save
-                    {/* {isLoading ? "Saving.." : "Confirm &  Save"} */}
-                  </Button>
-                </>
               )}
             </Box>
           </Center>

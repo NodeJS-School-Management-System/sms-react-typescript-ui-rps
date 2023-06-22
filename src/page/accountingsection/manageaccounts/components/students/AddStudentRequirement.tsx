@@ -78,6 +78,8 @@ const AddStudentRequirement = () => {
 
   // ****************************************************************************************************
 
+  // GET TODAYS DATE
+
   const today = new Date();
 
   // Get the day, month, and year

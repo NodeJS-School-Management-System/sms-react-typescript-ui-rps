@@ -1,42 +1,37 @@
 import { Box, Text } from "@chakra-ui/react";
+import { format } from "timeago.js";
 
-const Conversation = ({ item, setShowMessages, setShowMessage }: any) => {
-  const triggerMessage = () => {
-    setShowMessages(false);
-    setShowMessage(true);
-  };
+const Conversation = ({ item, triggerMessage }: any) => {
   return (
     <Box
       h={70}
-      bg={"#eee"}
       display={"flex"}
       gap={2}
       flexDirection="column"
-      borderBottom={"1px solid teal"}
+      borderBottom={"1px solid #ccc"}
       padding={2}
-      borderRadius={3}
       marginBottom={0}
       paddingBottom={0}
-      _hover={{ backgroundColor: "#ddd", cursor: "pointer" }}
-      onClick={triggerMessage}
+      _hover={{ backgroundColor: "#eee", cursor: "pointer" }}
+      onClick={() => triggerMessage(item)}
     >
       <Box display={"flex"} justifyContent={"space-between"}>
-        <Box fontWeight={"600"} fontSize={18}>
-          Abeinemukama Vicent
+        <Box
+          fontWeight={"600"}
+          fontSize={{ base: 10, md: 13, lg: 16 }}
+        >
+          {item.sender_fullname}
         </Box>
         <Box fontWeight={"500"} fontSize={16}>
-          PTA Meeting
+          {item.title}
         </Box>
         <Box fontWeight={"300"} fontSize={14}>
-          2 min ago
+          {format(item.createdAt)}
         </Box>
       </Box>
       <Box>
         <Text textOverflow={"ellipsis"} whiteSpace="nowrap" overflow={"hidden"}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique
-          tempore minima ipsam molestiae totam, iste modi eaque natus
-          repudiandae in fugiat non illo a quibusdam expedita perferendis
-          aliquam, unde facilis.
+          {item.messagebody} 
         </Text>
       </Box>
     </Box>

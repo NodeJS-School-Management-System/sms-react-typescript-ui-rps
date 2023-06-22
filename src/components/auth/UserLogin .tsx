@@ -55,19 +55,18 @@ export function UserLogin() {
       res.data?.user?.isTeacher &&
         localStorage.setItem("isTeacher", res.data.user.isTeacher);
       res.data?.user?.isTeacher &&
-        localStorage.setItem("teacherId", res.data.user._id);
+        localStorage.setItem("id", res.data.user._id);
 
       // student
       res.data?.user?.isStudent &&
         localStorage.setItem("isStudent", res.data?.user?.isStudent);
       res.data?.user?.isStudent &&
-        localStorage.setItem("studentId", res.data?.user?._id);
+        localStorage.setItem("id", res.data?.user?._id);
 
       // non teaching staff
       res.data?.user?.isMember &&
         localStorage.setItem("isNonteachingstaff", res.data.user.isMember);
-      res.data?.user?.isMember &&
-        localStorage.setItem("nonteachingstaffId", res.data.user._id);
+      res.data?.user?.isMember && localStorage.setItem("id", res.data.user._id);
 
       // Both
       res.data && localStorage.setItem("username", res.data?.user?.username);
@@ -139,7 +138,7 @@ export function UserLogin() {
                   onChange={(e) => {
                     setUsername(e.target.value);
                   }}
-                  placeholder="Email"
+                  placeholder="Username"
                   type="text"
                 />
               </FormControl>

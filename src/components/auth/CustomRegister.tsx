@@ -20,7 +20,6 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import useTheme from "../../theme/useTheme";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import axios from "axios";
 
 export function CustomRegister() {
   // GLOBAL THEME ****************************************************************

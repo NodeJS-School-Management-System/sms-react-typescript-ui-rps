@@ -8,61 +8,181 @@ import {
   Input,
   FormLabel,
   Textarea,
+  Select,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Conversation from "./Conversation";
-import { MongoAPIClient } from "../../../components/auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
+import { myAPIClient } from "../../auth/axiosInstance";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { format } from "timeago.js";
 
 export const ViewMessage = () => {
-  const PF = MongoAPIClient;
-
   // IMPORT PRIMARY COLOR FROM THEME **************************************************
   const {
     theme: { primaryColor },
   } = useTheme();
 
-  // Logged in user id
-  // State variables for showing hiding messages/message
+  const token = localStorage.getItem("token");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [receiver_fullname, setReceiverFullname] = useState("");
+
   const [showMessages, setShowMessages] = useState(true);
   const [showMessage, setShowMessage] = useState(false);
 
-  // GET CONVERSATIONS OF THE LOGGED IN USER ********************************************
-  const userId = localStorage.getItem("_id");
-  const [conversations, setConversations] = useState([]);
-  const getConversations = async () => {
+  // CLICKED MESSAGE DETAILS
+  const [msgbody, setMsgbody] = useState<any>({});
+
+  const triggerMessage = (item: any) => {
+    setShowMessages(false);
+    setShowMessage(true);
+    setMsgbody(item);
+  };
+
+  // GET CONVERSATIONS OF THE LOGGED IN USER ***********************************************
+  const userId = localStorage.getItem("id");
+  const [user, setUser] = useState<any>({});
+
+  const getUser = async () => {
     try {
-      const res = await axios.get(`${PF}conversations/${userId}`);
-      setConversations(res.data);
-      console.log(conversations);
+      const res = await myAPIClient.get(`/users/getuserbyid/${userId}`, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data);
+      setUser(res.data);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    getConversations();
+    getUser();
     console.log(userId);
-  }, []);
+  }, [userId]);
+
   // ****************************************************************************************
 
-  // GET LOGGED IN USERS DETAILS BY HIS ID *************************************************
-  // const [user, setUser] = useState({});
-  // const [passedConversation, setPassedConversation] = useState([])
-
+  // GET TEACHERS' PAYMENTS
+  const [teachers, setTeachers] = useState([]);
   useEffect(() => {
-    const getUser = async () => {
+    const getTeachers = async () => {
       try {
-        const res = await axios.get(`${PF}staff/${userId}`);
+        const res = await myAPIClient.get("/users/teachers/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
         console.log(res.data);
+        setTeachers(res.data);
       } catch (err) {
         console.log(err);
       }
     };
-    getUser();
+    getTeachers();
   }, []);
+
+  // GET MEMBERS' PAYMENTS
+  const [members, setMembers] = useState([]);
+  useEffect(() => {
+    const getMembers = async () => {
+      try {
+        const res = await myAPIClient.get("/users/members/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setMembers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMembers();
+  }, []);
+
+  // GET ADMINS' PAYMENTS
+  const [admins, setAdmins] = useState([]);
+  useEffect(() => {
+    const getAdmins = async () => {
+      try {
+        const res = await myAPIClient.get("/users/admins/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setAdmins(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAdmins();
+  }, []);
+
+  const employees = [...teachers, ...members, ...admins];
+
+  // SEND MESSAGE
+  const [isSending, setIsSending] = useState(false);
+  const [refetch, setRefetch] = useState(false);
+  const sendMessage = async () => {
+    setIsSending(true);
+    try {
+      await myAPIClient.post(
+        "/messages/newmessage",
+        {
+          receiver_fullname,
+          senderId: userId,
+          sender_fullname: `${user?.firstname} ${user?.lastname}`,
+          messagebody: body,
+          title,
+        },
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      setRefetch(true);
+      setIsSending(false);
+      setBody("");
+      setTitle("");
+      setReceiverFullname("");
+      toast.success("Message sent successfully!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error processing your request!");
+      setIsSending(false);
+    }
+  };
+
+  // GET CONVERSATIONS OF A USER
+  const [messages, setMessages] = useState([]);
+  const [fetching, setFetching] = useState(false);
+  useEffect(() => {
+    const getConversations = async () => {
+      setFetching(true);
+      try {
+        const res = await myAPIClient.get(`/messages/findbyuserid/${userId}`, {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setMessages(res.data);
+        setFetching(false);
+      } catch (err) {
+        console.log(err);
+        setFetching(false);
+      }
+    };
+    getConversations();
+  }, [refetch]);
 
   // ****************************************************************************************
 
@@ -95,24 +215,33 @@ export const ViewMessage = () => {
             h={"max-content"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
-            <Button colorScheme={"teal"} w={"100%"}>
+            <Box
+              backgroundColor={primaryColor.color}
+              px={5}
+              py={3}
+              display="flex"
+              color="white"
+              alignItems={"center"}
+              justifyContent="center"
+              w={"100%"}
+            >
               Compose
-            </Button>
+            </Box>
             <Center
               flexDirection={"column"}
               boxShadow={"lg"}
               w="100%"
               borderRadius={2}
               pb={4}
-              borderTop="3px solid #ccc"
-              bg={"white"}
+              borderTop={`3px solid ${primaryColor.color}`}
+              // bg={"white"}
               height="auto"
               h="100%"
             >
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -128,11 +257,35 @@ export const ViewMessage = () => {
                   >
                     Message To:
                   </FormLabel>
-                  <Input type="text" placeholder="Receiver" />
+                  <Select
+                    placeholder="Select User"
+                    value={receiver_fullname}
+                    onChange={(e) => setReceiverFullname(e.target.value)}
+                    w={"100%"}
+                  >
+                    {employees?.map((c: any) => (
+                      <option
+                        key={c._id}
+                        value={`${c.firstname} ${c.lastname}`}
+                      >
+                        {c.username}
+                        <span style={{ fontSize: 12 }}>
+                          {" "}
+                          (
+                          {c.isMember
+                            ? c.role
+                            : c.isTeacher
+                            ? c.designation
+                            : "admin"}
+                          )
+                        </span>
+                      </option>
+                    ))}
+                  </Select>
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -148,11 +301,16 @@ export const ViewMessage = () => {
                   >
                     Title
                   </FormLabel>
-                  <Input type="text" placeholder="Subject" />
+                  <Input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Subject"
+                  />
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -168,7 +326,11 @@ export const ViewMessage = () => {
                   >
                     Body
                   </FormLabel>
-                  <Textarea placeholder="Body"></Textarea>
+                  <Textarea
+                    placeholder="Body"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                  ></Textarea>
                 </Flex>
 
                 <Button
@@ -177,8 +339,18 @@ export const ViewMessage = () => {
                   mx={3}
                   backgroundColor={primaryColor.color}
                   color="white"
+                  onClick={sendMessage}
+                  disabled={!title || !body || !receiver_fullname}
                 >
-                  Send
+                  {isSending ? (
+                    <CircularProgress
+                      isIndeterminate
+                      color="white"
+                      size="24px"
+                    />
+                  ) : (
+                    "Send"
+                  )}
                 </Button>
               </Box>
             </Center>
@@ -193,11 +365,11 @@ export const ViewMessage = () => {
           >
             <Box
               flexDirection={"column"}
-              boxShadow={"lg"}
+              boxShadow={"md"}
               borderRadius={2}
               p={4}
-              borderTop="3px solid #ccc"
-              bg={"white"}
+              borderTop={`3px solid ${primaryColor.color}`}
+              // bg={"white"}
               height="auto"
               w="100%"
               h="100%"
@@ -211,7 +383,12 @@ export const ViewMessage = () => {
                 >
                   <Box>
                     <Box>
-                      <Text p={2} fontSize={22} fontWeight="bold">
+                      <Text
+                        p={2}
+                        color={primaryColor.color}
+                        fontSize={22}
+                        fontWeight="bold"
+                      >
                         Inbox
                       </Text>
                     </Box>
@@ -220,24 +397,39 @@ export const ViewMessage = () => {
               </Box>
             </Box>
 
-            <Box bg={"#eee"} h={400} p={5} w="100%" overflowY={"scroll"}>
+            <Box boxShadow={"md"} h={400} p={5} w="100%" overflowY={"auto"}>
               <>
-                {showMessages &&
-                  [1, 2, 3, 4, 5, 6, 7].map((item: any, index) => (
+                {fetching ? (
+                  <Flex align={"center"} justify="center" margin={"auto"}>
+                    <CircularProgress
+                      isIndeterminate
+                      color="teal"
+                      size="24px"
+                    />
+                  </Flex>
+                ) : messages.length < 1 ? (
+                  <Flex align={"center"} justify="center">
+                    <Box color="gray">No message yet!</Box>
+                  </Flex>
+                ) : (
+                  showMessages &&
+                  messages.map((item: any) => (
                     <Conversation
                       item={item}
+                      key={item._id}
                       setShowMessage={setShowMessage}
                       setShowMessages={setShowMessages}
+                      setMsgbody={setMsgbody}
+                      triggerMessage={triggerMessage}
                     />
-                  ))}
+                  ))
+                )}
               </>
               {showMessage && (
                 <Box>
                   <Box
-                    h={70}
                     bg={"#eee"}
                     display={"flex"}
-                    gap={2}
                     flexDirection="column"
                     padding={2}
                     borderRadius={3}
@@ -259,22 +451,17 @@ export const ViewMessage = () => {
                           }}
                           style={{ fontSize: "22px", cursor: "pointer" }}
                         />
-                        <Text> Abeinemukama Vicent</Text>
+                        <Text> {msgbody?.sender_fullname}</Text>
                       </Box>
                       <Box fontWeight={"500"} fontSize={16}>
-                        PTA Meeting
+                        {msgbody?.title}
                       </Box>
                       <Box fontWeight={"300"} fontSize={14}>
-                        2 min ago
+                        {format(msgbody?.createdAt)}
                       </Box>
                     </Box>
                     <Box>
-                      <Text>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Similique tempore minima ipsam molestiae totam, iste
-                        modi eaque natus repudiandae in fugiat non illo a
-                        quibusdam expedita perferendis aliquam, unde facilis.
-                      </Text>
+                      <Text>{msgbody?.messagebody}</Text>
                     </Box>
                   </Box>
                 </Box>

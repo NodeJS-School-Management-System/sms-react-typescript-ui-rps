@@ -51,7 +51,7 @@ export function CustomLogin() {
       if (res.data.user.isAdmin === true) {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("isAdmin", res.data.user.isAdmin);
-        localStorage.setItem("id", res.data.user.userId);
+        localStorage.setItem("id", res.data.user._id);
         localStorage.setItem("username", res.data.user.username);
         localStorage.setItem("firstname", res.data.user.firstname);
         localStorage.setItem("lastname", res.data.user.lastname);
@@ -64,26 +64,8 @@ export function CustomLogin() {
           navigate("/dashboards/crm/");
           window.location.reload();
         }, 3000);
-        // try {
-        //   const res = await axios.post(`${PF}staff/loginstaff`, user);
-        //   console.log(res.data);
-        //   res.data && localStorage.setItem("_id", res.data.staff?._id);
-        // toast.success("Success, redirecting...");
-        // setIsLoading(false);
-        // setUsername("");
-        // setPassword("");
-        // setTimeout(() => {
-        //   navigate("/dashboards/crm/");
-        //   window.location.reload();
-        // }, 3000);
-        // } catch (err) {
-        //   console.log(err);
-        //   toast.error("Error, something went wrong, try again!");
-        //   setIsLoading(false);
-        // }
       } else {
         toast.error("Youre not authorised to login from here!");
-        console.log(res.data.user?.isAdmin);
         setIsLoading(false);
       }
     } catch (err) {
