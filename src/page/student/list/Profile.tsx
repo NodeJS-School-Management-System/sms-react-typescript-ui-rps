@@ -12,6 +12,7 @@ import {
   Tab,
   TabPanel,
   Heading,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { Home, LocationOn, PersonAddAlt1 } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
@@ -20,17 +21,20 @@ import { useState, useEffect } from "react";
 import useTheme from "../../../theme/useTheme";
 import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 import { myAPIClient } from "../../auth/axiosInstance";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const Profile = ({ studentId }: any) => {
   const token = localStorage.getItem("token");
   const id = studentId;
 
   const [student, setStudent] = useState<any>({});
+  const [suspension, setSuspension] = useState(false);
 
   useEffect(() => {
     const getStudents = async () => {
       try {
-        const res = await myAPIClient.get(`/students/${id}`, {
+        const res = await myAPIClient.get(`/users/students/${id}`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -42,8 +46,39 @@ export const Profile = ({ studentId }: any) => {
     };
 
     getStudents();
-  }, [id]);
-  console.log(student);
+  }, [id, suspension]);
+
+  // SUSPEND STUDENT
+  const [loading, setLoading] = useState(false);
+  const suspendStudent = async () => {
+    setLoading(true);
+    try {
+      const res = await myAPIClient.put(
+        `/users/students/${id}`,
+        {
+          isSuspended:
+            student.isSuspended === false
+              ? true
+              : student.isSuspended === true
+              ? false
+              : null,
+        },
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data);
+      setLoading(false);
+      setSuspension(true);
+      toast.success("Success, student has been updated!");
+    } catch (err) {
+      console.log(err);
+      toast.error("There was an error processing your request!");
+      setLoading(false);
+    }
+  };
 
   const {
     theme: { primaryColor },
@@ -162,7 +197,7 @@ export const Profile = ({ studentId }: any) => {
                       Email:
                     </Text>
                     <Text color={"#2e5984"} fontSize={{ base: 10, lg: 14 }}>
-                      {student.email}
+                      {student.email || "N/A"}
                     </Text>
                   </Flex>
                   <Flex
@@ -195,9 +230,15 @@ export const Profile = ({ studentId }: any) => {
                     variant={"solid"}
                     w="100%"
                     colorScheme={primaryColor.name}
+                    onClick={suspendStudent}
                   >
-                    {" "}
-                    Suspend {student.lastname}
+                    {loading ? (
+                      <CircularProgress size={"24px"} />
+                    ) : student.isSuspended === true ? (
+                      `Reinstate ${student.lastname}`
+                    ) : (
+                      `Suspend ${student.lastname}`
+                    )}
                   </Button>
                 </Box>
               </Box>
@@ -349,7 +390,7 @@ export const Profile = ({ studentId }: any) => {
                   >
                     <Text fontSize={{ base: 15, lg: 17 }}>
                       {" "}
-                      {student.clas}{" "}
+                      {student.studentclass}{" "}
                     </Text>
                     <Text fontSize={{ base: 15, lg: 17 }}>
                       {student.stream || " N/A"}{" "}

@@ -31,11 +31,12 @@ export const Profile = ({ teacherId }: any) => {
   useEffect(() => {
     const getTeacher = async () => {
       try {
-        const res = await myAPIClient.get(`/teachers/${id}`, {
+        const res = await myAPIClient.get(`/users/teachers/findbyid/${id}`, {
           headers: {
             token: `Bearer ${token}`,
           },
         });
+        console.log(res.data);
         setTeacher(res.data);
       } catch (err) {
         console.log(err);
@@ -43,7 +44,7 @@ export const Profile = ({ teacherId }: any) => {
     };
 
     getTeacher();
-  }, []);
+  }, [id]);
 
   const {
     theme: { primaryColor },
@@ -86,7 +87,7 @@ export const Profile = ({ teacherId }: any) => {
           </Box>
           <PersonAddAlt1 style={{ fontSize: 16 }} />
           <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
-            {teacher.username}
+            {teacher?.username}
           </Text>
         </Box>
       </Flex>
@@ -134,8 +135,8 @@ export const Profile = ({ teacherId }: any) => {
                       objectFit="cover"
                       height={40}
                       src={
-                        teacher.profileimage
-                          ? `${teacher.profileimage}`
+                        teacher?.profileimage
+                          ? `${teacher?.profileimage}`
                           : "https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg"
                       }
                     />
@@ -146,7 +147,7 @@ export const Profile = ({ teacherId }: any) => {
                         fontSize={22}
                         fontWeight="bold"
                       >
-                        {teacher.firstname} {teacher.lastname}
+                        {teacher?.firstname} {teacher?.lastname}
                       </Text>
                       <Text pb={2} textAlign="center" fontSize={17}>
                         Teacher
@@ -161,13 +162,13 @@ export const Profile = ({ teacherId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text fontSize={{ base: 10, lg: 14 }}>Email </Text>
+                    <Text fontSize={{ base: 10, lg: 14 }}>Email</Text>
                     <Text
                       fontSize={{ base: 10, lg: 14 }}
                       color={"#2e5984"}
                       fontWeight={"bold"}
                     >
-                      {teacher.email}
+                      {teacher?.email}
                     </Text>
                   </Flex>
                   <Flex
@@ -184,8 +185,7 @@ export const Profile = ({ teacherId }: any) => {
                       color={"#2e5984"}
                       fontWeight={"bold"}
                     >
-                      {" "}
-                      {teacher.contact}{" "}
+                      {teacher?.contact}
                     </Text>
                   </Flex>
                   <Flex
@@ -202,16 +202,17 @@ export const Profile = ({ teacherId }: any) => {
                       color={"#2e5984"}
                       fontWeight={"bold"}
                     >
-                      {teacher.dateofbirth}
+                      {teacher?.dateofbirth}
                     </Text>
                   </Flex>
                   {isAdmin && (
                     <Button
                       variant={"solid"}
                       w="100%"
+                      // onClick={suspendTr}
                       colorScheme={primaryColor.name}
                     >
-                      Suspend {teacher.lastname}
+                      Suspend {teacher?.lastname}
                     </Button>
                   )}
                 </Box>
@@ -329,7 +330,7 @@ export const Profile = ({ teacherId }: any) => {
                   <Box>
                     <Box>
                       <Text p={2} fontSize={19} fontWeight="bold">
-                        About {teacher.username}
+                        About {teacher?.username}
                       </Text>
                       <Text
                         p={2}
@@ -367,7 +368,7 @@ export const Profile = ({ teacherId }: any) => {
                     justifyContent="space-between"
                     flexDirection="row"
                   >
-                    <Text fontSize={13}> {teacher.educationlevel} </Text>
+                    <Text fontSize={13}> BOE </Text>
                     <Text fontSize={13}> {new Date().getFullYear()} </Text>
                   </Flex>
 
@@ -386,7 +387,7 @@ export const Profile = ({ teacherId }: any) => {
                       </Text>
                     </Flex>
                     <Text fontSize={13} color="gray">
-                      {teacher.address}
+                      {teacher?.address?.district}
                     </Text>
                   </Box>
                 </Flex>

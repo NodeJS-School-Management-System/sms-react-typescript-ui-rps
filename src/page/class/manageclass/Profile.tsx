@@ -28,11 +28,12 @@ export const Profile = ({ classroomId }: any) => {
 
   // GET CLASSROOM BY ID **************************************************************
   const [classroom, setClassroom] = useState<any>({});
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     const getClassroom = async () => {
       try {
-        const res = await myAPIClient.get(`/classroom/${id}`, {
+        const res = await myAPIClient.get(`/classrooms/find/byid/${id}`, {
           headers: {
             token: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -45,7 +46,7 @@ export const Profile = ({ classroomId }: any) => {
     };
 
     getClassroom();
-  }, [id]);
+  }, [id, refetch]);
 
   // GET TEACHER BY NAME **************************************************************
   const [classTeacher, setClassTeacher] = useState<any>({});
@@ -54,7 +55,7 @@ export const Profile = ({ classroomId }: any) => {
     const getTeacher = async () => {
       try {
         const res = await myAPIClient.get(
-          `/teachers/find/${classroom.classTeacher}`,
+          `/users/teachers/findbyfullname/${classroom.classteacher}`,
           {
             headers: {
               token: `Bearer ${localStorage.getItem("token")}`,
@@ -68,8 +69,8 @@ export const Profile = ({ classroomId }: any) => {
       }
     };
 
-    classroom && classroom.classTeacher && getTeacher();
-  }, [classroom?.classTeacher]);
+    classroom && classroom.classteacher && getTeacher();
+  }, [classroom?.classteacher]);
 
   const {
     theme: { primaryColor },
@@ -112,7 +113,7 @@ export const Profile = ({ classroomId }: any) => {
           </Box>
           <ClassOutlined style={{ fontSize: 16 }} />
           <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
-            {classroom?.className}
+            {classroom?.classname}
           </Text>
         </Box>
       </Flex>
@@ -173,7 +174,7 @@ export const Profile = ({ classroomId }: any) => {
                         fontSize={22}
                         fontWeight="bold"
                       >
-                        {classroom?.classTeacher || "N/A"}
+                        {classroom?.classteacher || "N/A"}
                       </Text>
                       <Text pb={2} textAlign="center" fontSize={17}>
                         Class Teacher
@@ -310,17 +311,17 @@ export const Profile = ({ classroomId }: any) => {
                     <TabPanel>Home</TabPanel>
                     <TabPanel>
                       <Box px={4} overflowX={"auto"}>
-                        <Subjects className={classroom.className} />
+                        <Subjects classroom={classroom} />
                       </Box>
                     </TabPanel>
                     <TabPanel>
-                      <Students className={classroom.classNumeral} />
+                      <Students classroom={classroom} />
                     </TabPanel>
                     <TabPanel>
-                      <Attendence className={classroom.classNumeral} />
+                      <Attendence classroom={classroom} />
                     </TabPanel>
                     <TabPanel>
-                      <Settings className={classroom.classNumeral} />
+                      <Settings classroom={classroom} setRefetch={setRefetch} />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -353,8 +354,13 @@ export const Profile = ({ classroomId }: any) => {
                 >
                   <Box>
                     <Box>
-                      <Text p={2} fontSize={19} fontWeight="bold">
-                        About {classroom.className}
+                      <Text
+                        p={2}
+                        color={primaryColor.color}
+                        fontSize={19}
+                        fontWeight="bold"
+                      >
+                        About {classroom.classname}
                       </Text>
                       <Text p={2} fontSize={17} fontWeight="bold">
                         Details
@@ -388,7 +394,7 @@ export const Profile = ({ classroomId }: any) => {
                   >
                     <Text fontSize={{ base: 15, lg: 17 }}>
                       {" "}
-                      {classroom.classNumeral}
+                      {classroom.classnumeral}
                     </Text>
 
                     <Text fontSize={{ base: 15, lg: 17 }}>

@@ -23,7 +23,6 @@ export const HomeComp = () => {
 
 export const Information = ({ teacher }: any) => {
   return (
-    
     <Flex
       boxShadow={{ base: "none", md: "md" }}
       w="100%"
@@ -44,7 +43,7 @@ export const Information = ({ teacher }: any) => {
           NAME
         </Box>
         <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
-          {teacher.firstname} {teacher.lastname}
+          {teacher?.firstname} {teacher?.lastname}
         </Box>
       </Flex>
       <Flex
@@ -57,7 +56,9 @@ export const Information = ({ teacher }: any) => {
         <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
           ADDRESS
         </Box>
-        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{teacher.address}</Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {teacher?.address?.district}
+        </Box>
       </Flex>
       <Flex
         py={2}
@@ -69,7 +70,7 @@ export const Information = ({ teacher }: any) => {
         <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
           CLASS
         </Box>
-        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{teacher.class}</Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>P.6</Box>
       </Flex>
       <Flex
         py={2}
@@ -81,7 +82,7 @@ export const Information = ({ teacher }: any) => {
         <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
           GENDER
         </Box>
-        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{teacher.gender}</Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{teacher?.gender}</Box>
       </Flex>
       <Flex
         py={2}
@@ -94,7 +95,7 @@ export const Information = ({ teacher }: any) => {
           MARITAL STATUS
         </Box>
         <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
-          {teacher.maritalstatus ? teacher.maritalstatus : "N/A"}
+          {teacher?.maritalstatus ? teacher?.maritalstatus : "N/A"}
         </Box>
       </Flex>
       <Flex
@@ -107,9 +108,7 @@ export const Information = ({ teacher }: any) => {
         <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
           STREAM
         </Box>
-        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
-          {teacher.stream || "N/A"}
-        </Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>N/A</Box>
       </Flex>
       <Flex
         py={2}
@@ -122,7 +121,7 @@ export const Information = ({ teacher }: any) => {
           CONTACT
         </Box>
         <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
-          {teacher.contact ? teacher.contact : "N/A"}
+          {teacher?.contact ? teacher?.contact : "N/A"}
         </Box>
       </Flex>
       <Flex
@@ -162,7 +161,7 @@ export const ChangePassword = ({ teacher }: any) => {
   const [oldPassword, setOldPassword] = useState("");
   const updatePassword = async () => {
     if (
-      oldPassword === teacher.password &&
+      oldPassword === teacher?.password &&
       confirmNewPassword === newPassword
     ) {
       const passwords = {
@@ -313,7 +312,7 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={teacher.username}
+          placeholder={teacher?.username}
           onChange={(e) => setUsername(e.target.value)}
         />
       </InputGroup>
@@ -329,7 +328,7 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={teacher.email ? teacher.email : ""}
+          placeholder={teacher?.email ? teacher?.email : ""}
           onChange={(e) => setEmail(e.target.value)}
         />
       </InputGroup>
@@ -345,7 +344,7 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={teacher.contact}
+          placeholder={teacher?.contact}
           onChange={(e) => setContact(e.target.value)}
         />
       </InputGroup>
@@ -361,7 +360,7 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={teacher.address}
+          placeholder={teacher?.address?.district}
           onChange={(e) => setAddress(e.target.value)}
         />
       </InputGroup>

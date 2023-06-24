@@ -27,11 +27,14 @@ export const Teachers = () => {
   const deleteTeacher = async (teacherId: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`teachers/${teacherId}`, {
-        headers: {
-          token: `token ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await myAPIClient.delete(
+        `/users/teachers/remove/${teacherId}`,
+        {
+          headers: {
+            token: `token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       console.log(res.data);
       setIsDeleting(false);
     } catch (err) {

@@ -44,16 +44,15 @@ export const StudentList = ({
             <TableCaption>Student's List</TableCaption>
             <Thead>
               <Tr>
-                <Th fontSize={14}>Full Name</Th>
-                <Th fontSize={14}>Username</Th>
-                <Th fontSize={14}>Profile Image</Th>
-                <Th fontSize={14}>Passcode</Th>
-                <Th fontSize={14}>Class</Th>
-                <Th fontSize={14}>Address</Th>
-                {/* <Th fontSize={14}>Date of Birth</Th> */}
-                <Th fontSize={14}>Parent Name</Th>
-                <Th fontSize={14}>Parent Contact</Th>
-                <Th fontSize={14} m="auto" textAlign={"center"}>
+                <Th fontSize={12}>Full Name</Th>
+                <Th fontSize={12}>Username</Th>
+                <Th fontSize={12}>Profile Image</Th>
+                <Th fontSize={12}>Passcode</Th>
+                <Th fontSize={12}>Class</Th>
+                <Th fontSize={12}>Address</Th>
+                <Th fontSize={12}>Parent Name</Th>
+                <Th fontSize={12}>Parent Contact</Th>
+                <Th fontSize={12} m="auto" textAlign={"center"}>
                   Action
                 </Th>
               </Tr>
@@ -63,11 +62,11 @@ export const StudentList = ({
               {list &&
                 list.map((user: any) => (
                   <Tr key={user.studentId}>
-                    <Td>
+                    <Td fontSize={12}>
                       {user.firstname} {user.lastname}
                     </Td>
-                    <Td>{user.username}</Td>
-                    <Td textAlign={"center"} margin="auto" p={0}>
+                    <Td fontSize={12}>{user.username}</Td>
+                    <Td fontSize={12} textAlign={"center"} margin="auto" p={0}>
                       <Image
                         w={45}
                         margin="auto"
@@ -77,25 +76,25 @@ export const StudentList = ({
                         src={user.profileimage}
                       />
                     </Td>
-                    <Td>{user.password}</Td>
-                    <Td>{user.studentclass}</Td>
-                    <Td>{user.address}</Td>
-                    {/* <Td>{user.dateofbirth}</Td> */}
-                    <Td>{user.parentname}</Td>
-                    <Td>{user.parentcontact}</Td>
-                    {/* <Td>{user.address}</Td> */}
-                    <Td>
-                      <Td display={"flex"} gap={2}>
+                    <Td fontSize={12}>{user.password}</Td>
+                    <Td fontSize={12}>{user.studentclass}</Td>
+                    <Td fontSize={12}>{user.address}</Td>
+                    {/* <Td fontSize={12}>{user.dateofbirth}</Td> */}
+                    <Td fontSize={12}>{user.parentname}</Td>
+                    <Td fontSize={12}>{user.parentcontact}</Td>
+                    {/* <Td fontSize={12}>{user.address}</Td> */}
+                    <Td fontSize={12}>
+                      <Td fontSize={12} display={"flex"} gap={2}>
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          onClick={() => deleteStudent(user.studentId)}
+                          onClick={() => deleteStudent(user._id)}
                           icon={<BiTrashAlt />}
                           size="sm"
                         />
                         <IconButton
                           colorScheme="blue"
-                          onClick={() => openModal(user.studentId)}
+                          onClick={() => openModal(user._id)}
                           aria-label="Edit database"
                           icon={<BsEye />}
                           size="sm"

@@ -13,11 +13,7 @@ import {
   TabPanel,
   Heading,
 } from "@chakra-ui/react";
-import {
-  Home,
-  LocationOn,
-  PersonAddAlt1,
-} from "@mui/icons-material";
+import { Home, LocationOn, PersonAddAlt1 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -34,7 +30,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
   useEffect(() => {
     const getNonteachingstaff = async () => {
       try {
-        const res = await myAPIClient.get(`/nonteachingstaff/${id}`, {
+        const res = await myAPIClient.get(`/users/members/findbyid/${id}`, {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -46,7 +42,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
     };
 
     getNonteachingstaff();
-  }, []);
+  }, [id]);
 
   const {
     theme: { primaryColor },
@@ -54,8 +50,6 @@ export const Profile = ({ nonteachingstaffId }: any) => {
 
   return (
     <Box>
-      
-
       <Flex
         w={"100%"}
         display={"flex"}
@@ -370,7 +364,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
                       </Text>
                     </Flex>
                     <Text ml={2} fontSize={13} color="gray">
-                      {nonteachingstaff.address}
+                      {nonteachingstaff?.address?.district}
                     </Text>
                   </Box>
                 </Flex>

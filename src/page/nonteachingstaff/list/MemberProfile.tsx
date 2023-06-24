@@ -20,7 +20,6 @@ const MemberProfile = ({ isOpen, onClose, onOpen, id, user }: any) => {
         <ModalHeader fontSize={22}></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-         
           <Profile nonteachingstaffId={id} />
         </ModalBody>
       </ModalContent>

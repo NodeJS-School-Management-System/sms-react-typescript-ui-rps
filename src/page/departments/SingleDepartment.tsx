@@ -160,7 +160,7 @@ const SingleDepartment = ({ d }: any) => {
   // DELETE DEPARTMENT *************************************************************************
   const deleteDept = async () => {
     try {
-      const res = await myAPIClient.delete(`departments/${d.deptId}`, {
+      const res = await myAPIClient.delete(`/departments/remove/${d.deptId}`, {
         headers: {
           token: `Bearer ${localStorage.getItem("token")}`,
         },

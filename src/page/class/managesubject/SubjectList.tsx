@@ -60,9 +60,11 @@ export const SubjectList = ({ list, deleteSubject }: any) => {
                   <Tr key={subj._id}>
                     <Td>{subj.subjectname}</Td>
                     <Td>{subj.subjectshorthand}</Td>
-                    {/* <Td>{subj.classname || "N/A"}</Td> */}
-                    {/* <Td>{subj.subjectteacher || "N/A"}</Td> */}
-                    <Td>
+                    <Td
+                      display={"flex"}
+                      alignItems="center"
+                      justifyContent={"center"}
+                    >
                       <Td display={"flex"} gap={2}>
                         <IconButton
                           colorScheme="red"

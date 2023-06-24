@@ -38,10 +38,10 @@ export const ClassList = ({ list, query, isLoading, deleteClass }: any) => {
             <TableCaption>Class List</TableCaption>
             <Thead>
               <Tr>
-                <Th fontSize={14}>Class Name</Th>
-                <Th fontSize={14}>Class Numeral</Th>
-                <Th fontSize={14}>Class Teacher</Th>
-                <Th fontSize={14} m="auto" textAlign={"center"}>
+                <Th fontSize={12}>Class Name</Th>
+                <Th fontSize={12}>Class Numeral</Th>
+                <Th fontSize={12}>Class Teacher</Th>
+                <Th fontSize={12} m="auto" textAlign={"center"}>
                   Action
                 </Th>
               </Tr>
@@ -51,11 +51,17 @@ export const ClassList = ({ list, query, isLoading, deleteClass }: any) => {
               {list &&
                 list.map((clas: any) => (
                   <Tr key={clas._id}>
-                    <Td>{clas.classname}</Td>
-                    <Td>{clas.classnumeral}</Td>
-                    <Td>{clas.classteacher || "N/A"}</Td>
-                    <Td>
-                      <Td display={"flex"} gap={2}>
+                    <Td fontSize={12}>{clas.classname}</Td>
+                    <Td fontSize={12}>{clas.classnumeral}</Td>
+                    <Td fontSize={12}>{clas.classteacher || "N/A"}</Td>
+                    <Td fontSize={12}>
+                      <Td
+                        fontSize={12}
+                        display={"flex"}
+                        alignItems="center"
+                        justifyContent="center"
+                        gap={2}
+                      >
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"

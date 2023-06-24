@@ -208,6 +208,7 @@ export const ViewMessage = () => {
           gap={4}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
+          
           <WrapItem
             flex={1}
             gap={6}

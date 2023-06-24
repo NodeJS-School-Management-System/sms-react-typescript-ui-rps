@@ -89,12 +89,12 @@ export const TeacherList = ({
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          onClick={() => deleteTeacher(user.teacherId)}
+                          onClick={() => deleteTeacher(user._id)}
                           icon={<BiTrashAlt />}
                         />
                         <IconButton
                           colorScheme="blue"
-                          onClick={() => openModal(user.teacherId)}
+                          onClick={() => openModal(user._id)}
                           aria-label="Edit database"
                           icon={<BsEye />}
                         />

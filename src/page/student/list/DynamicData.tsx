@@ -68,7 +68,9 @@ export const Information = ({ student }: any) => {
         <Box fontWeight={"bold"} fontSize={{ base: 10, md: 12, lg: 15 }}>
           CLASS
         </Box>
-        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>{student.clas}</Box>
+        <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
+          {student.studentclass}
+        </Box>
       </Flex>
       <Flex
         py={2}
@@ -322,9 +324,8 @@ export const Settings = ({ student }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={student.email ? student.email : ""}
+          placeholder={student.email ? student.email : "N/A"}
           onChange={(e) => setEmail(e.target.value)}
-          // placeholder="Email"
         />
       </InputGroup>
       <FormLabel>Contact</FormLabel>
@@ -339,7 +340,7 @@ export const Settings = ({ student }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={student.contact}
+          placeholder={student.contact || "N/A"}
           onChange={(e) => setContact(e.target.value)}
         />
       </InputGroup>
@@ -356,7 +357,6 @@ export const Settings = ({ student }: any) => {
           isRequired
           type="text"
           placeholder={student.address}
-          // placeholder="Address"
           onChange={(e) => setAddress(e.target.value)}
         />
       </InputGroup>

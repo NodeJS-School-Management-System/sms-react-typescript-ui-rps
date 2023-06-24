@@ -10,6 +10,7 @@ import {
   Button,
   FormLabel,
   Textarea,
+  CircularProgress,
 } from "@chakra-ui/react";
 import {
   AttachMoney,
@@ -45,7 +46,7 @@ const CRM = () => {
   useEffect(() => {
     const getExams = async () => {
       try {
-        const res = await myAPIClient.get("/exams", {
+        const res = await myAPIClient.get("/exams/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -137,25 +138,6 @@ const CRM = () => {
     getClasses();
   }, []);
 
-  // GET ALL LIB BOOKS **************************************************************************
-  // const [books, setBooks] = useState([]);
-  // useEffect(() => {
-  //   const getBooks = async () => {
-  //     try {
-  //       const res = await myAPIClient.get("/library", {
-  //         headers: {
-  //           token: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       });
-  //       console.log(res.data);
-  //       setBooks(res.data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   getBooks();
-  // }, []);
-
   // GET income ITEMS FROM DB ****************************************************************
   const [incomeItems, setincomeItems] = useState([]);
   useEffect(() => {
@@ -231,22 +213,123 @@ const CRM = () => {
 
   // ****************************************************************************************
 
-  // SEND NEW MESSAGE ***********************************************************************
-  const [receiverName, setReceiverName] = useState("");
-  const [message, setMessage] = useState("");
+  // const sendMessage = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await myAPIClient.post(
+  //       "/message",
+  //       {
+  //         title,
+  //         senderId: localStorage.getItem("id"),
+  //         receiverName,
+  //         message,
+  //       },
+  //       {
+  //         headers: {
+  //           token: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(res.data);
+  //     setLoading(false);
+  //     setMessage("");
+  //     setReceiverName("");
+  //     setTitle("");
+  //     toast.success("Message sent successfully!");
+  //   } catch (err) {
+  //     console.log(err);
+
+  //     setLoading(false);
+  //     toast.error(
+  //       "Error, something went wrong sending your message, try again!"
+  //     );
+  //   }
+  // };
+
+  // MESSAGING SECTION **********************************************************
   const [title, setTitle] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [body, setBody] = useState("");
+  const [receiver_fullname, setReceiverFullname] = useState("");
+
+  // GET CONVERSATIONS OF THE LOGGED IN USER ***********************************************
+  const userId = localStorage.getItem("id");
+  const [user, setUser] = useState<any>({});
+
+  const getUser = async () => {
+    try {
+      const res = await myAPIClient.get(`/users/getuserbyid/${userId}`, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data);
+      setUser(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+    console.log(userId);
+  }, [userId]);
+
+  // ****************************************************************************************
+
+  // GET MEMBERS' PAYMENTS
+  const [members, setMembers] = useState([]);
+  useEffect(() => {
+    const getMembers = async () => {
+      try {
+        const res = await myAPIClient.get("/users/members/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setMembers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMembers();
+  }, []);
+
+  // GET ADMINS' PAYMENTS
+  const [admins, setAdmins] = useState([]);
+  useEffect(() => {
+    const getAdmins = async () => {
+      try {
+        const res = await myAPIClient.get("/users/admins/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setAdmins(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAdmins();
+  }, []);
+
+  const employees = [...teachers, ...members, ...admins];
+
+  // SEND MESSAGE
+  const [isSending, setIsSending] = useState(false);
 
   const sendMessage = async () => {
-    setLoading(true);
+    setIsSending(true);
     try {
-      const res = await myAPIClient.post(
-        "/message",
+      await myAPIClient.post(
+        "/messages/newmessage",
         {
+          receiver_fullname,
+          senderId: userId,
+          sender_fullname: `${user?.firstname} ${user?.lastname}`,
+          messagebody: body,
           title,
-          senderId: localStorage.getItem("id"),
-          receiverName,
-          message,
         },
         {
           headers: {
@@ -254,21 +337,20 @@ const CRM = () => {
           },
         }
       );
-      console.log(res.data);
-      setLoading(false);
-      setMessage("");
-      setReceiverName("");
+      setIsSending(false);
+      setBody("");
       setTitle("");
+      setReceiverFullname("");
       toast.success("Message sent successfully!");
     } catch (err) {
       console.log(err);
-
-      setLoading(false);
-      toast.error(
-        "Error, something went wrong sending your message, try again!"
-      );
+      toast.error("Error processing your request!");
+      setIsSending(false);
     }
   };
+
+
+  // ****************************************************************************************
 
   return (
     <Flex direction="column" style={{ width: "100%" }}>
@@ -377,123 +459,161 @@ const CRM = () => {
 
         <Flex boxShadow={"lg"} flexDir={{ base: "column", lg: "row" }}>
           <Box boxShadow={"lg"} m={2} flex={1}>
+          
+
             <WrapItem
               flex={1}
               gap={6}
               flexDirection={"column"}
               h={"max-content"}
-              color="white"
+             
             >
-              <Button
-                py={7}
-                fontSize={22}
-                cursor="auto"
-                bgColor={primaryColor.color}
+              <Box
+                backgroundColor={primaryColor.color}
+                px={5}
+                py={3}
+                display="flex"
+                color="white"
+                alignItems={"center"}
+                justifyContent="center"
                 w={"100%"}
               >
-                Quick Mail
-              </Button>
-
-              <Box w={"100%"}>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Message To: <span style={{ color: "red" }}>*</span>
-                  </FormLabel>
-                  <Input
-                    value={receiverName}
-                    color="black"
-                    onChange={(e) => setReceiverName(e.target.value)}
-                    type="text"
-                    placeholder="Receiver"
-                  />
-                </Flex>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Title <span style={{ color: "red" }}>*</span>
-                  </FormLabel>
-                  <Input
-                    value={title}
-                    color="black"
-                    onChange={(e) => setTitle(e.target.value)}
-                    type="text"
-                    placeholder="Subject"
-                  />
-                </Flex>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Body <span style={{ color: "red" }}>*</span>
-                  </FormLabel>
-                  <Textarea
-                    value={message}
-                    color="black"
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Body"
-                  ></Textarea>
-                </Flex>
-
-                <Button
-                  variant={"solid"}
-                  w="50%"
-                  mx={3}
-                  mb={2}
-                  onClick={sendMessage}
-                  bgColor={primaryColor.color}
-                  color="white"
-                  isDisabled={!message || !title || !receiverName}
-                >
-                  {loading ? "Sending.." : "Send Message"}
-                </Button>
+                Compose
               </Box>
+              <Center
+                flexDirection={"column"}
+                boxShadow={"lg"}
+                w="100%"
+                borderRadius={2}
+                pb={4}
+                // borderTop={`3px solid ${primaryColor.color}`}
+                height="auto"
+                h="100%"
+              >
+                <Box w={"100%"}>
+                  <Flex
+                    p={3}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection="column"
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <FormLabel
+                      fontSize={20}
+                      fontWeight="bold"
+                      alignSelf={"flex-start"}
+                      color={"gray"}
+                      mb={3}
+                    >
+                      Message To:
+                    </FormLabel>
+                    <Select
+                      placeholder="Select User"
+                      value={receiver_fullname}
+                      onChange={(e) => setReceiverFullname(e.target.value)}
+                      w={"100%"}
+                    >
+                      {employees?.map((c: any) => (
+                        <option
+                          key={c._id}
+                          value={`${c.firstname} ${c.lastname}`}
+                        >
+                          {c.username}
+                          <span style={{ fontSize: 12 }}>
+                            {" "}
+                            (
+                            {c.isMember
+                              ? c.role
+                              : c.isTeacher
+                              ? c.designation
+                              : "admin"}
+                            )
+                          </span>
+                        </option>
+                      ))}
+                    </Select>
+                  </Flex>
+                  <Flex
+                    p={3}
+                    // bg={"white"}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection="column"
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <FormLabel
+                      fontSize={20}
+                      fontWeight="bold"
+                      alignSelf={"flex-start"}
+                      color={"gray"}
+                      mb={3}
+                    >
+                      Title
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Subject"
+                    />
+                  </Flex>
+                  <Flex
+                    p={3}
+                    // bg={"white"}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection="column"
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <FormLabel
+                      fontSize={20}
+                      fontWeight="bold"
+                      alignSelf={"flex-start"}
+                      color={"gray"}
+                      mb={3}
+                    >
+                      Body
+                    </FormLabel>
+                    <Textarea
+                      placeholder="Body"
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                    ></Textarea>
+                  </Flex>
+
+                  <Button
+                    variant={"solid"}
+                    w="50%"
+                    mx={3}
+                    backgroundColor={primaryColor.color}
+                    color="white"
+                    onClick={sendMessage}
+                    disabled={!title || !body || !receiver_fullname}
+                  >
+                    {isSending ? (
+                      <CircularProgress
+                        isIndeterminate
+                        color="white"
+                        size="24px"
+                      />
+                    ) : (
+                      "Send"
+                    )}
+                  </Button>
+                </Box>
+              </Center>
             </WrapItem>
           </Box>
 
           <Box boxShadow={"lg"} m={2} flex={1}>
             <WrapItem
-              // boxShadow={"lg"}
               flex={1}
               gap={2}
               borderRadius={4}
               flexDirection={"column"}
-              // w={{ base: "100%", md: "50%", lg: "50%" }}
             >
               <Flex
                 bgColor={"#2e5984"}

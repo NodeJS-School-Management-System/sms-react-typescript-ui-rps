@@ -57,7 +57,7 @@ export const Information = ({ nonteachingstaff }: any) => {
           ADDRESS
         </Box>
         <Box fontSize={{ base: 10, md: 12, lg: 15 }}>
-          {nonteachingstaff.address}
+          {nonteachingstaff?.address?.district}
         </Box>
       </Flex>
       <Flex
@@ -372,7 +372,7 @@ export const Settings = ({ nonteachingstaff }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={nonteachingstaff.address}
+          placeholder={nonteachingstaff?.address?.district}
           // placeholder="Address"
           onChange={(e) => setAddress(e.target.value)}
         />

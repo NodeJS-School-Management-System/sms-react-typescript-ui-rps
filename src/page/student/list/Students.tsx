@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { myAPIClient } from "../../../components/auth/axiosInstance";
 import { StudentList } from "./StudentList";
 import useTheme from "../../../theme/useTheme";
+import { toast } from "react-toastify";
 
 export const Students = () => {
   const token = localStorage.getItem("token");
@@ -26,16 +27,21 @@ export const Students = () => {
   const deleteStudent = async (studentId: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`students/${studentId}`, {
-        headers: {
-          token: `token ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await myAPIClient.delete(
+        `/users/students/remove/${studentId}`,
+        {
+          headers: {
+            token: `token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       console.log(res.data);
       setIsDeleting(false);
+      toast.success("Success, student has been delted!");
     } catch (err) {
       console.log(err);
       setIsDeleting(false);
+      toast.error("There was an error processing your request!");
     }
   };
 

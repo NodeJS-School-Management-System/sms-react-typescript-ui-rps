@@ -34,11 +34,14 @@ export const ManageClass = () => {
   const deleteClass = async (classroomId: any) => {
     setIsDeleting(true);
     try {
-      const res = await myAPIClient.delete(`/classrooms/remove/${classroomId}`, {
-        headers: {
-          token: `token ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await myAPIClient.delete(
+        `/classrooms/remove/${classroomId}`,
+        {
+          headers: {
+            token: `token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       console.log(res.data);
       setIsDeleting(false);
     } catch (err) {
@@ -128,7 +131,7 @@ export const ManageClass = () => {
         console.log(err);
       }
     };
-  classUpdate &&  getClass();
+    classUpdate && getClass();
   }, [classUpdate]);
 
   // Update classroom according to the id of the selected class
@@ -174,7 +177,7 @@ export const ManageClass = () => {
         <Box display={"flex"}>
           <Heading
             as={"h5"}
-            fontSize={{ base: 20, md: 30, lg: 35 }}
+            fontSize={{ base: 20, md: 32 }}
             color={primaryColor.color}
           >
             Manage Class
@@ -239,7 +242,7 @@ export const ManageClass = () => {
                     p={2}
                     color="white"
                     textAlign="center"
-                    fontSize={22}
+                    fontSize={16}
                     fontWeight="bold"
                   >
                     Running Class
@@ -256,7 +259,7 @@ export const ManageClass = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -281,7 +284,7 @@ export const ManageClass = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -330,7 +333,7 @@ export const ManageClass = () => {
                   <Text
                     p={2}
                     textAlign="center"
-                    fontSize={22}
+                    fontSize={18}
                     color={"white"}
                     fontWeight="bold"
                   >
@@ -348,7 +351,7 @@ export const ManageClass = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -378,7 +381,7 @@ export const ManageClass = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -432,7 +435,7 @@ export const ManageClass = () => {
               boxShadow={"base"}
               borderRadius={2}
               p={4}
-              borderTop="3px solid #ccc"
+              borderTop={`3px solid ${primaryColor.color}`}
               height="auto"
               w="90%"
               h="100%"

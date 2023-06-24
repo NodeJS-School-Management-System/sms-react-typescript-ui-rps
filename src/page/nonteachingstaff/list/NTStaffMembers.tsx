@@ -28,7 +28,7 @@ export const NTStaffMembers = () => {
     setIsDeleting(true);
     try {
       const res = await myAPIClient.delete(
-        `nonteachingstaff/${nonteachingstaffId}`,
+        `/users/members/remove/${nonteachingstaffId}`,
         {
           headers: {
             token: `token ${localStorage.getItem("token")}`,
@@ -98,7 +98,7 @@ export const NTStaffMembers = () => {
     "contact",
     "address",
   ];
-  
+
   // FILTER MEMBERS
   const filterMembers = (members: any) => {
     return members?.filter((member: any) => {
@@ -117,35 +117,6 @@ export const NTStaffMembers = () => {
   return (
     <>
       <Box>
-        {/* <Flex
-          w={"100%"}
-          display={"flex"}
-          alignItems={"center"}
-          justify="space-between"
-          h={70}
-          p={5}
-          my={3}
-        >
-          <Box display={"flex"}>
-            <Heading as={"h5"} color={primaryColor.color}>
-              Members
-            </Heading>
-            <Text>SMS</Text>
-          </Box>
-          <Box display={"flex"} alignItems="center" gap={2}>
-            <Home />
-            <Link to="/">
-              <Text fontWeight="bold" fontSize={14}>
-                Home
-              </Text>
-            </Link>
-            <FaAngleRight />
-            <Diversity3 />
-            <Text fontWeight="bold" fontSize={14}>
-              Members
-            </Text>
-          </Box>
-        </Flex> */}
         <Flex
           w={"100%"}
           display={"flex"}
