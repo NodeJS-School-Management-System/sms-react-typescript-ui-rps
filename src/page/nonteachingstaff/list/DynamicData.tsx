@@ -17,6 +17,7 @@ import { BiEnvelope } from "react-icons/bi";
 import useTheme from "../../../theme/useTheme";
 import { myAPIClient } from "../../auth/axiosInstance";
 import { useState } from "react";
+import { toast } from "react-toastify";
 export const HomeComp = () => {
   return <Box>Home</Box>;
 };
@@ -162,22 +163,17 @@ export const Information = ({ nonteachingstaff }: any) => {
 
 export const ChangePassword = ({ nonteachingstaff }: any) => {
   const token = localStorage.getItem("token");
-  const id = localStorage.getItem("nonteachingstaffId");
-
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const updatePassword = async () => {
-    if (
-      oldPassword === nonteachingstaff.password &&
-      confirmNewPassword === newPassword
-    ) {
+    if (confirmNewPassword === newPassword) {
       const passwords = {
         newPassword,
       };
       try {
         const res = await myAPIClient.put(
-          `/nonteachingstaff/${id}`,
+          `/users/members/update/${nonteachingstaff._id}`,
           passwords,
           {
             headers: {
@@ -189,11 +185,13 @@ export const ChangePassword = ({ nonteachingstaff }: any) => {
         setNewPassword("");
         setOldPassword("");
         setConfirmNewPassword("");
+        toast.success("Success, member password have been updated!");
       } catch (err) {
         console.log(err);
+        toast.error("Check passwords and try again");
       }
     } else {
-      alert("CHeck passwords and try again");
+      toast.error("Check passwords and try again");
     }
   };
 
@@ -241,6 +239,7 @@ export const ChangePassword = ({ nonteachingstaff }: any) => {
         <Input
           isRequired
           type="text"
+          value={confirmNewPassword}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
           placeholder="Confirm New Password"
         />
@@ -257,6 +256,7 @@ export const ChangePassword = ({ nonteachingstaff }: any) => {
         <Input
           isRequired
           type="text"
+          value={oldPassword}
           onChange={(e) => setOldPassword(e.target.value)}
           placeholder="Old Password"
         />
@@ -270,7 +270,6 @@ export const ChangePassword = ({ nonteachingstaff }: any) => {
 
 export const Settings = ({ nonteachingstaff }: any) => {
   const token = localStorage.getItem("token");
-  const id = localStorage.getItem("nonteachingstaffId");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
@@ -282,19 +281,26 @@ export const Settings = ({ nonteachingstaff }: any) => {
       contact,
       address,
     };
+
     try {
-      const res = await myAPIClient.put(`/nonteachingstaff/${id}`, updates, {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await myAPIClient.put(
+        `/users/members/update/${nonteachingstaff._id}`,
+        updates,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data);
       setAddress("");
       setEmail("");
       setContact("");
       setUsername("");
+      toast.success("Success, member details have been updated!");
     } catch (err) {
       console.log(err);
+      toast.error("Error updating member details!");
     }
   };
 
@@ -323,6 +329,7 @@ export const Settings = ({ nonteachingstaff }: any) => {
         <Input
           isRequired
           type="text"
+          value={username}
           placeholder={nonteachingstaff.username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -339,6 +346,7 @@ export const Settings = ({ nonteachingstaff }: any) => {
         <Input
           isRequired
           type="text"
+          value={email}
           placeholder={nonteachingstaff.email ? nonteachingstaff.email : ""}
           onChange={(e) => setEmail(e.target.value)}
           // placeholder="Email"
@@ -356,6 +364,7 @@ export const Settings = ({ nonteachingstaff }: any) => {
         <Input
           isRequired
           type="text"
+          value={contact}
           placeholder={nonteachingstaff.contact}
           onChange={(e) => setContact(e.target.value)}
         />
@@ -372,6 +381,7 @@ export const Settings = ({ nonteachingstaff }: any) => {
         <Input
           isRequired
           type="text"
+          value={address}
           placeholder={nonteachingstaff?.address?.district}
           // placeholder="Address"
           onChange={(e) => setAddress(e.target.value)}

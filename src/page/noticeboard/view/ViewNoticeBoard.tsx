@@ -1,71 +1,168 @@
 import {
   Box,
-  Text,
-  Center,
   Flex,
   WrapItem,
-  Button,
   Input,
+  Button,
   FormLabel,
-  Textarea,
+  Spinner,
+  Text,
   Heading,
+  Textarea,
+  Select,
 } from "@chakra-ui/react";
-import { Home } from "@mui/icons-material";
+import { Diversity3, Home } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { FaAngleRight } from "react-icons/fa";
-import { RiNotificationBadgeFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { myAPIClient } from "../../../components/auth/axiosInstance";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { myAPIClient } from "../../auth/axiosInstance";
 import useTheme from "../../../theme/useTheme";
-import { NoticeList } from "./NoticeList";
+import ReusableAnalytics from "../../accountingsection/manageaccounts/components/reusable/ReusableAnalytics";
+import { FaAngleRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export const ViewNoticeBoard = () => {
+  const {
+    theme: { primaryColor },
+  } = useTheme();
   const token = localStorage.getItem("token");
-  const username = localStorage.getItem("username");
 
-  const [title, setTitle] = useState("");
-  const [info, setInfo] = useState("");
+  const [isLoadingItems, setIsLoadingItems] = useState(false);
 
-  const [notices, setNotices] = useState();
+  // ****************************************************************************************
+
+  // GET TEACHERS' PAYMENTS
+  const [teachers, setTeachers] = useState([]);
   useEffect(() => {
-    const getNotices = async () => {
+    const getTeachers = async () => {
       try {
-        const res = await myAPIClient.get("/noticeboard", {
+        const res = await myAPIClient.get("/users/teachers/all", {
           headers: {
             token: `Bearer ${token}`,
           },
         });
-        setNotices(res.data);
         console.log(res.data);
+        setTeachers(res.data);
       } catch (err) {
         console.log(err);
       }
     };
-    getNotices();
+    getTeachers();
   }, []);
 
-  const addNotice = async () => {
-    try {
-      const res = await myAPIClient.post(
-        "/noticeboard",
-        { title, info, username },
-        {
+  // GET MEMBERS' PAYMENTS
+  const [members, setMembers] = useState([]);
+  useEffect(() => {
+    const getMembers = async () => {
+      try {
+        const res = await myAPIClient.get("/users/members/all", {
           headers: {
             token: `Bearer ${token}`,
           },
+        });
+        console.log(res.data);
+        setMembers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMembers();
+  }, []);
+
+  // GET ADMINS' PAYMENTS
+  const [admins, setAdmins] = useState([]);
+  useEffect(() => {
+    const getAdmins = async () => {
+      try {
+        const res = await myAPIClient.get("/users/admins/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setAdmins(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAdmins();
+  }, []);
+
+  const employees = [...teachers, ...members, ...admins];
+
+  // INCOMES
+  const tableHeaders = ["Sender", "Title", "Message", "Action"];
+
+  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState("");
+  const [attachment, setAttachment] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const newnotice = {
+    message,
+    title,
+    sender: attachment,
+  };
+  const addNotice = async () => {
+    setLoading(true);
+    try {
+      const res = await myAPIClient.post(
+        "/noticeboard/createnotice",
+        newnotice,
+        {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
-      console.log(res.data);
+      setLoading(false);
+      setMessage("");
       setTitle("");
-      setInfo("");
+      setAttachment("");
+      setIsLoadingItems(true);
+      toast.success("Success, notice has been added!");
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      toast.error("Sorry, something went wrong adding new notice!");
+    }
+  };
+
+  // DELETE NOTICE
+  const deleteNotice = async (id: any) => {
+    try {
+      await myAPIClient.delete(`/noticeboard/remove/${id}`, {
+        headers: {
+          token: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setIsLoadingItems(!isLoadingItems);
+      toast.success("Success, notice has been deleted");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error processing your request!");
+    }
+  };
+
+  const [notices, setNotices] = useState([]);
+  const getData = async () => {
+    try {
+      const res = await myAPIClient.get("/noticeboard/findall", {
+        headers: {
+          token: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setNotices(res.data);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const {
-    theme: { primaryColor },
-  } = useTheme();
+  useEffect(() => {
+    getData();
+  }, [isLoadingItems]);
 
   return (
     <Box>
@@ -76,18 +173,17 @@ export const ViewNoticeBoard = () => {
         justify="space-between"
         h={70}
         p={5}
-        pt={0}
-        mb={3}
+        my={3}
       >
         <Box display={"flex"}>
           <Heading
             as={"h5"}
-            fontSize={{ base: 20, md: 30, lg: 35 }}
+            fontSize={{ base: 22, md: 32, lg: 37 }}
             color={primaryColor.color}
           >
-            NoticeBoard
+            Notice Board
           </Heading>
-          <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
+          <Text>SMS</Text>
         </Box>
         <Box display={"flex"} alignItems="center" gap={2}>
           <Box
@@ -103,152 +199,160 @@ export const ViewNoticeBoard = () => {
             </Link>
             <FaAngleRight />
           </Box>
-          <RiNotificationBadgeFill style={{ fontSize: 16 }} />
+          <Diversity3 style={{ fontSize: 16 }} />
           <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
             Notice Board
           </Text>
         </Box>
       </Flex>
 
-      <Box>
-        <Flex
-          boxShadow="md"
-          p={4}
-          w="100%"
-          h="100%"
-          gap={2}
-          flexDirection={{ base: "column", md: "row", lg: "row" }}
-        >
-          <WrapItem
-            flex={1}
-            gap={6}
-            flexDirection={"column"}
-            h={"max-content"}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
-            <Center
-              flexDirection={"column"}
-              boxShadow={"lg"}
-              borderRadius={2}
-              pb={4}
-              borderTop="3px solid #ccc"
-              // bg={"white"}
-              height="auto"
-              w="90%"
-              h="100%"
-            >
-              <Box w={"100%"}>
-                <Flex
-                  p={3}
-                  // bg={"white"}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Title <span style={{ color: "red" }}>*</span>
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Subject"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </Flex>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    File
-                  </FormLabel>
-                  <Input
-                    type="file"
-                    placeholder="Subject"
-                    border="none"
-                    // value={title}
-                    // onChange={(e) => setTitle(e.target.value)}
-                  />
-                </Flex>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Body <span style={{ color: "red" }}>*</span>
-                  </FormLabel>
-                  <Textarea
-                    placeholder="Body"
-                    onChange={(e) => setInfo(e.target.value)}
-                    value={info}
-                  ></Textarea>
-                </Flex>
-
-                <Button
-                  disabled={!title || !info}
-                  variant={"solid"}
-                  w="50%"
-                  mx={3}
-                  onClick={addNotice}
-                  bgColor={primaryColor.color}
-                  color="white"
-                >
-                  Add
-                </Button>
-              </Box>
-            </Center>
-          </WrapItem>
-
-          <WrapItem
-            flexDirection={"column"}
-            gap={2}
-            h={"max-content"}
-            flex={2}
-            w={{ base: "100%", md: "50%", lg: "50%" }}
-          >
+      <Flex
+        w="100%"
+        flexDirection={{ base: "column", lg: "row" }}
+        boxShadow={"lg"}
+      >
+        <Box w={{ base: "100%", lg: "50%" }} boxShadow={"lg"} m={2} flex={1}>
+          <WrapItem flex={1} gap={6} flexDirection={"column"} h={"max-content"}>
             <Box
-              flexDirection={"column"}
-              boxShadow={"lg"}
-              borderRadius={2}
-              p={4}
-              borderTop="3px solid #ccc"
-              height="auto"
-              w="90%"
-              h="100%"
+              backgroundColor={primaryColor.color}
+              color="white"
+              cursor="default"
+              fontSize={16}
+              display="flex"
+              alignItems={"center"}
+              justifyContent="center"
+              w="100%"
+              py={2}
             >
-              <NoticeList list={notices} />
+              {loading ? "Adding.." : "Add Notice"}
+            </Box>
+
+            <Box w={"100%"}>
+              <Flex
+                p={3}
+                w={"100%"}
+                h={"100%"}
+                flexDirection="column"
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <FormLabel
+                  fontSize={16}
+                  fontWeight="bold"
+                  alignSelf={"flex-start"}
+                  color={"gray"}
+                  mb={3}
+                >
+                  Title <span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <Input
+                  value={title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                  type="text"
+                  placeholder="Title"
+                />
+              </Flex>
+
+              <Flex
+                p={3}
+                w={"100%"}
+                h={"100%"}
+                flexDirection="column"
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <FormLabel
+                  fontSize={16}
+                  fontWeight="bold"
+                  alignSelf={"flex-start"}
+                  color={"gray"}
+                  mb={3}
+                >
+                  Sender
+                </FormLabel>
+                <Select
+                  placeholder="Select User"
+                  value={attachment}
+                  onChange={(e) => setAttachment(e.target.value)}
+                  w={"100%"}
+                >
+                  {employees?.map((c: any) => (
+                    <option key={c._id} value={`${c.firstname} ${c.lastname}`}>
+                      {c.username}
+                      <span style={{ fontSize: 12 }}>
+                        {" "}
+                        (
+                        {c.isMember
+                          ? c.role
+                          : c.isTeacher
+                          ? c.designation
+                          : "admin"}
+                        )
+                      </span>
+                    </option>
+                  ))}
+                </Select>
+              </Flex>
+
+              <Flex
+                p={3}
+                w={"100%"}
+                h={"100%"}
+                flexDirection="column"
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <FormLabel
+                  fontSize={16}
+                  fontWeight="bold"
+                  alignSelf={"flex-start"}
+                  color={"gray"}
+                  mb={3}
+                >
+                  Message <span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <Textarea
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                  }}
+                  placeholder="Message"
+                ></Textarea>
+              </Flex>
+
+              <Button
+                my={2}
+                variant={"solid"}
+                w="50%"
+                mx={3}
+                onClick={addNotice}
+                isDisabled={!title || !message || !attachment}
+                backgroundColor={primaryColor.color}
+                color="white"
+              >
+                {loading ? <Spinner color="white" /> : "Add Notice"}
+              </Button>
             </Box>
           </WrapItem>
-        </Flex>
-      </Box>
+        </Box>
+
+        <Box
+          w={{ base: "100%", lg: "50%" }}
+          h={600}
+          boxShadow={"lg"}
+          m={2}
+          flex={1}
+        >
+          <ReusableAnalytics
+            tableHeaders={tableHeaders}
+            captionText="Notice Board"
+            data={notices}
+            deleteNotice={deleteNotice}
+          />
+        </Box>
+      </Flex>
     </Box>
   );
 };

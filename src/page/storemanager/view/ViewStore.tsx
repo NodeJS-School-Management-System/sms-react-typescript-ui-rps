@@ -5,24 +5,24 @@ import { myAPIClient } from "../../auth/axiosInstance";
 import DataTable from "./DataTable";
 import ViewLib from "./ViewLib";
 import "react-toastify/dist/ReactToastify.css";
-export const ViewLibrary = () => {
+export const ViewStore = () => {
   const token = localStorage.getItem("token");
   // GET ALL LIB BOOKS **************************************************************************
 
-  const [books, setBooks] = useState([]);
+  const [items, setItems] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   useEffect(() => {
     const getBooks = async () => {
       try {
         setIsFetching(true);
-        const res = await myAPIClient.get("/library/findall", {
+        const res = await myAPIClient.get("/storemanager/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
         });
         console.log(res.data);
-        setBooks(res.data);
+        setItems(res.data);
         setIsFetching(false);
       } catch (err) {
         setIsFetching(false);
@@ -33,26 +33,25 @@ export const ViewLibrary = () => {
   }, [isDeleting]);
 
   const headerData = [
-    "Book Number",
-    "Title",
-    "Author",
-    "Class Name",
-    "Subject Name",
-    "Total Books",
-    "Available Books",
-    "Lent Books",
+    "Item Name",
+    "Item Category",
+    "Item quantity",
+    "Item Cost Price",
+    "Date Added",
+    "Remaining Items",
+    "Items Released",
     "Action",
   ];
 
-  const deleteBook = async (id: any) => {
+  const deleteItem = async (id: any) => {
     try {
-      const res = await myAPIClient.delete(`/library/remove/${id}`, {
+      const res = await myAPIClient.delete(`/storemanager/remove/${id}`, {
         headers: {
           token: `Bearer ${token}`,
         },
       });
       console.log(res.data);
-      toast.success("Success, book has been deleted!");
+      toast.success("Success, item has been deleted!");
       setIsDeleting(true);
     } catch (err) {
       console.log(err);
@@ -64,7 +63,7 @@ export const ViewLibrary = () => {
   const [query, setQuery] = useState("");
 
   // Filter students with search
-  const keys = ["bookTitle", "bookAuthor", "className", "subjectName"];
+  const keys = ["itemName", "itemCategory", "itemQuantity", "itemCostPrice"];
 
   // FILTER STUDENTS
   const filterLib = (libs: any) => {
@@ -85,10 +84,10 @@ export const ViewLibrary = () => {
         </Flex>
       ) : (
         <DataTable
-          captionText="Library Books"
+          captionText="Store Items"
           headerData={headerData}
-          books={query ? filterLib(books) : books}
-          deleteBook={deleteBook}
+          items={query ? filterLib(items) : items}
+          deleteItem={deleteItem}
         />
       )}
     </Box>

@@ -23,6 +23,7 @@ export type ReusableAnalyticsProps = {
   captionText: string;
   tableHeaders: string[];
   data?: object[];
+  deleteNotice?: any;
 };
 
 export type ReusableAddItemProps = {

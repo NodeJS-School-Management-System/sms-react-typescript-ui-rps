@@ -512,6 +512,7 @@ export const PayFees = () => {
             ></iframe>
           )}
         </WrapItem>
+        
       </Flex>
     </Box>
   );

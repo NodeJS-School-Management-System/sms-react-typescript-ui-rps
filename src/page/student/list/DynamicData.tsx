@@ -17,6 +17,8 @@ import { BiEnvelope } from "react-icons/bi";
 import useTheme from "../../../theme/useTheme";
 import { myAPIClient } from "../../auth/axiosInstance";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import NewPassword from "../../../components/auth/NewPassword";
 export const HomeComp = () => {
   return <Box>Home</Box>;
 };
@@ -154,7 +156,6 @@ export const Information = ({ student }: any) => {
 
 export const ChangePassword = ({ student }: any) => {
   const token = localStorage.getItem("token");
-  const id = localStorage.getItem("studentId");
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -165,23 +166,30 @@ export const ChangePassword = ({ student }: any) => {
       confirmNewPassword === newPassword
     ) {
       const passwords = {
-        newPassword,
+        password: Number(newPassword),
       };
+
       try {
-        const res = await myAPIClient.put(`/students/${id}`, passwords, {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
+        const res = await myAPIClient.put(
+          `/users/students/${student._id}}`,
+          passwords,
+          {
+            headers: {
+              token: `Bearer ${token}`,
+            },
+          }
+        );
         console.log(res.data);
         setNewPassword("");
         setOldPassword("");
         setConfirmNewPassword("");
+        toast.success("Success, password has been updated!");
       } catch (err) {
         console.log(err);
+        toast.error("Check passwords and try again!");
       }
     } else {
-      alert("Check passwords and try again");
+      toast.error("Check passwords and try again!");
     }
   };
 
@@ -215,6 +223,7 @@ export const ChangePassword = ({ student }: any) => {
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           placeholder="New Password"
+          maxLength={4}
         />
       </InputGroup>
       <FormLabel>Confirm New Password</FormLabel>
@@ -229,6 +238,8 @@ export const ChangePassword = ({ student }: any) => {
         <Input
           isRequired
           type="text"
+          value={confirmNewPassword}
+          maxLength={4}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
           placeholder="Confirm New Password"
         />
@@ -245,11 +256,17 @@ export const ChangePassword = ({ student }: any) => {
         <Input
           isRequired
           type="text"
+          maxLength={4}
           onChange={(e) => setOldPassword(e.target.value)}
           placeholder="Old Password"
         />
       </InputGroup>
-      <Button mt={3} colorScheme={primaryColor.name} onClick={updatePassword}>
+      <Button
+        mt={3}
+        colorScheme={primaryColor.name}
+        disabled={!NewPassword || !oldPassword || !confirmNewPassword}
+        onClick={updatePassword}
+      >
         Change Password
       </Button>
     </form>
@@ -258,27 +275,37 @@ export const ChangePassword = ({ student }: any) => {
 
 export const Settings = ({ student }: any) => {
   const token = localStorage.getItem("token");
-  // const id = localStorage.getItem("studentId");
-  const id = student.studentId;
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
   const updateStudent = async () => {
-    const updates = {};
+    const updates = {
+      username,
+      email,
+      contact,
+      address,
+    };
+
     try {
-      const res = await myAPIClient.put(`/students/${id}`, updates, {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await myAPIClient.put(
+        `/users/students/${student._id}`,
+        updates,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data);
       setAddress("");
       setEmail("");
       setContact("");
       setUsername("");
+      toast.success("Success, student has been updated!");
     } catch (err) {
       console.log(err);
+      toast.error("An error occured while running your operation!");
     }
   };
 
@@ -356,7 +383,8 @@ export const Settings = ({ student }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={student.address}
+          value={address}
+          placeholder={student.address || "N/A"}
           onChange={(e) => setAddress(e.target.value)}
         />
       </InputGroup>

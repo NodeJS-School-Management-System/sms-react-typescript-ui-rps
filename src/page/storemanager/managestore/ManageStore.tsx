@@ -7,23 +7,16 @@ import {
   Input,
   Button,
   FormLabel,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  IconButton,
-  Image,
   Alert,
   AlertIcon,
   Spinner,
-  useDisclosure,
+  Center,
+  Select,
+  CircularProgress,
 } from "@chakra-ui/react";
-import { Edit, Home, Store } from "@mui/icons-material";
-import { BiTrash } from "react-icons/bi";
+import { Home, Store } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { storeAnalytics } from "../../../api/fakeAPI";
@@ -32,183 +25,254 @@ import useTheme from "../../../theme/useTheme";
 import { useEffect, useState } from "react";
 import { myAPIClient } from "../../auth/axiosInstance";
 
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import app from "../../../firebase/firebase";
-import { SpinnerIcon } from "@chakra-ui/icons";
-import EditModal from "./EditModal";
 const ManageStore = () => {
   const {
     theme: { primaryColor },
   } = useTheme();
 
   const [itemName, setItemName] = useState("");
-  const [itemImage, setItemImage] = useState<any>(undefined);
-  const [itemQuantity, setItemQuantity] = useState<any>(undefined);
+  const [itemCostPrice, setItemCostPrice] = useState("");
+  const [itemQuantity, setItemQuantity] = useState("");
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingItems, setIsLoadingItems] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setItemImage(e.target.files[0]);
-      setError(false);
-      setSuccess(false);
-      console.log(itemImage);
-    }
-  };
 
   // DELETE ITEM FROM STORE **********************************************************
-  const [isDeleting, setIsDeleting] = useState(false);
-  const deleteItem = async (itemId: any) => {
-    setIsDeleting(true);
-    try {
-      const res = await myAPIClient.delete(`storemanager/${itemId}`, {
-        headers: {
-          token: `token ${localStorage.getItem("token")}`,
-        },
-      });
-      console.log(res.data);
-      setIsDeleting(false);
-    } catch (err) {
-      console.log(err);
-      setIsDeleting(false);
-    }
-  };
+  // const [isDeleting, setIsDeleting] = useState(false);
+  // const deleteItem = async (itemId: any) => {
+  //   setIsDeleting(true);
+  //   try {
+  //     const res = await myAPIClient.delete(`/storemanager/remove${itemId}`, {
+  //       headers: {
+  //         token: `token ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  //     console.log(res.data);
+  //     setIsDeleting(false);
+  //   } catch (err) {
+  //     console.log(err);
+  //     setIsDeleting(false);
+  //   }
+  // };
 
   // EDIT ITEM IN STROE **********************************************************
-  const editItem = async (itemId: any) => {
-    try {
-      const res = await myAPIClient.put(`storemanager/${itemId}`, {
-        headers: {
-          token: `token ${localStorage.getItem("token")}`,
-        },
-      });
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const editItem = async (itemId: any) => {
+  //   try {
+  //     const res = await myAPIClient.put(`/storemanager/update/${itemId}`, {
+  //       headers: {
+  //         token: `token ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  //     console.log(res.data);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  // CREATE NEW ITEM INTO STROE *************************************************
+  // CREATE NEW ITEM INTO STORE ************************************************************
+
+  // /TODAYS DATE
+
+  const today = new Date();
+
+  // Get the day, month, and year
+  const day = String(today.getDate()).padStart(2, "0");
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+  const year = today.getFullYear();
+
+  // Format the date
+  const formattedDate = `${month}/${day}/${year}`;
+
   const createStore = async (e: any) => {
     e.preventDefault();
 
-    const store: any = {
+    const store = {
       itemName,
-      itemQuantity,
-      category,
+      itemQuantity: Number(itemQuantity),
+      itemCategory: category,
+      itemCostPrice: Number(itemCostPrice),
+      dateAdded: formattedDate,
     };
-
     setIsLoading(true);
-    if (itemImage !== null) {
-      const datai = new FormData();
-      const fileName = Date.now() + itemImage.name;
-      datai.append("name", fileName);
-      datai.append("file", itemImage);
-      // student.profileimage = fileName;
-
-      // Upload image to firebase storage ******************************************************************
-      const storage = getStorage(app);
-      const storageRef = ref(storage, fileName);
-
-      const uploadTask = uploadBytesResumable(storageRef, itemImage);
-
-      // Register three observers:
-      // 1. 'state_changed' observer, called any time the state changes
-      // 2. Error observer, called on failure
-      // 3. Completion observer, called on successful completion
-      uploadTask.on(
-        "state_changed",
-        (snapshot: any) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
+    try {
+      const res = await myAPIClient.post("/storemanager/additem", store, {
+        headers: {
+          token: `token ${localStorage.getItem("token")}`,
         },
-        (error: any) => {
-          // Handle unsuccessful uploads
-        },
-        async () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log(downloadURL);
-            store.itemImage = downloadURL;
-          });
-          try {
-            const res = await myAPIClient.post("/storemanager", store, {
-              headers: {
-                token: `token ${localStorage.getItem("token")}`,
-              },
-            });
+      });
 
-            setItemImage("");
-            setItemName("");
-            setItemQuantity(1);
-            setCategory("");
-
-            setIsLoading(false);
-            setSuccess(true);
-            setError(false);
-            console.log(res.data);
-          } catch (err) {
-            setError(true);
-            setSuccess(false);
-            setIsLoading(false);
-          }
-        }
-      );
+      setItemCostPrice("");
+      setItemName("");
+      setItemQuantity("");
+      setCategory("");
+      setIsLoading(false);
+      setSuccess(true);
+      setError(false);
+      console.log(res.data);
+      toast.success("Store item has been added!");
+    } catch (err) {
+      setError(true);
+      setSuccess(false);
+      setIsLoading(false);
+      toast.error("Error adding store item!");
     }
   };
 
-  // GET STORE ITEMS FROM DB ****************************************************************
-  const [storeItems, setStoreItems] = useState([]);
-  useEffect(() => {
-    const getStore = async () => {
-      setIsLoadingItems(true);
-      try {
-        const res = await myAPIClient.get(
-          "/storemanager",
+  // GET ITEM BY NAME *****************************************************************
+  const [detailsRevealed, setDetailsRevealed] = useState(false);
+  const [item_name_finder, setItemNameFinder] = useState("");
+  const [isRevealing, setIsRevealing] = useState(false);
+  const [user, setUser] = useState("");
+  const [amount, setAmount] = useState("");
+  const [datereleased, setDateReleased] = useState("");
+  const [termname, setTermname] = useState("");
+  const [availableItem, setAvailableItem] = useState<any>({});
 
-          {
-            headers: {
-              token: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        setStoreItems(res.data);
-        setIsLoadingItems(false);
+  const getItemByName = async () => {
+    setIsRevealing(true);
+
+    try {
+      const res = await myAPIClient.get(
+        `/storemanager/findbyname/${item_name_finder}`,
+        {
+          headers: {
+            token: `token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setAvailableItem(res.data);
+      setDetailsRevealed(true);
+      setIsRevealing(false);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+      setIsRevealing(false);
+      setDetailsRevealed(false);
+      toast.error("Error getting store item!");
+    }
+  };
+
+  // RELEASE ITEM
+  // UPDATE LENT BOOK
+
+  const token = localStorage.getItem("token");
+  const [isLending, setIsLending] = useState(false);
+  const releaseItem = async () => {
+    setIsLending(true);
+    try {
+      const res = await myAPIClient.put(
+        `/storemanager/update/${item_name_finder}`,
+        {
+          released_against: user,
+          date_released: datereleased,
+          runningterm: termname,
+          quantity_released: Number(amount),
+        },
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data);
+      setAmount("");
+      setTermname("");
+      setDateReleased("");
+      setUser("");
+      setIsLending(false);
+      toast.success("Success, item has been released!");
+    } catch (err) {
+      setIsLending(false);
+      toast.error("Error processing your request!");
+    }
+  };
+
+  // USERS *************************************************************************************
+  // GET TEACHERS' PAYMENTS
+  const [teachers, setTeachers] = useState([]);
+  useEffect(() => {
+    const getTeachers = async () => {
+      try {
+        const res = await myAPIClient.get("/users/teachers/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setTeachers(res.data);
       } catch (err) {
         console.log(err);
-        setIsLoadingItems(false);
       }
     };
-    getStore();
-  }, [isDeleting]);
+    getTeachers();
+  }, []);
 
-  // OPEN MODAL ***********************************************************************************************
-  const [selectedId, setSelectedId] = useState("");
-  const openModel = (id: any) => {
-    setSelectedId(id);
-    onOpen();
-  };
+  // GET MEMBERS' PAYMENTS
+  const [members, setMembers] = useState([]);
+  useEffect(() => {
+    const getMembers = async () => {
+      try {
+        const res = await myAPIClient.get("/users/members/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setMembers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMembers();
+  }, []);
+
+  // GET STUDENTS
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    const getStudents = async () => {
+      try {
+        const res = await myAPIClient.get("/users/students/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setStudents(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getStudents();
+  }, []);
+
+  const users = [...teachers, ...members, ...students];
+
+  // GET STORE ITEMS FROM DB ****************************************************************
+  // const [storeItems, setStoreItems] = useState([]);
+  // useEffect(() => {
+  //   const getStore = async () => {
+  //     setIsLoadingItems(true);
+  //     try {
+  //       const res = await myAPIClient.get(
+  //         "/storemanager/findall",
+  //         {
+  //           headers: {
+  //             token: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         }
+  //       );
+  //       setStoreItems(res.data);
+  //       setIsLoadingItems(false);
+  //     } catch (err) {
+  //       console.log(err);
+  //       setIsLoadingItems(false);
+  //     }
+  //   };
+  //   getStore();
+  // }, []);
+
+  //  ***********************************************************************************************
 
   return (
     <Flex direction="column" style={{ width: "100%" }}>
@@ -279,20 +343,23 @@ const ManageStore = () => {
               flexDirection={"column"}
               h={"max-content"}
             >
-              <Button
+              <Box
                 backgroundColor={primaryColor.color}
                 color="white"
+                alignItems={"center"}
+                justifyContent="center"
                 cursor="default"
+                display={"flex"}
+                p={2}
                 fontSize={20}
                 w={"100%"}
               >
                 Add Store Item
-              </Button>
+              </Box>
 
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -376,12 +443,12 @@ const ManageStore = () => {
                       setItemQuantity(e.target.value);
                     }}
                     placeholder="Quantity e.g 40"
+                    type="number"
                   />
                 </Flex>
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -395,13 +462,14 @@ const ManageStore = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Item Image <span style={{ color: "red" }}>*</span>
+                    Item Cost Price <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <Input
-                    border={"none"}
-                    onChange={onUploadImage}
+                    value={itemCostPrice}
+                    onChange={(e) => setItemCostPrice(e.target.value)}
                     isRequired
-                    type="file"
+                    type="number"
+                    placeholder="Item Cost Price"
                   />
                 </Flex>
                 {error && (
@@ -427,7 +495,7 @@ const ManageStore = () => {
                   backgroundColor={primaryColor.color}
                   color="white"
                   disabled={
-                    !itemName || !itemImage || !itemQuantity || !category
+                    !itemName || !itemCostPrice || !itemQuantity || !category
                   }
                 >
                   {isLoading ? <Spinner color="white" /> : "Create Store"}
@@ -444,78 +512,308 @@ const ManageStore = () => {
             m={2}
             flex={1}
           >
-            {isLoadingItems ? (
-              <Flex align="center" m="auto" mt={20} justify="center">
-                <Spinner style={{ margin: "auto" }} color="teal" />
-              </Flex>
-            ) : (
-              <TableContainer>
-                <Table variant="simple">
-                  <TableCaption>Store Analytics</TableCaption>
-                  <Thead>
-                    <Tr>
-                      <Th fontSize={16}>Item Name</Th>
-                      <Th fontSize={16}>Item Category</Th>
-                      <Th fontSize={16}>Item Image</Th>
-                      <Th fontSize={16}>Total Items</Th>
-                      <Th fontSize={16}>Items Used</Th>
-                      <Th fontSize={16}>Remaining Items</Th>
-                      <Th fontSize={16}>Date Added</Th>
-                      <Th fontSize={16}>Action</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {storeItems.map((item: any) => (
-                      <Tr key={item.storeId}>
-                        <Td>{item.itemName}</Td>
-                        <Td>{item.category}</Td>
-                        <Td textAlign={"center"} margin="auto" p={0}>
-                          <Image
-                            w={45}
-                            margin="auto"
-                            h={45}
-                            objectFit="cover"
-                            borderRadius={"50%"}
-                            src={item.itemImage}
-                          />
-                        </Td>
-                        <Td>{item.itemQuantity}</Td>
-                        <Td>40</Td>
-                        <Td>80</Td>
-                        <Td>12/02/2023</Td>
-                        <Td display={"flex"} gap={2}>
-                          <IconButton
-                            colorScheme="red"
-                            aria-label="Delete database"
-                            onClick={() => deleteItem(item.storeId)}
-                            icon={isDeleting ? <SpinnerIcon /> : <BiTrash />}
-                          />
-                          <IconButton
-                            colorScheme="blue"
-                            onClick={() => openModel(item.storeId)}
-                            aria-label="Edit database"
-                            icon={<Edit />}
-                          />
-                          <Box display="none">
-                            {isOpen ? (
-                              <EditModal
-                                setIsLoadingItems={setIsLoadingItems}
-                                // item={item}
-                                editItem={editItem}
-                                onOpen={onOpen}
-                                onClose={onClose}
-                                isOpen={isOpen}
-                                selectedId={selectedId}
-                              />
-                            ) : null}
-                          </Box>
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            )}
+            <WrapItem
+              flex={1}
+              gap={6}
+              flexDirection={"column"}
+              height={"max-content"}
+            >
+              <Center
+                flexDirection={"column"}
+                boxShadow={"lg"}
+                borderRadius={2}
+                pb={4}
+                height="auto"
+                w="100%"
+                h="100%"
+              >
+                <Flex
+                  alignItems="center"
+                  bg={primaryColor.color}
+                  w="100%"
+                  justifyContent="center"
+                  flexDirection="column"
+                >
+                  <Box>
+                    <Text
+                      p={2}
+                      color="white"
+                      textAlign="center"
+                      fontSize={22}
+                      fontWeight="bold"
+                    >
+                      Release Store Item Book
+                    </Text>
+                  </Box>
+                </Flex>
+                <Box px={2} w={"100%"}>
+                  <Flex
+                    p={3}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection={{ base: "column", md: "row" }}
+                    gap={2}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <Input
+                      placeholder="Enter item name"
+                      value={item_name_finder}
+                      type="text"
+                      w={{ base: "100%", md: "50%" }}
+                      onChange={(e) => setItemNameFinder(e.target.value)}
+                    />
+                    <Button
+                      bg={primaryColor.color}
+                      color="white"
+                      mx={3}
+                      disabled={!item_name_finder}
+                      onClick={getItemByName}
+                    >
+                      {isRevealing ? "Fetching.." : "Get Item Details"}
+                    </Button>
+                  </Flex>
+
+                  {detailsRevealed && (
+                    <Flex
+                      py={3}
+                      w={"100%"}
+                      h={"100%"}
+                      flexDirection={{ base: "column", md: "row" }}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      gap={3}
+                    >
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Item Category
+                        </Text>
+
+                        <Input
+                          placeholder="Enter student passcode"
+                          value={
+                            availableItem?.itemCategory
+                              ? availableItem?.itemCategory
+                              : "N/A"
+                          }
+                          fontWeight={"bold"}
+                          disabled
+                          style={{ cursor: "default" }}
+                        />
+                      </Flex>
+
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Item Quantity
+                        </Text>
+
+                        <Input
+                          placeholder="Enter student passcode"
+                          value={availableItem?.itemQuantity}
+                          fontWeight={"bold"}
+                          disabled
+                          style={{ cursor: "default" }}
+                        />
+                      </Flex>
+                    </Flex>
+                  )}
+
+                  {detailsRevealed && (
+                    <Flex
+                      py={3}
+                      w={"100%"}
+                      h={"100%"}
+                      flexDirection={{ base: "column", md: "row" }}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      gap={3}
+                    >
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Item Cost Price
+                        </Text>
+
+                        <Input
+                          value={availableItem?.itemCostPrice}
+                          fontWeight={"bold"}
+                          disabled
+                          style={{ cursor: "default" }}
+                        />
+                      </Flex>
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Quantity Remaining
+                        </Text>
+
+                        <Input
+                          placeholder=""
+                          value={availableItem?.quantity_remaining || "N/A"}
+                          fontWeight={"bold"}
+                          disabled
+                          style={{ cursor: "default" }}
+                        />
+                      </Flex>
+                    </Flex>
+                  )}
+
+                  {detailsRevealed && (
+                    <Flex
+                      py={3}
+                      w={"100%"}
+                      h={"100%"}
+                      flexDirection={{ base: "column", md: "row" }}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      gap={3}
+                    >
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Released Against{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </Text>
+
+                        <Select
+                          placeholder="Select User"
+                          value={user}
+                          onChange={(e) => setUser(e.target.value)}
+                          w={"100%"}
+                        >
+                          {users?.map((c: any) => (
+                            <option key={c._id} value={c.username}>
+                              {c.username}
+                            </option>
+                          ))}
+                        </Select>
+                      </Flex>
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Quantity Released
+                          <span style={{ color: "red" }}>*</span>{" "}
+                        </Text>
+                        <Input
+                          placeholder="Amount"
+                          value={amount}
+                          type="number"
+                          onChange={(e) => setAmount(e.target.value)}
+                        />
+                      </Flex>
+                    </Flex>
+                  )}
+                  {detailsRevealed && (
+                    <Flex
+                      py={3}
+                      w={"100%"}
+                      h={"100%"}
+                      flexDirection={{ base: "column", md: "row" }}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      gap={3}
+                    >
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Date of Release{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </Text>
+                        <Input
+                          placeholder="Date Released"
+                          type="date"
+                          value={datereleased}
+                          onChange={(e) => setDateReleased(e.target.value)}
+                        />
+                      </Flex>
+                      <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                        <Text
+                          fontSize={16}
+                          fontWeight="bold"
+                          alignSelf={"flex-start"}
+                          color={"gray"}
+                          mb={3}
+                        >
+                          Running Term <span style={{ color: "red" }}>*</span>{" "}
+                        </Text>
+                        <Select
+                          placeholder="Select Term"
+                          onChange={(e) => setTermname(e.target.value)}
+                          value={termname}
+                        >
+                          <option value={"Term One"}>Term One</option>
+                          <option value={"Term Two"}>Term Two</option>
+                          <option value={"Term Three"}>Term Three</option>
+                        </Select>
+                      </Flex>
+                    </Flex>
+                  )}
+
+                  {/* ***************************** */}
+
+                  {detailsRevealed && (
+                    <Button
+                      variant={"solid"}
+                      w={{ base: "90%", md: "50%" }}
+                      mx={3}
+                      bgColor={primaryColor.color}
+                      color="white"
+                      isDisabled={
+                        !amount || !termname || !datereleased || !user
+                      }
+                      onClick={releaseItem}
+                    >
+                      {isLending ? (
+                        <CircularProgress
+                          isIndeterminate
+                          color="white"
+                          size={"24px"}
+                        />
+                      ) : (
+                        "Release Item"
+                      )}
+                    </Button>
+                  )}
+                </Box>
+              </Center>
+            </WrapItem>
           </Box>
         </Flex>
       </Box>

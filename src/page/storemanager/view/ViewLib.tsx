@@ -27,7 +27,7 @@ const ViewLib = ({ query, setQuery }: any) => {
             fontSize={{ base: 20, md: 30, lg: 35 }}
             color={primaryColor.color}
           >
-            View Library
+            View Store
           </Heading>
           <Text fontSize={{ base: 12, lg: 16 }}>SMS</Text>
         </Box>
@@ -47,7 +47,7 @@ const ViewLib = ({ query, setQuery }: any) => {
           </Box>
           <LibraryAddCheckSharp style={{ fontSize: 16 }} />
           <Text fontWeight="bold" fontSize={{ base: 10, md: 12, lg: 14 }}>
-            View Library
+            View Store
           </Text>
         </Box>
       </Flex>
@@ -75,7 +75,7 @@ const ViewLib = ({ query, setQuery }: any) => {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search library.."
+              placeholder="Search store.."
             />
           </Box>
         </Box>

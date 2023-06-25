@@ -20,6 +20,7 @@ const ReusableAnalytics = ({
   captionText,
   tableHeaders,
   data,
+  deleteNotice,
 }: ReusableAnalyticsProps) => {
   return (
     <Box>
@@ -34,7 +35,7 @@ const ReusableAnalytics = ({
         {captionText}
       </Box>
       <Box>
-        <TableContainer overflow={"auto"}>
+        <TableContainer h={560} overflowY={"auto"}>
           <Table fontSize={12} variant="striped" colorScheme="gray">
             <TableCaption fontSize={13}>{captionText}</TableCaption>
             <Thead>
@@ -49,19 +50,16 @@ const ReusableAnalytics = ({
             {data && (
               <Tbody>
                 {data.map((d: any) => (
-                  <Tr key={d._id}>
-                    <Td fontSize={12}>{d.itemname}</Td>
-                    <Td fontSize={12}>{d.category}</Td>
-                    <Td fontSize={12}>{d.networth}</Td>
+                  <Tr key={d?._id}>
+                    <Td fontSize={12}>{d?.itemname || d?.sender}</Td>
+                    <Td fontSize={12}>{d?.category || d?.title}</Td>
+                    <Td fontSize={12}>{d?.networth || d?.message}</Td>
                     <Td margin="auto">
-                      <Flex
-                        gap={2}
-                       
-                      >
+                      <Flex gap={2}>
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          // onClick={() => deleteStudent(user.studentId)}
+                          onClick={() => deleteNotice(d?._id)}
                           icon={<BiTrashAlt />}
                           size="xs"
                         />

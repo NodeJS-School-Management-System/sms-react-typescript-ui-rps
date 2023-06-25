@@ -8,6 +8,7 @@ import {
   Select,
   Input,
   Heading,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { Home, LibraryAdd } from "@mui/icons-material";
 import {
@@ -28,18 +29,12 @@ import "react-toastify/dist/ReactToastify.css";
 export const ManageLibrary = () => {
   const token = localStorage.getItem("token");
 
-  const [clas, setClas] = useState("");
-  const [subject, setSubject] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  // const [file, setFile] = useState('')
-
   // Get all classes
   const [classes, setClasses] = useState([]);
   useEffect(() => {
     const getClasses = async () => {
       try {
-        const res = await myAPIClient.get("/classroom", {
+        const res = await myAPIClient.get("/classrooms/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -58,7 +53,7 @@ export const ManageLibrary = () => {
   useEffect(() => {
     const getSubjects = async () => {
       try {
-        const res = await myAPIClient.get("/subject", {
+        const res = await myAPIClient.get("/subjects/findall", {
           headers: {
             token: `Bearer ${token}`,
           },
@@ -74,12 +69,12 @@ export const ManageLibrary = () => {
   // ADD NEW LIB BOOK *****************************************************************************
 
   const [className, setClassName] = useState("");
-  const [status, setStatus] = useState("");
   const [subjectName, setSubjectName] = useState("");
   // const [releasedAgainst, setReleasedAgainst] = useState("");
   const [bookAuthor, setBookAuthor] = useState("");
   const [publication, setPublication] = useState<any>(undefined);
   const [bookTitle, setBookTitle] = useState("");
+  const [quantityinstock, setQuantityinstock] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   // upload image
@@ -91,6 +86,16 @@ export const ManageLibrary = () => {
     }
   };
 
+  // BOOK NUMBER GENERATOR
+  const generateOTP = () => {
+    let otp = "";
+    const possible = "0123456789";
+    for (let i = 0; i < 4; i++) {
+      otp += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return otp;
+  };
+
   const addBook = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -99,7 +104,10 @@ export const ManageLibrary = () => {
       subjectName,
       bookAuthor,
       bookTitle,
+      bookNumber: generateOTP(),
+      quantity_remaining_instock: Number(quantityinstock),
       publication,
+      quantityinstock: Number(quantityinstock),
     };
 
     // setIsLoading(true);
@@ -150,7 +158,7 @@ export const ManageLibrary = () => {
             }
           );
           try {
-            const res = await myAPIClient.post("/library", newBook, {
+            const res = await myAPIClient.post("/library/addbook", newBook, {
               headers: {
                 token: `Bearer ${token}`,
               },
@@ -160,7 +168,9 @@ export const ManageLibrary = () => {
             setBookAuthor("");
             setPublication("");
             setBookTitle("");
+            setSubjectName("");
             setClassName("");
+            setQuantityinstock("");
             toast.success("Book uploaded successfully!");
           } catch (err) {
             console.log(err);
@@ -175,63 +185,131 @@ export const ManageLibrary = () => {
   // *********************************************************************************************
   // UPDATE LIB BOOK *****************************************************************************
 
-  const [classNameUpdate, setClassNameUpdate] = useState("");
-  // const [statusUpdate, setStatusUpdate] = useState("");
-  // const [subjectNameUpdate, setSubjectNameUpdate] = useState("");
-  // const [releasedAgainstUpdate, setReleasedAgainstUpdate] = useState("");
-  const [bookAuthorUpdate, setBookAuthorUpdate] = useState("");
-  const [bookTitleUpdate, setBookTitleUpdate] = useState("");
-  // const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [book_title_finder, setBookTitleFinder] = useState("");
+  const [isRevealing, setIsRevealing] = useState(false);
+  const [detailsRevealed, setDetailsRevealed] = useState(false);
+  const [user, setUser] = useState("");
+  const [amount, setAmount] = useState("");
+  const [datereleased, setDateReleased] = useState("");
+  const [termname, setTermname] = useState("");
+  const [availableBook, setAvailableBook] = useState<any>({});
 
-  const updateBook = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    // setIsLoadingUpdate(true);
-    const updatedBook = {
-      className: classNameUpdate,
-      // subjectName: subjectNameUpdate,
-      bookAuthor: bookAuthorUpdate,
-      bookTitle: bookTitleUpdate,
-      // releasedAgainst,
-      status,
-    };
-
-    // setIsLoadingUpdate(true);
-
+  // GET BOOK BY TITLE
+  const getBookByTitle = async () => {
+    setIsRevealing(true);
     try {
-      const res = await myAPIClient.put("/library", updatedBook, {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await myAPIClient.get(
+        `/library/getbytitle/${book_title_finder}`,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data);
-      // setIsLoadingUpdate(false);
-      setBookAuthorUpdate("");
-      setBookTitleUpdate("");
-      setClassNameUpdate("");
+      setAvailableBook(res.data);
+      setDetailsRevealed(true);
+      setIsRevealing(false);
     } catch (err) {
       console.log(err);
-      setIsLoading(false);
+      setIsRevealing(false);
+      setDetailsRevealed(false);
+
+      toast.error("Error fetching book details!");
     }
   };
 
+  // UPDATE LENT BOOK
+  const [isLending, setIsLending] = useState(false);
+  const lendBook = async () => {
+    setIsLending(true);
+    try {
+      const res = await myAPIClient.put(
+        `/library/lendbook/${book_title_finder}`,
+        {
+          released_against: user,
+          date_released: datereleased,
+          runningterm: termname,
+          quantitylent: Number(amount),
+        },
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data);
+      setAmount("");
+      setTermname("");
+      setDateReleased("");
+      setUser("");
+      setIsLending(false);
+      toast.success("Success, book has been lent!");
+    } catch (err) {
+      setIsLending(false);
+      toast.error("Error processing your request!");
+    }
+  };
+
+  // USERS *************************************************************************************
+  // GET TEACHERS' PAYMENTS
+  const [teachers, setTeachers] = useState([]);
   useEffect(() => {
-    setStatus("availabe");
+    const getTeachers = async () => {
+      try {
+        const res = await myAPIClient.get("/users/teachers/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setTeachers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getTeachers();
   }, []);
 
-  // Get all library books
-  // const [books, setBooks] = useState([])
+  // GET MEMBERS' PAYMENTS
+  const [members, setMembers] = useState([]);
   useEffect(() => {
-    const getBooks = async () => {
-      const res = await myAPIClient.get("/library", {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data);
-      // setBooks(res.data)
+    const getMembers = async () => {
+      try {
+        const res = await myAPIClient.get("/users/members/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setMembers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
-    getBooks();
+    getMembers();
   }, []);
+
+  // GET STUDENTS
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    const getStudents = async () => {
+      try {
+        const res = await myAPIClient.get("/users/students/all", {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+        setStudents(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getStudents();
+  }, []);
+
+  const users = [...teachers, ...members, ...students];
 
   const {
     theme: { primaryColor },
@@ -239,20 +317,6 @@ export const ManageLibrary = () => {
 
   return (
     <Box>
-      {/* <Flex justifyContent={"space-between"} pr={10}>
-        <Box display={"flex"}>
-          <Heading ml={3} as={"h5"} color={primaryColor.color}>
-            Manage Library
-          </Heading>
-          <Text>SMS</Text>
-        </Box>
-        <Flex flexDirection={"row"} gap={2} alignItems="center">
-          <Text fontSize={14}>Home</Text>
-          <FaAngleRight />
-          <Text fontSize={14}>Library</Text>
-        </Flex>
-      </Flex> */}
-
       <Flex
         w={"100%"}
         display={"flex"}
@@ -315,7 +379,6 @@ export const ManageLibrary = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -332,7 +395,7 @@ export const ManageLibrary = () => {
                     p={2}
                     color="white"
                     textAlign="center"
-                    fontSize={22}
+                    fontSize={16}
                     fontWeight="bold"
                   >
                     Add Library Book
@@ -342,7 +405,6 @@ export const ManageLibrary = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -350,7 +412,7 @@ export const ManageLibrary = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -361,19 +423,21 @@ export const ManageLibrary = () => {
                   <Select
                     placeholder="Select Class"
                     value={className}
+                    fontSize={16}
                     onChange={(e) => {
                       setClassName(e.target.value);
                     }}
                     w={"100%"}
                   >
                     {classes.map((c: any) => (
-                      <option value={c.className}>{c.className}</option>
+                      <option style={{ fontSize: 16 }} value={c.classname}>
+                        {c.classname}
+                      </option>
                     ))}
                   </Select>
                 </Flex>
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -381,7 +445,7 @@ export const ManageLibrary = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -392,6 +456,7 @@ export const ManageLibrary = () => {
                   <Select
                     placeholder="Select Class"
                     value={subjectName}
+                    fontSize={16}
                     onChange={(e) => {
                       console.log(e.target.value);
                       setSubjectName(e.target.value);
@@ -399,13 +464,13 @@ export const ManageLibrary = () => {
                     w={"100%"}
                   >
                     {subjects.map((s: any) => (
-                      <option value={s.subjectName}>{s.subjectName}</option>
+                      <option value={s.subjectname}>{s.subjectname}</option>
                     ))}
                   </Select>
                 </Flex>
+
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -413,23 +478,24 @@ export const ManageLibrary = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
                     mb={3}
+                    fontSize={16}
                   >
                     Book Title
                   </Text>
                   <Input
                     value={bookTitle}
+                    fontSize={16}
                     onChange={(e) => setBookTitle(e.target.value)}
                     placeholder="Book title"
                   />
                 </Flex>
+
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -437,7 +503,33 @@ export const ManageLibrary = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                    fontSize={16}
+                  >
+                    Quantity in Stock
+                  </Text>
+                  <Input
+                    fontSize={16}
+                    type={"number"}
+                    value={quantityinstock}
+                    onChange={(e) => setQuantityinstock(e.target.value)}
+                    placeholder="Quantity in Stock"
+                  />
+                </Flex>
+
+                <Flex
+                  p={3}
+                  w={"100%"}
+                  h={"100%"}
+                  flexDirection="column"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -447,13 +539,14 @@ export const ManageLibrary = () => {
                   </Text>
                   <Input
                     value={bookAuthor}
+                    fontSize={16}
                     onChange={(e) => setBookAuthor(e.target.value)}
                     placeholder="Book Author"
                   />
                 </Flex>
+
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -461,7 +554,7 @@ export const ManageLibrary = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -469,13 +562,18 @@ export const ManageLibrary = () => {
                   >
                     Book Publication
                   </Text>
-                  <Input type="file" onChange={onUploadImage} />
+                  <Input fontSize={16} type="file" onChange={onUploadImage} />
                 </Flex>
 
                 <Button
                   onClick={addBook}
+                  fontSize={16}
                   isDisabled={
-                    !bookTitle || !bookAuthor || !className || !subjectName
+                    !bookTitle ||
+                    !bookAuthor ||
+                    !className ||
+                    !subjectName ||
+                    !publication
                   }
                   variant={"solid"}
                   w="50%"
@@ -493,7 +591,7 @@ export const ManageLibrary = () => {
             flex={1}
             gap={6}
             flexDirection={"column"}
-            h={"max-content"}
+            height={"max-content"}
             w={{ base: "100%", md: "50%", lg: "50%" }}
           >
             <Center
@@ -501,9 +599,8 @@ export const ManageLibrary = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              // bg={"white"}
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Flex
@@ -525,149 +622,316 @@ export const ManageLibrary = () => {
                   </Text>
                 </Box>
               </Flex>
-              <Box w={"100%"}>
+              <Box px={2} w={"100%"}>
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
-                  flexDirection="column"
+                  flexDirection={{ base: "column", md: "row" }}
+                  gap={2}
                   alignItems={"center"}
                   justifyContent={"center"}
                 >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Lender's ClassName
-                  </Text>
-                  <Select
-                    placeholder="Select Class"
-                    value={clas}
-                    onChange={(e) => {
-                      setClas(e.target.value);
-                    }}
-                    w={"100%"}
-                  >
-                    {classes.map((c: any) => (
-                      <option value={c.className}>{c.className}</option>
-                    ))}
-                  </Select>
-                </Flex>
-                <Flex
-                  p={3}
-                  // bg={"white"}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Subject Name
-                  </Text>
-                  <Select
-                    placeholder="Select Class"
-                    value={subject}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      setSubject(e.target.value);
-                    }}
-                    w={"100%"}
-                  >
-                    {subjects.map((s: any) => (
-                      <option value={s.subjectName}>{s.subjectName}</option>
-                    ))}
-                  </Select>
-                </Flex>
-                <Flex
-                  p={3}
-                  // bg={"white"}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Book Title
-                  </Text>
                   <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Book title"
+                    placeholder="Enter book title"
+                    value={book_title_finder}
+                    type="text"
+                    w={{ base: "100%", md: "50%" }}
+                    onChange={(e) => setBookTitleFinder(e.target.value)}
                   />
-                </Flex>
-                <Flex
-                  p={3}
-                  // bg={"white"}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
+                  <Button
+                    bg={primaryColor.color}
+                    color="white"
+                    mx={3}
+                    disabled={!book_title_finder}
+                    onClick={getBookByTitle}
                   >
-                    Book Author
-                  </Text>
-                  <Input
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
-                    placeholder="Book Author"
-                  />
-                </Flex>
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <Text
-                    fontSize={20}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Released Against
-                  </Text>
-                  <Input placeholder="Lender's name" />
+                    {isRevealing ? "Fetching.." : "Get Book Details"}
+                  </Button>
                 </Flex>
 
-                <Button
-                  disabled={!title || !author || !clas || !subject}
-                  variant={"solid"}
-                  w="50%"
-                  mx={3}
-                  color="white"
-                  onClick={updateBook}
-                  backgroundColor={primaryColor.color}
-                >
-                  Lend Book
-                </Button>
+                {detailsRevealed && (
+                  <Flex
+                    py={3}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection={{ base: "column", md: "row" }}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    gap={3}
+                  >
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Class Name
+                      </Text>
+
+                      <Input
+                        placeholder="Enter student passcode"
+                        value={
+                          availableBook?.className
+                            ? availableBook?.className
+                            : "N/A"
+                        }
+                        fontWeight={"bold"}
+                        disabled
+                        style={{ cursor: "default" }}
+                      />
+                    </Flex>
+
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Subject Name
+                      </Text>
+
+                      <Input
+                        placeholder="Enter student passcode"
+                        value={availableBook?.subjectName}
+                        fontWeight={"bold"}
+                        disabled
+                        style={{ cursor: "default" }}
+                      />
+                    </Flex>
+                  </Flex>
+                )}
+
+                {detailsRevealed && (
+                  <Flex
+                    py={3}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection={{ base: "column", md: "row" }}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    gap={3}
+                  >
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Book Author
+                      </Text>
+
+                      <Input
+                        value={availableBook?.bookAuthor}
+                        fontWeight={"bold"}
+                        disabled
+                        style={{ cursor: "default" }}
+                      />
+                    </Flex>
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Quantity in Stock
+                      </Text>
+
+                      <Input
+                        placeholder="Enter student passcode"
+                        value={availableBook?.quantityinstock}
+                        fontWeight={"bold"}
+                        disabled
+                        style={{ cursor: "default" }}
+                      />
+                    </Flex>
+                  </Flex>
+                )}
+
+                {detailsRevealed && (
+                  <Flex
+                    py={3}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection={{ base: "column", md: "row" }}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    gap={3}
+                  >
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Quantity Lent Out
+                      </Text>
+
+                      <Input
+                        value={availableBook?.quantitylent || "N/A"}
+                        fontWeight={"bold"}
+                        disabled
+                        style={{ cursor: "default" }}
+                      />
+                    </Flex>
+
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Quantity in Stock
+                      </Text>
+
+                      <Input
+                        placeholder="Enter student passcode"
+                        value={availableBook?.quantityinstock}
+                        fontWeight={"bold"}
+                        disabled
+                        style={{ cursor: "default" }}
+                      />
+                    </Flex>
+                  </Flex>
+                )}
+
+                {detailsRevealed && (
+                  <Flex
+                    py={3}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection={{ base: "column", md: "row" }}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    gap={3}
+                  >
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Released Against <span style={{ color: "red" }}>*</span>
+                      </Text>
+
+                      <Select
+                        placeholder="Select User"
+                        value={user}
+                        onChange={(e) => setUser(e.target.value)}
+                        w={"100%"}
+                      >
+                        {users?.map((c: any) => (
+                          <option key={c._id} value={c.username}>
+                            {c.username}
+                          </option>
+                        ))}
+                      </Select>
+                    </Flex>
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Quantity Lent<span style={{ color: "red" }}>*</span>{" "}
+                      </Text>
+                      <Input
+                        placeholder="Amount"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                      />
+                    </Flex>
+                  </Flex>
+                )}
+                {detailsRevealed && (
+                  <Flex
+                    py={3}
+                    w={"100%"}
+                    h={"100%"}
+                    flexDirection={{ base: "column", md: "row" }}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    gap={3}
+                  >
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Date of Release <span style={{ color: "red" }}>*</span>
+                      </Text>
+                      <Input
+                        placeholder="Date Released"
+                        type="date"
+                        value={datereleased}
+                        onChange={(e) => setDateReleased(e.target.value)}
+                      />
+                    </Flex>
+                    <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                      <Text
+                        fontSize={16}
+                        fontWeight="bold"
+                        alignSelf={"flex-start"}
+                        color={"gray"}
+                        mb={3}
+                      >
+                        Running Term <span style={{ color: "red" }}>*</span>{" "}
+                      </Text>
+                      <Select
+                        placeholder="Select Term"
+                        onChange={(e) => setTermname(e.target.value)}
+                        value={termname}
+                      >
+                        <option value={"Term One"}>Term One</option>
+                        <option value={"Term Two"}>Term Two</option>
+                        <option value={"Term Three"}>Term Three</option>
+                      </Select>
+                    </Flex>
+                  </Flex>
+                )}
+
+                {/* ***************************** */}
+
+                {detailsRevealed && (
+                  <Button
+                    variant={"solid"}
+                    w={{ base: "90%", md: "50%" }}
+                    mx={3}
+                    bgColor={primaryColor.color}
+                    color="white"
+                    isDisabled={!amount || !termname || !datereleased || !user}
+                    onClick={lendBook}
+                  >
+                    {isLending ? (
+                      <CircularProgress
+                        isIndeterminate
+                        color="white"
+                        size={"24px"}
+                      />
+                    ) : (
+                      "Lend Book"
+                    )}
+                  </Button>
+                )}
               </Box>
             </Center>
           </WrapItem>

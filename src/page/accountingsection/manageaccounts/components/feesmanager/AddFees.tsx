@@ -142,8 +142,6 @@ const AddFees = () => {
   // Format the date
   const formattedDate = `${month}/${day}/${year}`;
 
-  console.log(formattedDate);
-
   // ****************************************************************************************************
 
   // UPDATE STUDENT WITH PAYMENT INFO FROM RECEIPT

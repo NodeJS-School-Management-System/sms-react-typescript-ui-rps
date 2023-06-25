@@ -47,15 +47,15 @@ export const TeacherList = ({
             <TableCaption>Teacher's List</TableCaption>
             <Thead>
               <Tr>
-                <Th fontSize={14}>Full Name</Th>
-                <Th fontSize={14}>Username</Th>
-                <Th fontSize={14}>Profile Image</Th>
-                {/* <Th fontSize={14}>NIN</Th> */}
-                <Th fontSize={14}>Department</Th>
-                <Th fontSize={14}>Date of Birth</Th>
-                <Th fontSize={14}>Contact</Th>
-                <Th fontSize={14}>Address</Th>
-                <Th fontSize={14} m="auto" textAlign={"center"}>
+                <Th fontSize={12}>Full Name</Th>
+                <Th fontSize={12}>Username</Th>
+                <Th fontSize={12}>Profile Image</Th>
+                <Th fontSize={12}>Designation</Th>
+                <Th fontSize={12}>Department</Th>
+                <Th fontSize={12}>Date of Birth</Th>
+                <Th fontSize={12}>Contact</Th>
+                <Th fontSize={12}>Address</Th>
+                <Th fontSize={12} m="auto" textAlign={"center"}>
                   Action
                 </Th>
               </Tr>
@@ -65,11 +65,11 @@ export const TeacherList = ({
               {list &&
                 list.map((user: any) => (
                   <Tr key={user.teacherId}>
-                    <Td>
+                    <Td fontSize={12}>
                       {user.firstname} {user.lastname}
                     </Td>
-                    <Td>{user.username}</Td>
-                    <Td textAlign={"center"} margin="auto" p={0}>
+                    <Td fontSize={12}>{user.username}</Td>
+                    <Td fontSize={12} textAlign={"center"} margin="auto" p={0}>
                       <Image
                         w={45}
                         margin="auto"
@@ -79,13 +79,15 @@ export const TeacherList = ({
                         src={user.profileimage}
                       />
                     </Td>
-                    {/* <Td>{user.NIN}</Td> */}
-                    <Td>{user.department ? user.department : "N/A"}</Td>
-                    <Td>{user.dateofbirth}</Td>
-                    <Td>{user.contact}</Td>
-                    <Td>{user.address.village}</Td>
-                    <Td>
-                      <Td display={"flex"} gap={2}>
+                    <Td fontSize={12}>{user.designation}</Td>
+                    <Td fontSize={12}>
+                      {user.department ? user.department : "N/A"}
+                    </Td>
+                    <Td fontSize={12}>{user.dateofbirth}</Td>
+                    <Td fontSize={12}>{user.contact}</Td>
+                    <Td fontSize={12}>{user.address.village}</Td>
+                    <Td fontSize={12}>
+                      <Td fontSize={12} display={"flex"} gap={2}>
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"

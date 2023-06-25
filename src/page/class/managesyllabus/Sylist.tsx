@@ -21,7 +21,6 @@ export const Sylist = ({
   deleteSylabus,
   downloadImage,
 }: any) => {
-  // const isLoading = false;
   return (
     <>
       {isLoading ? (
@@ -34,10 +33,10 @@ export const Sylist = ({
             <TableCaption>Sylabus List</TableCaption>
             <Thead>
               <Tr>
-                <Th fontSize={14}>Subject</Th>
-                <Th fontSize={14}>File</Th>
-                <Th fontSize={14}>Class</Th>
-                <Th fontSize={14} m="auto" textAlign={"center"}>
+                <Th fontSize={12}>Subject</Th>
+                <Th fontSize={12}>File</Th>
+                <Th fontSize={12}>Class</Th>
+                <Th fontSize={12} m="auto" textAlign={"center"}>
                   Action
                 </Th>
               </Tr>
@@ -47,20 +46,19 @@ export const Sylist = ({
               {list &&
                 list.map((sylabus: any) => (
                   <Tr key={sylabus._id}>
-                    <Td>{sylabus.subjectname}</Td>
-                    <Td>
+                    <Td fontSize={12}>{sylabus.subjectname}</Td>
+                    <Td fontSize={12}>
                       <Image
                         src={sylabus.sylabusfile}
                         alt=""
                         borderRadius={"50%"}
                         width={25}
-                        height={25}
-                        m="auto"
+                        height={25}                       
                         objectFit="cover"
                       />
                     </Td>
-                    <Td>{sylabus.classname}</Td>
-                    <Td textAlign={"center"}>
+                    <Td fontSize={12}>{sylabus.classname}</Td>
+                    <Td fontSize={12} textAlign={"center"}>
                       <Flex align={"center"} justify="center" gap={2}>
                         <IconButton
                           colorScheme="red"

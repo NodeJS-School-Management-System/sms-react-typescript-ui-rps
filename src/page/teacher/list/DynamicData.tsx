@@ -17,6 +17,7 @@ import { BiEnvelope } from "react-icons/bi";
 import useTheme from "../../../theme/useTheme";
 import { myAPIClient } from "../../auth/axiosInstance";
 import { useState } from "react";
+import { toast } from "react-toastify";
 export const HomeComp = () => {
   return <Box>Home</Box>;
 };
@@ -154,34 +155,36 @@ export const Information = ({ teacher }: any) => {
 
 export const ChangePassword = ({ teacher }: any) => {
   const token = localStorage.getItem("token");
-  const id = localStorage.getItem("teacherId");
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const updatePassword = async () => {
-    if (
-      oldPassword === teacher?.password &&
-      confirmNewPassword === newPassword
-    ) {
+    if (confirmNewPassword === newPassword) {
       const passwords = {
         newPassword,
       };
       try {
-        const res = await myAPIClient.put(`/teacher/${id}`, passwords, {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        });
+        const res = await myAPIClient.put(
+          `/users/teachers/update/${teacher._id}`,
+          passwords,
+          {
+            headers: {
+              token: `Bearer ${token}`,
+            },
+          }
+        );
         console.log(res.data);
         setNewPassword("");
         setOldPassword("");
         setConfirmNewPassword("");
+        toast.success("Success, your password has been updated!");
       } catch (err) {
         console.log(err);
+        toast.error("Error updating your password!");
       }
     } else {
-      alert("CHeck passwords and try again");
+      toast.error("Check passwords and try again");
     }
   };
 
@@ -245,11 +248,17 @@ export const ChangePassword = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
+          value={oldPassword}
           onChange={(e) => setOldPassword(e.target.value)}
           placeholder="Old Password"
         />
       </InputGroup>
-      <Button colorScheme={primaryColor.name} mt={4} onClick={updatePassword}>
+      <Button
+        colorScheme={primaryColor.name}
+        disabled={!oldPassword || !newPassword || !confirmNewPassword}
+        mt={4}
+        onClick={updatePassword}
+      >
         Change Password
       </Button>
     </form>
@@ -258,7 +267,6 @@ export const ChangePassword = ({ teacher }: any) => {
 
 export const Settings = ({ teacher }: any) => {
   const token = localStorage.getItem("token");
-  const id = localStorage.getItem("teacherId");
   const isAdmin = localStorage.getItem("isAdmin");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -272,18 +280,24 @@ export const Settings = ({ teacher }: any) => {
       address,
     };
     try {
-      const res = await myAPIClient.put(`/teachers/${id}`, updates, {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await myAPIClient.put(
+        `/users/teachers/update/${teacher._id}`,
+        updates,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data);
       setAddress("");
       setEmail("");
       setContact("");
       setUsername("");
+      toast.success("Success, teacher has been updated!");
     } catch (err) {
       console.log(err);
+      toast.error("Error updating teacher's details!");
     }
   };
 
@@ -312,6 +326,7 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
+          value={username}
           placeholder={teacher?.username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -328,6 +343,7 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
+          value={email}
           placeholder={teacher?.email ? teacher?.email : ""}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -344,6 +360,7 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           type="text"
+          value={contact}
           placeholder={teacher?.contact}
           onChange={(e) => setContact(e.target.value)}
         />
@@ -359,6 +376,7 @@ export const Settings = ({ teacher }: any) => {
         />
         <Input
           isRequired
+          value={address}
           type="text"
           placeholder={teacher?.address?.district}
           onChange={(e) => setAddress(e.target.value)}
