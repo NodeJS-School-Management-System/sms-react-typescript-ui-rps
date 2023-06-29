@@ -1,11 +1,6 @@
 import { Center, Flex, Heading, Text, WrapItem } from "@chakra-ui/react";
 
-
 const AnalyticsBox = ({ item }: any) => {
-//   const {
-//     theme: { primaryColor },
-//   } = useTheme();
-
   return (
     <WrapItem
       boxShadow={"base"}
@@ -22,7 +17,7 @@ const AnalyticsBox = ({ item }: any) => {
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <item.icon style={{ color: "white", fontSize: 60 }} />
+          <item.icon style={{ color: "white", fontSize: 55 }} />
         </Flex>
         <Flex
           p={3}
@@ -32,10 +27,16 @@ const AnalyticsBox = ({ item }: any) => {
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <Text fontSize={20} textAlign='center' fontWeight="bold" color={"gray"} mb={3}>
+          <Text
+            fontSize={16}
+            textAlign="center"
+            fontWeight="bold"
+            color={"gray"}
+            mb={3}
+          >
             {item.title}
           </Text>
-          <Heading as="h2">{(item.value).toLocaleString()}</Heading>
+          <Heading as="h4" fontSize={30}>{item.value.toLocaleString()}</Heading>
         </Flex>
       </Center>
     </WrapItem>

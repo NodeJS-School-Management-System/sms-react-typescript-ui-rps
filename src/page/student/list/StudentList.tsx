@@ -10,7 +10,6 @@ import {
   IconButton,
   Image,
   Spinner,
-  Box,
   Flex,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -99,23 +98,20 @@ export const StudentList = ({
                           icon={<BsEye />}
                           size="sm"
                         />
-                        <Box>
-                          {isOpen ? (
-                            <StudentProfile
-                              id={clickedId}
-                              user={user}
-                              onOpen={onOpen}
-                              onClose={onClose}
-                              isOpen={isOpen}
-                            />
-                          ) : null}
-                        </Box>
                       </Td>
                     </Td>
                   </Tr>
                 ))}
             </Tbody>
           </Table>
+
+          {/* Profile modal */}
+          <StudentProfile
+            id={clickedId}
+            onOpen={onOpen}
+            onClose={onClose}
+            isOpen={isOpen}
+          />
         </TableContainer>
       )}
     </>

@@ -415,11 +415,12 @@ const AddPayments = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Select Term <span style={{ color: "red" }}>*</span>
+                    Deductions <OptionalMaker />
                   </Text>
                   <Input
                     placeholder="Deductions"
                     value={deductions}
+                    type="number"
                     onChange={(e) => setDeductions(e.target.value)}
                   />
                 </Flex>
@@ -431,10 +432,10 @@ const AddPayments = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Bank Name <span style={{ color: "red" }}>*</span>
+                    Payment Method <span style={{ color: "red" }}>*</span>
                   </Text>
                   <Select
-                    placeholder="Select Bank Name"
+                    placeholder="Select Payment Method"
                     value={bank}
                     onChange={(e) => setBank(e.target.value)}
                     w={"100%"}
@@ -486,6 +487,7 @@ const AddPayments = () => {
                   <Input
                     placeholder="Amount"
                     value={amount}
+                    type="number"
                     onChange={(e) => setAmount(e.target.value)}
                   />
                 </Flex>
@@ -501,7 +503,7 @@ const AddPayments = () => {
                 mx={3}
                 bgColor={primaryColor.color}
                 color="white"
-                isDisabled={!amount || !deductions || !bank}
+                isDisabled={!amount || !bank}
                 onClick={updateemployeeFees}
               >
                 {isLoading ? "Updating.." : "Update Details"}

@@ -36,6 +36,7 @@ export const Profile = ({ nonteachingstaffId }: any) => {
           },
         });
         setNonteachingstaff(res.data);
+        console.log(res.data)
       } catch (err) {
         console.log(err);
       }

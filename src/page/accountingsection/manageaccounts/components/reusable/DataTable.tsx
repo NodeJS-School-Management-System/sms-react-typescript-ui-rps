@@ -10,9 +10,13 @@ import {
   Image,
   Flex,
   IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
-import { BsEye } from "react-icons/bs";
+import { BsEye, BsDownload } from "react-icons/bs";
+import EmployeeModal from "./modals/employeepayments/EmployeeModal";
+import StudentModal from "./modals/StudentModal";
 import { DataTableProps } from "./types/Reusable.type";
 
 const DataTable = ({
@@ -20,7 +24,25 @@ const DataTable = ({
   captionText,
   students,
   employees,
+  creditors,
+  deleteCreditor,
 }: DataTableProps) => {
+  const studentModal = useDisclosure();
+  const employeeModal = useDisclosure();
+
+  const [clickedId, setClickedId] = useState("");
+  const [user, setUser] = useState<any>({});
+
+  const openModal = (id: any) => {
+    setClickedId(id);
+    studentModal.onOpen();
+  };
+
+  const openUserModal = (userr: any) => {
+    setUser(userr);
+    employeeModal.onOpen();
+  };
+
   return (
     <TableContainer overflowY={"auto"} h={470}>
       <Table variant="striped" colorScheme="gray">
@@ -70,12 +92,13 @@ const DataTable = ({
                       colorScheme="red"
                       aria-label="Delete database"
                       // onClick={() => deleteStudent(user.studentId)}
-                      icon={<BiTrashAlt />}
+                      icon={<BsDownload />}
+                      disabled
                       size="xs"
                     />
                     <IconButton
                       colorScheme="blue"
-                      // onClick={() => openModal(user.studentId)}
+                      onClick={() => openModal(student._id)}
                       aria-label="Edit database"
                       icon={<BsEye />}
                       size="xs"
@@ -153,8 +176,45 @@ const DataTable = ({
                     />
                     <IconButton
                       colorScheme="blue"
-                      // onClick={() => openModal(user.studentId)}
-                      aria-label="Edit database"
+                      onClick={() => openUserModal(employee)}
+                      aria-label="View database"
+                      icon={<BsEye />}
+                      size="xs"
+                    />
+                  </Flex>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        ) : creditors ? (
+          <Tbody>
+            {creditors.map((creditor: any) => (
+              <Tr key={creditor._id}>
+                <Td fontSize={11}>#{creditor?.invoicenumber}</Td>
+                <Td fontSize={11}>{creditor?.itemname}</Td>
+                <Td fontSize={11}>{creditor?.amountpaid}</Td>
+                <Td fontSize={11}>{creditor?.totalamount}</Td>
+                <Td fontSize={11}>
+                  {creditor?.totalamount - creditor?.amountpaid}
+                </Td>
+                <Td fontSize={11}>{creditor?.suppliername}</Td>
+                <Td fontSize={11}>{creditor?.supplieraddress}</Td>
+                <Td fontSize={11}>{creditor?.supplieremail}</Td>
+                <Td fontSize={11}>{creditor?.suppliercontact}</Td>
+                <Td fontSize={11}>{creditor?.dateofpurchase}</Td>
+                <Td>
+                  <Flex gap={2} align="center" justify={"center"}>
+                    <IconButton
+                      colorScheme="red"
+                      aria-label="Delete database"
+                      onClick={() => deleteCreditor(creditor._id)}
+                      icon={<BiTrashAlt />}
+                      size="xs"
+                    />
+                    <IconButton
+                      colorScheme="blue"
+                      // onClick={() => openUserModal(creditor)}
+                      aria-label="View database"
                       icon={<BsEye />}
                       size="xs"
                     />
@@ -165,6 +225,22 @@ const DataTable = ({
           </Tbody>
         ) : null}
       </Table>
+
+      {/* MODAL */}
+      <StudentModal
+        onOpen={studentModal.onOpen}
+        onClose={studentModal.onClose}
+        isOpen={studentModal.isOpen}
+        id={clickedId}
+      />
+
+      {/* EMPLOYEE MODAL */}
+      <EmployeeModal
+        onOpen={employeeModal.onOpen}
+        onClose={employeeModal.onClose}
+        isOpen={employeeModal.isOpen}
+        user={user}
+      />
     </TableContainer>
   );
 };

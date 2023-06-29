@@ -281,10 +281,10 @@ export const Settings = ({ student }: any) => {
   const [address, setAddress] = useState("");
   const updateStudent = async () => {
     const updates = {
-      username,
-      email,
-      contact,
-      address,
+      username: username || student.username,
+      email: email || student.email,
+      studentcontact: contact || student.studentcontact,
+      address: address || student.address,
     };
 
     try {
@@ -367,7 +367,7 @@ export const Settings = ({ student }: any) => {
         <Input
           isRequired
           type="text"
-          placeholder={student.contact || "N/A"}
+          placeholder={student.studentcontact || "N/A"}
           onChange={(e) => setContact(e.target.value)}
         />
       </InputGroup>

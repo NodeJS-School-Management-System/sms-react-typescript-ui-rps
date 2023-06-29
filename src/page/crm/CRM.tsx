@@ -58,7 +58,7 @@ const CRM = () => {
     };
 
     getExams();
-  }, [exams]);
+  }, []);
 
   // GET ALL STUDENTS IN SCHOOL*******************************************************************
   const [studentlist, setStudentlist] = useState([]);

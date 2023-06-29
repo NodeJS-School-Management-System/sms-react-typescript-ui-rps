@@ -10,16 +10,13 @@ import {
   IconButton,
   Image,
   Spinner,
-  Box,
   Flex,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
-// import { BiTrash } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import TeacherProfile from "./TeacherProfile";
-// import StudentProfile from "./StudentProfile";
 export const TeacherList = ({
   list,
   query,
@@ -100,23 +97,20 @@ export const TeacherList = ({
                           aria-label="Edit database"
                           icon={<BsEye />}
                         />
-                        <Box>
-                          {isOpen ? (
-                            <TeacherProfile
-                              id={clickedId}
-                              user={user}
-                              onOpen={onOpen}
-                              onClose={onClose}
-                              isOpen={isOpen}
-                            />
-                          ) : null}
-                        </Box>
                       </Td>
                     </Td>
                   </Tr>
                 ))}
             </Tbody>
           </Table>
+
+          {/* profile modal  */}
+          <TeacherProfile
+            id={clickedId}
+            onOpen={onOpen}
+            onClose={onClose}
+            isOpen={isOpen}
+          />
         </TableContainer>
       )}
     </>

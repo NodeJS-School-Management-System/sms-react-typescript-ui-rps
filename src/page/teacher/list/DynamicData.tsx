@@ -274,10 +274,10 @@ export const Settings = ({ teacher }: any) => {
   const [address, setAddress] = useState("");
   const updateteacher = async () => {
     const updates = {
-      username,
-      email,
-      contact,
-      address,
+      username: username || teacher.username,
+      email: email || teacher.email,
+      contact: contact || teacher.contact,
+      dateofbirth: address || teacher.dateofbirth,
     };
     try {
       const res = await myAPIClient.put(
@@ -365,7 +365,7 @@ export const Settings = ({ teacher }: any) => {
           onChange={(e) => setContact(e.target.value)}
         />
       </InputGroup>
-      <FormLabel>Address</FormLabel>
+      <FormLabel>Date of Birth</FormLabel>
       <InputGroup>
         <InputLeftElement
           cursor={"pointer"}
@@ -377,8 +377,8 @@ export const Settings = ({ teacher }: any) => {
         <Input
           isRequired
           value={address}
-          type="text"
-          placeholder={teacher?.address?.district}
+          type="date"
+          placeholder={teacher?.dateofbirth}
           onChange={(e) => setAddress(e.target.value)}
         />
       </InputGroup>

@@ -25,6 +25,23 @@ const Expenses = () => {
 
   const [isLoadingItems, setIsLoadingItems] = useState(false);
 
+  // DELETE EXPENSE
+  const [refetch, setRefetch] = useState(false);
+  const deleteExpense = async (id: any) => {
+    try {
+      await myAPIClient.delete(`/expenses/remove/${id}`, {
+        headers: {
+          token: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setRefetch(!refetch);
+      toast.info("Success, expense has been deleted!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error processing your request!");
+    }
+  };
+
   // INCOMES
   const tableHeaders = ["Item Name", "Item Category", "Amount", "Action"];
 
@@ -38,6 +55,7 @@ const Expenses = () => {
     category,
     amount,
   };
+
   const addExpense = async () => {
     setLoading(true);
     try {
@@ -50,7 +68,7 @@ const Expenses = () => {
       setAmount("");
       setCategory("");
       setItemName("");
-      setIsLoadingItems(true);
+      setIsLoadingItems(!isLoadingItems);
       toast.success("Success, expense has been added!");
       console.log(res.data);
     } catch (err) {
@@ -77,31 +95,54 @@ const Expenses = () => {
 
   useEffect(() => {
     getData();
-  }, [isLoadingItems]);
+  }, [isLoadingItems, refetch]);
+
+  // FILTER BY CATEGORY
+  const filterExpensesByCategory = (category: string) => {
+    const filteredexpenses = expenses.filter(
+      (income: any) => income.category.toLowerCase() === category.toLowerCase()
+    );
+
+    const totalAmount = filteredexpenses.reduce(
+      (total: any, income: any) => total + income.amount,
+      0
+    );
+
+    return totalAmount;
+  };
+
+  // TOTAL AMOUNT
+  const getTotal = () => {
+    const totalAmount = expenses.reduce(
+      (total: any, income: any) => total + income.amount,
+      0
+    );
+    return totalAmount;
+  };
 
   // ANALYTICS
   const storeAnalytics = [
     {
       title: "Food",
-      value: 34,
+      value: filterExpensesByCategory("Food"),
       icon: BiFoodMenu,
       bgColor: "teal",
     },
     {
       title: "Staff Salary",
-      value: 3,
+      value: filterExpensesByCategory("Staff Salary"),
       icon: FeedRounded,
       bgColor: "orange",
     },
     {
-      title: "Others",
-      value: 53,
+      title: "Fuel",
+      value: filterExpensesByCategory("Fuel"),
       icon: AllInbox,
       bgColor: "darkblue",
     },
     {
       title: "Total Spent",
-      value: 4500000,
+      value: getTotal(),
       icon: AttachMoney,
       bgColor: "purple",
     },
@@ -254,6 +295,7 @@ const Expenses = () => {
             tableHeaders={tableHeaders}
             captionText="List of Expenses"
             data={expenses}
+            deleteIncome={deleteExpense}
           />
         </Box>
       </Flex>

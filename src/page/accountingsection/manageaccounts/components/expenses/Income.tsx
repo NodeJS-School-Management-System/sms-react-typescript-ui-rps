@@ -44,6 +44,26 @@ const Incomes = () => {
 
   const [isLoadingItems, setIsLoadingItems] = useState(false);
 
+  // EXPENSES
+
+  const [expenses, setExpenses] = useState([]);
+  const getExpesnes = async () => {
+    try {
+      const res = await myAPIClient.get("/expenses/findall", {
+        headers: {
+          token: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setExpenses(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getExpesnes();
+  }, []);
+
   // INCOMES
   const tableHeaders = ["Item Name", "Item Category", "Amount", "Action"];
 
@@ -69,7 +89,7 @@ const Incomes = () => {
       setAmount("");
       setCategory("");
       setItemName("");
-      setIsLoadingItems(true);
+      setIsLoadingItems(!isLoadingItems);
       toast.success("Success, income has been added!");
       console.log(res.data);
     } catch (err) {
@@ -79,6 +99,24 @@ const Incomes = () => {
     }
   };
 
+  // DELETE INCOME
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteIncome = async (id: any) => {
+    try {
+      await myAPIClient.delete(`incomes/remove/${id}`, {
+        headers: {
+          token: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setIsDeleting(!isDeleting);
+      toast.success("Success, income has been deleted!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error processing your request!");
+    }
+  };
+
+  // ALL INCOMES
   const [incomes, setIncomes] = useState([]);
   const getData = async () => {
     try {
@@ -87,7 +125,6 @@ const Incomes = () => {
           token: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(res.data);
       setIncomes(res.data);
     } catch (err) {
       console.log(err);
@@ -96,7 +133,30 @@ const Incomes = () => {
 
   useEffect(() => {
     getData();
-  }, [isLoadingItems]);
+  }, [isLoadingItems, isDeleting]);
+
+  // FILTER BY CATEGORY
+  const filterIncomesByCategory = (category: string) => {
+    const filteredIncomes = incomes.filter(
+      (income: any) => income.category.toLowerCase() === category.toLowerCase()
+    );
+
+    const totalAmount = filteredIncomes.reduce(
+      (total: any, income: any) => total + income.amount,
+      0
+    );
+
+    return totalAmount;
+  };
+
+  // TOTAL AMOUNT
+  const getTotal = () => {
+    const totalAmount = incomes.reduce(
+      (total: any, income: any) => total + income.amount,
+      0
+    );
+    return totalAmount;
+  };
 
   // OPEN MODAL ***********************************************************************************************
 
@@ -104,25 +164,25 @@ const Incomes = () => {
   const incomeAnalytics = [
     {
       title: "Agriculture",
-      value: 34,
+      value: filterIncomesByCategory("Agriculture"),
       icon: Agriculture,
       bgColor: "teal",
     },
     {
       title: "School Fees",
-      value: 3,
+      value: filterIncomesByCategory("School Fees"),
       icon: FeedRounded,
       bgColor: "orange",
     },
     {
-      title: "Others",
-      value: 53,
+      title: "Accounts Receivable",
+      value: filterIncomesByCategory("Accounts Receivable"),
       icon: AllInbox,
       bgColor: "darkblue",
     },
     {
       title: "Total Received",
-      value: 4500000,
+      value: getTotal(),
       icon: AttachMoney,
       bgColor: "purple",
     },
@@ -281,6 +341,7 @@ const Incomes = () => {
               tableHeaders={tableHeaders}
               captionText="List of Incomes"
               data={incomes}
+              deleteIncome={deleteIncome}
             />
           )}
         </Box>
@@ -312,16 +373,10 @@ const Incomes = () => {
         ref={incomeStmtRef}
       >
         <Box m="auto">
-          <Heading color={primaryColor.color} m="auto" textAlign={"center"}>
+          <Heading m="auto" textAlign={"center"}>
             Rwebita Preparatory School
           </Heading>
-          <Box
-            color={primaryColor.color}
-            m="auto"
-            textAlign={"center"}
-            fontSize={16}
-            fontWeight="bold"
-          >
+          <Box m="auto" textAlign={"center"} fontSize={16} fontWeight="bold">
             Income Statement for the Year {new Date().getFullYear()}
           </Box>
         </Box>
@@ -342,10 +397,9 @@ const Incomes = () => {
               <Tbody>
                 <Tr></Tr>
                 {incomes?.map((item: any) => (
-                  <Tr key={item.incomeId}>
+                  <Tr key={item._id}>
                     <Td>{item.itemname}</Td>
                     <Td>{item.category}</Td>
-
                     <Td>{item.amount}/=</Td>
                   </Tr>
                 ))}
@@ -363,7 +417,7 @@ const Incomes = () => {
               </Tbody>
             </Table>
           </TableContainer>
-          {/* <TableContainer>
+          <TableContainer>
             <Table variant="simple">
               <TableCaption>Income Statement</TableCaption>
               <Thead>
@@ -378,7 +432,7 @@ const Incomes = () => {
               </Thead>
               <Tbody>
                 <Tr></Tr>
-                {expenditureItems?.map((item: any) => (
+                {expenses?.map((item: any) => (
                   <Tr key={item.expenditureId}>
                     <Td>{item.itemname}</Td>
                     <Td>{item.category}</Td>
@@ -389,7 +443,7 @@ const Incomes = () => {
                   <Th fontSize={16}>Total Expenses</Th>
                   <Th fontSize={16}></Th>
                   <Th fontSize={16}>
-                    {expenditureItems.reduce(
+                    {expenses.reduce(
                       (total: any, item: any) => total + item.amount,
                       0
                     )}
@@ -405,7 +459,7 @@ const Incomes = () => {
                       (total: any, item: any) => total + item.amount,
                       0
                     ) -
-                      expenditureItems.reduce(
+                      expenses.reduce(
                         (total: any, item: any) => total + item.amount,
                         0
                       )}
@@ -414,7 +468,7 @@ const Incomes = () => {
                 </Tr>
               </Tbody>
             </Table>
-          </TableContainer> */}
+          </TableContainer>
         </Box>
       </Box>
     </Box>

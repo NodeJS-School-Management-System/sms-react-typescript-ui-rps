@@ -4,11 +4,10 @@ import {
   Center,
   Flex,
   Input,
-  Select,
   Text,
   WrapItem,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -71,41 +70,6 @@ const AddStudentDetails = () => {
     }
   };
 
-  // GET ALL CLASSES
-  const [clas, setClas] = useState("");
-  const [fees, setFees] = useState<any>(0);
-  const [classlist, setClasslist] = useState([]);
-  useEffect(() => {
-    const getClasses = async () => {
-      try {
-        const res = await myAPIClient.get("/classrooms/findall", {
-          headers: {
-            token: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setClasslist(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getClasses();
-  }, []);
-
-  // ADD CLASS FEES
-  const addClassFees = async () => {
-    try {
-      const res = await myAPIClient.post("", {
-        headers: {
-          token: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
-      toast.error("Something went wrong adding class fees!");
-    }
-  };
-
   const {
     theme: { primaryColor },
   } = useTheme();
@@ -118,106 +82,6 @@ const AddStudentDetails = () => {
         h={"max-content"}
         w={"100%"}
       >
-        {/* ACCOUNT TYPES ******************************************************************/}
-        <Center
-          flexDirection={"column"}
-          boxShadow={"lg"}
-          borderRadius={2}
-          pb={4}
-          w="100%"
-          h="100%"
-        >
-          <Flex
-            alignItems="center"
-            bg={primaryColor.color}
-            w="100%"
-            justifyContent="center"
-            flexDirection="column"
-          >
-            <Box>
-              <Text
-                p={1}
-                fontSize={18}
-                color="white"
-                textAlign="center"
-                fontWeight="bold"
-              >
-                Add Fees Structure
-              </Text>
-            </Box>
-          </Flex>
-
-          <Box w={"100%"}>
-            <Flex
-              p={3}
-              w={"100%"}
-              h={"100%"}
-              flexDirection="column"
-              alignItems={"center"}
-              justifyContent={"center"}
-            >
-              <Text
-                fontSize={20}
-                fontWeight="bold"
-                alignSelf={"flex-start"}
-                color={"gray"}
-                mb={3}
-              >
-                Select Class
-              </Text>
-              <Select
-                value={clas}
-                placeholder={"Select Class"}
-                onChange={(e) => {
-                  setClas(e.target.value);
-                }}
-                w={"100%"}
-              >
-                {classlist?.map((c: any) => (
-                  <option key={c._id}>{c.classnumeral}</option>
-                ))}
-              </Select>
-            </Flex>
-
-            <Flex
-              p={3}
-              w={"100%"}
-              h={"100%"}
-              flexDirection="column"
-              alignItems={"center"}
-              justifyContent={"center"}
-            >
-              <Text
-                fontSize={20}
-                fontWeight="bold"
-                alignSelf={"flex-start"}
-                color={"gray"}
-                mb={3}
-              >
-                Fees
-              </Text>
-              <Input
-                placeholder="Enter fees"
-                value={fees}
-                onChange={(e) => setFees(e.target.value)}
-                w="100%"
-              />
-            </Flex>
-
-            <Button
-              variant={"solid"}
-              w="50%"
-              mx={3}
-              color="white"
-              bgColor={primaryColor.color}
-              onClick={addClassFees}
-              disabled={!fees || !clas}
-            >
-              Add Fees
-            </Button>
-          </Box>
-        </Center>
-
         {/* ACCOUNT TYPES ****************************************************************/}
         <Center
           flexDirection={"column"}
@@ -238,7 +102,7 @@ const AddStudentDetails = () => {
             <Box>
               <Text
                 p={1}
-                fontSize={18}
+                fontSize={16}
                 color="white"
                 textAlign="center"
                 fontWeight="bold"

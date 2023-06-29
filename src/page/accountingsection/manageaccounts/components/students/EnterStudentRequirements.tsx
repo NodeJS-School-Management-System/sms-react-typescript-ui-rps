@@ -67,6 +67,10 @@ const EnterStudentRequirements = () => {
         }
       );
       console.log(res.data);
+      setClas("");
+      setFeeswithOutmeals("");
+      setFeeswithmeals("");
+      setBorders("");
       toast.success("Success, class fees has been added!");
     } catch (err) {
       console.log(err);

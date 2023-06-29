@@ -10,7 +10,6 @@ import {
   IconButton,
   Image,
   Spinner,
-  Box,
   Flex,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -99,23 +98,20 @@ export const NTStaffList = ({
                           aria-label="Edit database"
                           icon={<BsEye />}
                         />
-                        <Box>
-                          {isOpen ? (
-                            <MemberProfile
-                              id={clickedId}
-                              user={user}
-                              onOpen={onOpen}
-                              onClose={onClose}
-                              isOpen={isOpen}
-                            />
-                          ) : null}
-                        </Box>
                       </Td>
                     </Td>
                   </Tr>
                 ))}
             </Tbody>
           </Table>
+
+          {/* profile modal */}
+          <MemberProfile
+            id={clickedId}
+            onOpen={onOpen}
+            onClose={onClose}
+            isOpen={isOpen}
+          />
         </TableContainer>
       )}
     </>

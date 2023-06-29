@@ -15,15 +15,20 @@ export type DataTableProps = {
   captionText: string;
   students?: object[];
   employees?: object[];
+  creditors?: object[];
   data?: object[];
   emailAvailable?: boolean;
+  deleteCreditor?: any;
 };
 
 export type ReusableAnalyticsProps = {
   captionText: string;
   tableHeaders: string[];
+  grants?: object[];
+  deleteAsset?: any;
   data?: object[];
   deleteNotice?: any;
+  deleteIncome?: any;
 };
 
 export type ReusableAddItemProps = {

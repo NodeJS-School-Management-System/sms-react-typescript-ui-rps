@@ -6,13 +6,9 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import { Profile } from "./Profile";
 
-const MemberProfile = ({ isOpen, onClose, onOpen, id, user }: any) => {
-  useEffect(() => {
-    console.log(user);
-  }, []);
+const MemberProfile = ({ isOpen, onClose, id }: any) => {
   return (
     <Modal size="full" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

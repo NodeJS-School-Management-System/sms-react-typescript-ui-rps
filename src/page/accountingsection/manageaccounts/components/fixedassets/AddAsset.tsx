@@ -7,14 +7,11 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useState } from "react";
-
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import useTheme from "../../../../../theme/useTheme";
 import { myAPIClient } from "../../../../auth/axiosInstance";
-
-const AddAsset = () => {
+const AddAsset = ({ setRefetch, refetch }: any) => {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [itemname, setItemName] = useState("");
@@ -38,6 +35,10 @@ const AddAsset = () => {
         }
       );
       setLoading(false);
+      setRefetch(!refetch);
+      setAmount("");
+      setCategory("");
+      setItemName("");
       toast.success("Success, asset has been added!");
       console.log(res.data);
     } catch (err) {

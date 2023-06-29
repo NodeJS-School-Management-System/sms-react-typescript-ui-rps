@@ -258,11 +258,13 @@ export default function ManageAccounts() {
                 borderRadius: 0,
               }}
               fontSize={13}
+              borderRight={"1px solid #ddd"}
+              borderRadius={0}
             >
               Student Requirements
             </Tab>
 
-            <Tab
+            {/* `<Tab
               _selected={{
                 color: "white",
                 bg: primaryColor.color,
@@ -333,8 +335,9 @@ export default function ManageAccounts() {
               borderRadius={0}
             >
               Sales
-            </Tab>
+            </Tab>` */}
           </TabList>
+
           <TabPanels>
             <TabPanel>
               <Dashboard />

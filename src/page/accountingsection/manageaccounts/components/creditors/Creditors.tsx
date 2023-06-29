@@ -1,5 +1,7 @@
 import { Box } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { myAPIClient } from "../../../../auth/axiosInstance";
 import DataTable from "../reusable/DataTable";
 import SearchSection from "../reusable/SearchSection";
 
@@ -7,50 +9,75 @@ const Creditors = () => {
   const [query, setQuery] = useState("");
 
   // HEADINGS
-  const data = [
-    {
-      id: 1,
-      header: "Username",
-      row: "abeine",
-    },
-    {
-      id: 2,
-      header: "Photo",
-      row: "",
-    },
-    {
-      id: 3,
-      header: "Name",
-      row: "Abeinemukama Vicent",
-    },
-    {
-      id: 4,
-      header: "DOB",
-      row: "12/2/2000",
-    },
-    {
-      id: 5,
-      header: "Gender",
-      row: "Female",
-    },
-    {
-      id: 6,
-      header: "Address",
-      row: "Mbarara",
-    },
-  ];
-
   const headerData = [
-    "Fullname",
-    "Invoice No.",
-    "Items",
-    "Amount",
+    "Inoive No.",
+    "Itemname",
+    "Amount Paid",
+    "Total Amount",
     "Balance",
-    "Address",
-    "Phone",
-    "Date",
+    "Supplier Name",
+    "Supplier Address",
+    "Supplier Email",
+    "Supplier Contact",
+    "Date of Purchase",
     "Action",
   ];
+
+  const [deleting, setDeleting] = useState(false);
+  const deleteCreditor = async (id: any) => {
+    try {
+      await myAPIClient.delete(`/creditors/remove/${id}`, {
+        headers: {
+          token: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setDeleting(!deleting);
+      toast.success("Success, supplier has been deleted!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error processing your request!");
+    }
+  };
+
+  // GET CREDITORS
+  const [creditors, setCreditors] = useState([]);
+  useEffect(() => {
+    const getCreditors = async () => {
+      try {
+        const res = await myAPIClient.get("/creditors/findall", {
+          headers: {
+            token: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        
+        setCreditors(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getCreditors();
+  }, [deleting]);
+
+  // Filter students with search
+  const keys = [
+    "suppliername",
+    "invoicenumber",
+    "suppliercontact",
+    "supplieremail",
+    "dateofpurchase",
+    "itemname",
+  ];
+
+  // FILTER STUDENTS
+  const filterCreditors = (creditors: any) => {
+    return creditors?.filter((creditor: any) => {
+      return keys?.some(
+        (key: any) =>
+          typeof creditor[key] === "string" &&
+          creditor[key].toLowerCase().includes(query)
+      );
+    });
+  };
 
   return (
     <Box w="100%">
@@ -64,9 +91,10 @@ const Creditors = () => {
       </Box>
       <DataTable
         captionText={"Creditors' Table"}
-        data={data}
+        creditors={query ? filterCreditors(creditors) : creditors}
         emailAvailable={false}
         headerData={headerData}
+        deleteCreditor={deleteCreditor}
       />
     </Box>
   );

@@ -40,6 +40,7 @@ export const Profile = ({ studentId }: any) => {
           },
         });
         setStudent(res.data);
+        console.log(res.data);
       } catch (err) {
         console.log(err);
       }

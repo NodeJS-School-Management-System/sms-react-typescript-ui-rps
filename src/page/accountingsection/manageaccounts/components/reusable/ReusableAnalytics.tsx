@@ -21,6 +21,9 @@ const ReusableAnalytics = ({
   tableHeaders,
   data,
   deleteNotice,
+  deleteIncome,
+  deleteAsset,
+  grants,
 }: ReusableAnalyticsProps) => {
   return (
     <Box>
@@ -51,15 +54,29 @@ const ReusableAnalytics = ({
               <Tbody>
                 {data.map((d: any) => (
                   <Tr key={d?._id}>
-                    <Td fontSize={12}>{d?.itemname || d?.sender}</Td>
-                    <Td fontSize={12}>{d?.category || d?.title}</Td>
-                    <Td fontSize={12}>{d?.networth || d?.message}</Td>
+                    <Td fontSize={12}>
+                      {d?.itemname || d?.sender || d?.fundername}
+                    </Td>
+                    <Td fontSize={12}>
+                      {d?.category || d?.title || d?.amount}
+                    </Td>
+                    <Td fontSize={12}>
+                      {d?.networth || d?.amount || d?.message || d?.date}
+                    </Td>
                     <Td margin="auto">
                       <Flex gap={2}>
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
-                          onClick={() => deleteNotice(d?._id)}
+                          onClick={() => {
+                            d.amount
+                              ? deleteIncome(d?._id)
+                              : d.message
+                              ? deleteNotice(d?._id)
+                              : d?.networth
+                              ? deleteAsset(d?._id)
+                              : null;
+                          }}
                           icon={<BiTrashAlt />}
                           size="xs"
                         />

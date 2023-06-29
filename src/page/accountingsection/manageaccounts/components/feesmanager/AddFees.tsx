@@ -36,40 +36,6 @@ const AddFees = () => {
   }, [iframeUrl]);
   // INITIATE PAYMENT **********************************************************************************
   const [isLoading, setIsLoading] = useState(false);
-  // const initiatePayment = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const res = await myAPIClient.post(
-  //       "/payments/initiatepayment",
-  //       {
-  //         phone_number: contact,
-  //         amount,
-  //       },
-  //       {
-  //         headers: {
-  //           token: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     console.log(res.data);
-
-  //     setIframeUrl(res.data.redirect_url);
-  //     setIsLoading(false);
-
-  //     toast.success(
-  //       `Success: Payment initiation in progress, confirm details on the right/down to proceed`,
-  //       {
-  //         autoClose: 25000,
-  //       }
-  //     );
-  //     //   setPaymentSuccess(true);
-  //   } catch (err) {
-  //     console.log(err);
-  //     setIsLoading(false);
-
-  //     toast.error("Sorry, something went wrong, try again!");
-  //   }
-  // }
 
   // GET LIST OF ALL BANKS
   const [banks, setBanks] = useState([]);
@@ -154,6 +120,7 @@ const AddFees = () => {
           amount: Number(amount),
           payment_reference: paymentReference,
           bankname: bank,
+          currentterm: termname,
           dateofpayment: formattedDate,
         },
         {
@@ -163,6 +130,10 @@ const AddFees = () => {
         }
       );
       console.log(res.data);
+      setBank("");
+      setPaymentReference("");
+      setTermname("");
+      setAmount("");
       setIsLoading(false);
       toast.success("Success, student payments have been updated!");
     } catch (err) {
@@ -213,7 +184,7 @@ const AddFees = () => {
                 fontSize={22}
                 fontWeight="bold"
               >
-                Pay School Fees
+                Update Student Fees
               </Text>
             </Box>
           </Flex>
@@ -549,6 +520,7 @@ const AddFees = () => {
                   </Text>
                   <Input
                     placeholder="Amount"
+                    type="number"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                   />

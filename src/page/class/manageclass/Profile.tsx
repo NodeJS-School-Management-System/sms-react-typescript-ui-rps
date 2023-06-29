@@ -21,7 +21,6 @@ import useTheme from "../../../theme/useTheme";
 import { myAPIClient } from "../../auth/axiosInstance";
 import { GiLevelFour } from "react-icons/gi";
 import { Attendence, Settings, Students, Subjects } from "./DynamicData";
-// import { Information, ChangePassword, Settings, HomeComp } from "./DynamicData";
 
 export const Profile = ({ classroomId }: any) => {
   const id = classroomId;

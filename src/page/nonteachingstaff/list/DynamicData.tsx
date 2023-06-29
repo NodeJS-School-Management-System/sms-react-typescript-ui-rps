@@ -276,10 +276,10 @@ export const Settings = ({ nonteachingstaff }: any) => {
   const [address, setAddress] = useState("");
   const updatenonteachingstaff = async () => {
     const updates = {
-      username,
-      email,
-      contact,
-      address,
+      username: username || nonteachingstaff.username,
+      email: email || nonteachingstaff.email,
+      contact: contact || nonteachingstaff.contact,
+      dateofbirth: address || nonteachingstaff.dateofbirth,
     };
 
     try {
@@ -327,7 +327,6 @@ export const Settings = ({ nonteachingstaff }: any) => {
           children={<PersonOutlineOutlined />}
         />
         <Input
-          isRequired
           type="text"
           value={username}
           placeholder={nonteachingstaff.username}
@@ -344,7 +343,6 @@ export const Settings = ({ nonteachingstaff }: any) => {
           children={<BiEnvelope />}
         />
         <Input
-          isRequired
           type="text"
           value={email}
           placeholder={nonteachingstaff.email ? nonteachingstaff.email : ""}
@@ -362,14 +360,13 @@ export const Settings = ({ nonteachingstaff }: any) => {
           children={<Phone />}
         />
         <Input
-          isRequired
           type="text"
           value={contact}
           placeholder={nonteachingstaff.contact}
           onChange={(e) => setContact(e.target.value)}
         />
       </InputGroup>
-      <FormLabel>Address</FormLabel>
+      <FormLabel>Date of Birth</FormLabel>
       <InputGroup>
         <InputLeftElement
           cursor={"pointer"}
@@ -379,11 +376,9 @@ export const Settings = ({ nonteachingstaff }: any) => {
           children={<LocationCity />}
         />
         <Input
-          isRequired
-          type="text"
+          type="date"
           value={address}
-          placeholder={nonteachingstaff?.address?.district}
-          // placeholder="Address"
+          placeholder={nonteachingstaff?.dateofbirth}
           onChange={(e) => setAddress(e.target.value)}
         />
       </InputGroup>
