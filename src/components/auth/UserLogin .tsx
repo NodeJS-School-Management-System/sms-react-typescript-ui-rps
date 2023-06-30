@@ -79,8 +79,10 @@ export function UserLogin() {
 
       // Both
       res?.data && localStorage.setItem("username", res?.data?.user?.username);
-      res?.data && localStorage.setItem("isAdmin", res?.data?.user?.isAdmin);
-      localStorage.setItem("token", res?.data?.token);
+      res?.data?.user?.isMember ||
+        (res?.data?.user?.isTeacher &&
+          localStorage.setItem("isAdmin", res?.data?.user?.isAdmin));
+      res?.data && localStorage.setItem("token", res?.data?.token);
 
       // Call toast for a success alert*********************************
       setIsLoading(false);
