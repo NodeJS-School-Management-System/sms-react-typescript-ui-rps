@@ -6,11 +6,11 @@ const Dashboard = () => {
   const tableHeaders = ["Type", "Amount", "Previous Paid"];
 
   return (
-    <Flex w="100%" gap={3}>
-      <Box flex={1} boxShadow="md">
+    <Flex w="100%" gap={3} flexDirection={{ base: "column", lg: "row" }}>
+      <Box flex={1} w={{ base: "100%", lg: "50%" }} boxShadow="md">
         <ReusableAnalytics captionText="KPI" tableHeaders={tableHeaders} />
       </Box>
-      <Box boxShadow="md" flex={1}>
+      <Box boxShadow="md" w={{ base: "100%", lg: "50%" }} flex={1}>
         <Graph />
       </Box>
     </Flex>

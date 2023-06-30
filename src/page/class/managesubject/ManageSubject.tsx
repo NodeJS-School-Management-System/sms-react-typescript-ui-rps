@@ -262,7 +262,7 @@ export const ManageSubject = () => {
                     p={2}
                     color="white"
                     textAlign="center"
-                    fontSize={22}
+                    fontSize={16}
                     fontWeight="bold"
                   >
                     Add Subject
@@ -279,7 +279,7 @@ export const ManageSubject = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -304,7 +304,7 @@ export const ManageSubject = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}

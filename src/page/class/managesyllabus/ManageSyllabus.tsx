@@ -272,7 +272,7 @@ export const ManageSyllabus = () => {
               borderRadius={2}
               pb={4}
               borderTop="3px solid blue"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -280,7 +280,7 @@ export const ManageSyllabus = () => {
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -288,7 +288,7 @@ export const ManageSyllabus = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -312,7 +312,7 @@ export const ManageSyllabus = () => {
 
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -320,7 +320,7 @@ export const ManageSyllabus = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -344,7 +344,7 @@ export const ManageSyllabus = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -390,7 +390,7 @@ export const ManageSyllabus = () => {
               borderRadius={2}
               p={4}
               borderTop="3px solid blue"
-              bg={"white"}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"

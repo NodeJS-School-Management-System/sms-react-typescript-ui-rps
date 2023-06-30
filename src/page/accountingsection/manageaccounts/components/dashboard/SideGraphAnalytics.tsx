@@ -3,7 +3,7 @@ import { ArrowDropUp } from "@mui/icons-material";
 
 const SideGraphAnalytics = () => {
   return (
-    <Center flexDirection={"row"} w="40%" h={100} boxShadow={"base"}>
+    <Center w={{ base: "80%", lg: "40%" }} h={100} boxShadow={"base"}>
       <Flex
         p={3}
         flexDirection="column"

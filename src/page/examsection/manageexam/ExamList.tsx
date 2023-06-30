@@ -57,6 +57,7 @@ export const ExamList = ({ list, query, deleteExam }: any) => {
                     <Td>
                       <Td display={"flex"} gap={2}>
                         <IconButton
+                          size="xs"
                           colorScheme="red"
                           aria-label="Delete database"
                           onClick={() => deleteExam(exam._id)}
@@ -64,23 +65,13 @@ export const ExamList = ({ list, query, deleteExam }: any) => {
                         />
                         <IconButton
                           colorScheme="blue"
+                          size="xs"
                           onClick={() =>
                             downloadImage(exam.examTimetable, "timetable")
                           }
                           aria-label="Edit database"
                           icon={<Download />}
                         />
-                        {/* <Box>
-                          {isOpen ? (
-                            <ClassProfile
-                              id={clickedId}
-                              classroom={clas}
-                              onOpen={onOpen}
-                              onClose={onClose}
-                              isOpen={isOpen}
-                            />
-                          ) : null}
-                        </Box> */}
                       </Td>
                     </Td>
                   </Tr>

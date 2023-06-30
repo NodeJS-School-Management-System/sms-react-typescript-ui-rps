@@ -96,8 +96,6 @@ const SearchSection = ({
   const currentDate = new Date();
   const currentMonth = currentDate.toLocaleString("default", { month: "long" });
 
-  console.log(currentMonth.toString());
-
   const [monthname, setMonthname] = useState(currentMonth.toString());
 
   return (

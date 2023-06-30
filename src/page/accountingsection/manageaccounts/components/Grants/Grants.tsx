@@ -92,7 +92,7 @@ const Grants = () => {
   };
 
   return (
-    <Flex w="100%" gap={2}>
+    <Flex w="100%" gap={2} flexDir={{ base: "column", md: "row" }}>
       <Box boxShadow="md" flex={1}>
         <ReusableAddItem grantObj={grantObj} itemname="Grant" />
       </Box>

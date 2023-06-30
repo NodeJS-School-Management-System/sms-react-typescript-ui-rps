@@ -13,6 +13,8 @@ import {
 import { Edit } from "@mui/icons-material";
 import { BiTrashAlt } from "react-icons/bi";
 export const CustomTable = ({ results }: any) => {
+  // FIND INDEX OF SELECTED MARK
+
   const isFetching = false;
   // const isAdmin = localStorage.getItem("isAdmin");
   return (
@@ -22,9 +24,8 @@ export const CustomTable = ({ results }: any) => {
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer w="100%">
+        <TableContainer w="100%" height={450} overflow={"auto"}>
           <Table variant="simple">
-            {/* <TableCaption>Results List</TableCaption> */}
             <Thead>
               <Tr>
                 <Th fontSize={14}>Full Name</Th>
@@ -39,19 +40,21 @@ export const CustomTable = ({ results }: any) => {
               {results?.map((res: any) => (
                 <Tr key={res._id}>
                   <Td>{res.studentname}</Td>
-                  <Td>90</Td>
-                  <Td>D2</Td>
+                  <Td>{res.marks[0].marks}</Td>
+                  <Td>{res.marks[0].grade}</Td>
                   <Td>
                     <Td display={"flex"} gap={2}>
                       <IconButton
                         colorScheme="red"
                         aria-label="Delete database"
                         isDisabled
+                        size="xs"
                         // onClick={() => deleteStudent(user.studentId)}
                         icon={<BiTrashAlt />}
                       />
                       <IconButton
                         colorScheme="blue"
+                        size={"xs"}
                         // isDisabled={!isAdmin}
                         isDisabled
                         // onClick={() => openModal(user.studentId)}

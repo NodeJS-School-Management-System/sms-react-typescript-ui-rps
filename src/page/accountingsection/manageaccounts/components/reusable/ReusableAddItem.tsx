@@ -43,7 +43,7 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}
@@ -70,7 +70,7 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}
@@ -97,7 +97,7 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}
@@ -163,7 +163,7 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}
@@ -189,7 +189,7 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}
@@ -217,13 +217,13 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}
                   mb={3}
                 >
-                  Invoice File <span style={{ color: "red" }}>*</span>
+                  Payment Voucher <span style={{ color: "red" }}>*</span>
                 </FormLabel>
                 <Input
                   required
@@ -243,7 +243,7 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}
@@ -271,7 +271,7 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                 justifyContent={"center"}
               >
                 <FormLabel
-                  fontSize={20}
+                  fontSize={16}
                   fontWeight="bold"
                   alignSelf={"flex-start"}
                   color={"gray"}

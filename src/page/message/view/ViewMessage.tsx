@@ -208,7 +208,6 @@ export const ViewMessage = () => {
           gap={4}
           flexDirection={{ base: "column", md: "row", lg: "row" }}
         >
-          
           <WrapItem
             flex={1}
             gap={6}
@@ -219,7 +218,7 @@ export const ViewMessage = () => {
             <Box
               backgroundColor={primaryColor.color}
               px={5}
-              py={3}
+              py={2}
               display="flex"
               color="white"
               alignItems={"center"}
@@ -250,7 +249,7 @@ export const ViewMessage = () => {
                   justifyContent={"center"}
                 >
                   <FormLabel
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -294,7 +293,7 @@ export const ViewMessage = () => {
                   justifyContent={"center"}
                 >
                   <FormLabel
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -319,7 +318,7 @@ export const ViewMessage = () => {
                   justifyContent={"center"}
                 >
                   <FormLabel
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -398,7 +397,7 @@ export const ViewMessage = () => {
               </Box>
             </Box>
 
-            <Box boxShadow={"md"} h={400} p={5} w="100%" overflowY={"auto"}>
+            <Box boxShadow={"md"} h={370} p={5} w="100%" overflowY={"auto"}>
               <>
                 {fetching ? (
                   <Flex align={"center"} justify="center" margin={"auto"}>

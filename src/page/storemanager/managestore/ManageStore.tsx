@@ -351,7 +351,7 @@ const ManageStore = () => {
                 cursor="default"
                 display={"flex"}
                 p={2}
-                fontSize={20}
+                fontSize={16}
                 w={"100%"}
               >
                 Add Store Item
@@ -367,7 +367,7 @@ const ManageStore = () => {
                   justifyContent={"center"}
                 >
                   <FormLabel
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -396,7 +396,7 @@ const ManageStore = () => {
                   justifyContent={"center"}
                 >
                   <FormLabel
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -427,7 +427,7 @@ const ManageStore = () => {
                   justifyContent={"center"}
                 >
                   <FormLabel
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -456,7 +456,7 @@ const ManageStore = () => {
                   justifyContent={"center"}
                 >
                   <FormLabel
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -535,13 +535,7 @@ const ManageStore = () => {
                   flexDirection="column"
                 >
                   <Box>
-                    <Text
-                      p={2}
-                      color="white"
-                      textAlign="center"
-                      fontSize={22}
-                      fontWeight="bold"
-                    >
+                    <Text p={2} color="white" textAlign="center" fontSize={16}>
                       Release Store Item Book
                     </Text>
                   </Box>

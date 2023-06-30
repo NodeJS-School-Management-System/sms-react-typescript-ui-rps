@@ -249,8 +249,8 @@ export const ManageExam = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              borderTop="3px solid blue"
-              bg={"white"}
+              borderTop={`3px solid ${primaryColor.color}`}
+              // bg={"white"}
               height="auto"
               w="90%"
               h="100%"
@@ -258,7 +258,7 @@ export const ManageExam = () => {
               <Box w={"100%"} p={4}>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -285,7 +285,7 @@ export const ManageExam = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -306,13 +306,13 @@ export const ManageExam = () => {
                     py={3}
                     value={examDate}
                     onChange={(e) => setExamDate(e.target.value)}
-                    type="text"
+                    type="date"
                     placeholder="Exam Name"
                   />
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -338,7 +338,7 @@ export const ManageExam = () => {
                 </Flex>
                 <Flex
                   p={3}
-                  bg={"white"}
+                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -392,7 +392,7 @@ export const ManageExam = () => {
               boxShadow={"base"}
               borderRadius={2}
               p={4}
-              borderTop="3px solid #ccc"
+              borderTop={`3px solid ${primaryColor.color}`}
               height="auto"
               w="90%"
               h="100%"

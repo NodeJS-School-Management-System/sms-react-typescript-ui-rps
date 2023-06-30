@@ -28,13 +28,19 @@ const formatGroupButton = (
   rootPath: string
 ) => ({ title, icon, rootPath });
 
-// const isStudent: any = localStorage.getItem("isStudent");
-// const isTeacher: any = localStorage.getItem("isTeacher");
-// const isMember: any = localStorage.getItem("isMember");
+const isStudent: any = localStorage.getItem("isStudent");
+const isMember: any = localStorage.getItem("isMember");
+const isBursar = localStorage.getItem("isBursar");
+const isStoreKeeper = localStorage.getItem("isStoreKeeper");
+const isSuperAdmin = localStorage.getItem("isSuperAdmin");
+const isLibrarian: any = localStorage.getItem("isLibrarian");
 
 const navList: NavOptions[] = [
   {
-    parent: formatGroupButton("Dashboard", <Home />, "/dashboards/"),
+    parent:
+      isStudent !== "true"
+        ? formatGroupButton("Dashboard", <Home />, "/dashboards/")
+        : undefined,
     childrens: [
       format("Home", "/dashboards/crm/"),
       format("Departments", "/dashboards/departments/"),
@@ -43,28 +49,27 @@ const navList: NavOptions[] = [
   },
   {
     parent: formatGroupButton("Student", <School />, "/student/"),
-    childrens: [
-      format("List", "/student/list/"),
-      format("Add", "/student/add/"),
-      // format("Profile", "/student/profile/"),
-      // isStudent && format("Profile", "/student/profile/"),
-    ],
+    childrens:
+      isStudent !== "true"
+        ? [format("List", "/student/list/"), format("Add", "/student/add/")]
+        : [format("List", "/student/list/")],
   },
   {
     parent: formatGroupButton("Teacher", <GroupAdd />, "/teacher/"),
-    childrens: [
-      format("List", "/teacher/list/"),
-      format("Add", "/teacher/add/"),
-      // isTeacher && format("Profile", "/teacher/profile/"),
-    ],
+    childrens:
+      isStudent !== "true"
+        ? [format("List", "/teacher/list/"), format("Add", "/teacher/add/")]
+        : [format("List", "/teacher/list/")],
   },
   {
     parent: formatGroupButton("Member", <Person />, "/nonteachingstaff/"),
-    childrens: [
-      format("List", "/nonteachingstaff/list/"),
-      format("Add", "/nonteachingstaff/add/"),
-      // isMember && format("Profile", "/nonteachingstaff/profile/"),
-    ],
+    childrens:
+      isStudent !== "true"
+        ? [
+            format("List", "/nonteachingstaff/list/"),
+            format("Add", "/nonteachingstaff/add/"),
+          ]
+        : [format("List", "/nonteachingstaff/list/")],
   },
   {
     parent: formatGroupButton("Classroom", <Class />, "/classroom/"),
@@ -76,48 +81,40 @@ const navList: NavOptions[] = [
   },
   {
     parent: formatGroupButton("Exam Section", <Note />, "/examsection/"),
-    childrens: [
-      format("Manage Exam", "/examsection/manageexam/"),
-      format("Entry Marks", "/examsection/entrymarks/"),
-      format("View Result", "/examsection/viewresult/"),
-    ],
+    childrens:
+      isStudent !== "true" || isMember !== true
+        ? [
+            format("Manage Exam", "/examsection/manageexam/"),
+            format("Entry Marks", "/examsection/entrymarks/"),
+            format("View Result", "/examsection/viewresult/"),
+          ]
+        : [
+            format("Manage Exam", "/examsection/manageexam/"),
+            format("View Result", "/examsection/viewresult/"),
+          ],
   },
-  // {
-  //   parent: formatGroupButton("Exam Results", <NoteAlt />, "/examandresult/"),
-  //   childrens: [
-  //     // format("Exam Routine", "/examandresult/examroutine/"),
-  //     format("View Result", "/examandresult/viewresult/"),
-  //   ],
-  // },
   {
     parent: formatGroupButton("Library", <LocalLibrary />, "/library/"),
-    childrens: [
-      format("Manage Library", "/library/manage/"),
-      format("View Library", "/library/view/"),
-    ],
+    childrens:
+      isLibrarian === "true" || isSuperAdmin === "true"
+        ? [
+            format("Manage Library", "/library/manage/"),
+            format("View Library", "/library/view/"),
+          ]
+        : [format("View Library", "/library/view/")],
   },
-  // {
-  //   parent: formatGroupButton(
-  //     "Income & Expenditure",
-  //     <ExpandCircleDownOutlined />,
-  //     "/incomeandexpenditure/"
-  //   ),
-  //   childrens: [
-  //     format("Manage Income", "/incomeandexpenditure/manageincome/"),
-  //     format("Manage Expenses", "/incomeandexpenditure/manageexpenditure/"),
-  //   ],
-  // },
+
   {
-    parent: formatGroupButton(
-      "Accounting",
-      <AttachMoney />,
-      "/accountingsection/"
-    ),
+    parent:
+      isBursar === "true" || isSuperAdmin === "true"
+        ? formatGroupButton(
+            "Accounting",
+            <AttachMoney />,
+            "/accountingsection/"
+          )
+        : undefined,
     childrens: [
       format("Manage Accounts", "/accountingsection/manageaccounts/"),
-      // format("Fees Payments", "/accountingsection/feespayment/"),
-      // format("Manage Income", "/incomeandexpenditure/manageincome/"),
-      // format("Manage Expenses", "/incomeandexpenditure/manageexpenditure/"),
     ],
   },
   {
@@ -125,11 +122,14 @@ const navList: NavOptions[] = [
     childrens: [format("Pay Fees", "/feespayments/payfees/")],
   },
   {
-    parent: formatGroupButton(
-      "Store Manager",
-      <StoreMallDirectory />,
-      "/storemanager/"
-    ),
+    parent:
+      isStoreKeeper === "true" || isSuperAdmin === "true"
+        ? formatGroupButton(
+            "Store Manager",
+            <StoreMallDirectory />,
+            "/storemanager/"
+          )
+        : undefined,
     childrens: [
       format("Manage Store", "/storemanager/managestore/"),
       format("View Store", "/storemanager/viewstoreitems/"),
@@ -140,7 +140,10 @@ const navList: NavOptions[] = [
     childrens: [format("View", "/noticeboard/view/")],
   },
   {
-    parent: formatGroupButton("Message", <Email />, "/message/"),
+    parent:
+      isStudent !== "true"
+        ? formatGroupButton("Message", <Email />, "/message/")
+        : undefined,
     childrens: [format("View", "/message/view/")],
   },
 ];

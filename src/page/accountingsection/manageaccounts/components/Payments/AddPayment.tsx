@@ -147,10 +147,10 @@ const AddPayments = () => {
           >
             <Box>
               <Text
-                p={2}
+                p={1}
                 color="white"
                 textAlign="center"
-                fontSize={22}
+                fontSize={16}
                 fontWeight="bold"
               >
                 Pay School Fees
@@ -178,6 +178,7 @@ const AddPayments = () => {
                 bg={primaryColor.color}
                 color="white"
                 mx={3}
+                fontSize={14}
                 onClick={getemployeeByusername}
                 disabled={!username || username.length < 3}
               >
@@ -201,7 +202,7 @@ const AddPayments = () => {
               >
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -225,7 +226,7 @@ const AddPayments = () => {
 
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -257,7 +258,7 @@ const AddPayments = () => {
               >
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -277,7 +278,7 @@ const AddPayments = () => {
                 </Flex>
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -308,7 +309,7 @@ const AddPayments = () => {
               >
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -327,7 +328,7 @@ const AddPayments = () => {
                 </Flex>
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -358,7 +359,7 @@ const AddPayments = () => {
               >
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -377,7 +378,7 @@ const AddPayments = () => {
                 </Flex>
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -409,7 +410,7 @@ const AddPayments = () => {
               >
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -426,7 +427,7 @@ const AddPayments = () => {
                 </Flex>
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -460,7 +461,7 @@ const AddPayments = () => {
               >
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -476,7 +477,7 @@ const AddPayments = () => {
                 </Flex>
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}

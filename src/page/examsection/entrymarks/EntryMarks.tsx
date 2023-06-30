@@ -151,7 +151,7 @@ export const EntryMarks = () => {
         </Box>
       </Flex>
 
-      <Box>
+      <Box w="100%">
         <Flex
           boxShadow="md"
           p={4}
@@ -172,9 +172,9 @@ export const EntryMarks = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              borderTop="3px solid #ccc"
+              borderTop={`3px solid ${primaryColor.color}`}
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Box w={"100%"}>
@@ -188,7 +188,7 @@ export const EntryMarks = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -224,7 +224,7 @@ export const EntryMarks = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -257,7 +257,7 @@ export const EntryMarks = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -292,7 +292,7 @@ export const EntryMarks = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}

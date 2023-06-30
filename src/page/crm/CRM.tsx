@@ -349,7 +349,6 @@ const CRM = () => {
     }
   };
 
-
   // ****************************************************************************************
 
   return (
@@ -459,14 +458,11 @@ const CRM = () => {
 
         <Flex boxShadow={"lg"} flexDir={{ base: "column", lg: "row" }}>
           <Box boxShadow={"lg"} m={2} flex={1}>
-          
-
             <WrapItem
               flex={1}
               gap={6}
               flexDirection={"column"}
               h={"max-content"}
-             
             >
               <Box
                 backgroundColor={primaryColor.color}

@@ -1,4 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import SideGraphAnalytics from "./SideGraphAnalytics";
 const data = [
@@ -72,6 +73,21 @@ const data = [
 ];
 
 const Graph = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const shouldDisplayComponent = windowWidth > 768;
+
   return (
     <Box>
       <Box
@@ -84,13 +100,15 @@ const Graph = () => {
       >
         Working Capital Trend
       </Box>
-      <BarChart width={600} height={350} data={data}>
-        <XAxis dataKey="name" stroke="#8884d8" />
-        <YAxis />
-        <Tooltip />
-        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-        <Bar dataKey="uv" fill="#8884d8" barSize={30} />
-      </BarChart>
+      {shouldDisplayComponent && (
+        <BarChart style={{}} width={600} height={350} data={data}>
+          <XAxis dataKey="name" stroke="#8884d8" />
+          <YAxis />
+          <Tooltip />
+          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+          <Bar dataKey="uv" fill="#8884d8" barSize={30} />
+        </BarChart>
+      )}
       <Flex
         flexWrap={"wrap"}
         gap={4}

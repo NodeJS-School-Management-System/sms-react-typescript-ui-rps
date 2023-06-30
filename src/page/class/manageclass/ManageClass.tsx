@@ -333,7 +333,7 @@ export const ManageClass = () => {
                   <Text
                     p={2}
                     textAlign="center"
-                    fontSize={18}
+                    fontSize={16}
                     color={"white"}
                     fontWeight="bold"
                   >

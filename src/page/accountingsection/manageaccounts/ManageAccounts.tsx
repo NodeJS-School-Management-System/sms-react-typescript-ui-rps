@@ -14,7 +14,7 @@ import { Home, Money } from "@mui/icons-material";
 import { FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useTheme from "../../../theme/useTheme";
-import Admissions from "./components/admissions/Admissions";
+// import Admissions from "./components/admissions/Admissions";
 import Creditors from "./components/creditors/Creditors";
 import Dashboard from "./components/dashboard/Dashboard";
 import Employees from "./components/employees/Employees";
@@ -226,7 +226,7 @@ export default function ManageAccounts() {
             >
               Students
             </Tab>
-            <Tab
+            {/* <Tab
               _selected={{
                 color: "white",
                 bg: primaryColor.color,
@@ -237,7 +237,7 @@ export default function ManageAccounts() {
               borderRadius={0}
             >
               Admissions
-            </Tab>
+            </Tab> */}
             <Tab
               _selected={{
                 color: "white",
@@ -258,7 +258,7 @@ export default function ManageAccounts() {
                 borderRadius: 0,
               }}
               fontSize={13}
-              borderRight={"1px solid #ddd"}
+              // borderRight={"1px solid #ddd"}
               borderRadius={0}
             >
               Student Requirements
@@ -375,9 +375,9 @@ export default function ManageAccounts() {
             <TabPanel>
               <Students />
             </TabPanel>
-            <TabPanel>
+            {/* <TabPanel>
               <Admissions />
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel>
               <FixedAssets />
             </TabPanel>

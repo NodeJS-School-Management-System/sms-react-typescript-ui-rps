@@ -5,7 +5,7 @@ import AddPayments from "./AddPayment";
 const Payments = () => {
   return (
     <Box>
-      <Flex gap={3}>
+      <Flex gap={3} flexDir={{ base: "column", md: "row" }}>
         <Box flex={1} h="100%">
           <AddPayments />
         </Box>

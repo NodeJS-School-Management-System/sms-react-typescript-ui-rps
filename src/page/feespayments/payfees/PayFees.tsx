@@ -73,7 +73,7 @@ export const PayFees = () => {
           },
         }
       );
-      console.log(res.data);
+     
 
       setIframeUrl(res.data.redirect_url);
       setIsLoading(false);
@@ -209,7 +209,7 @@ export const PayFees = () => {
                   p={2}
                   color="white"
                   textAlign="center"
-                  fontSize={22}
+                  fontSize={16}
                   fontWeight="bold"
                 >
                   Pay School Fees
@@ -491,7 +491,7 @@ export const PayFees = () => {
                 p={2}
                 color="white"
                 textAlign="center"
-                fontSize={22}
+                fontSize={16}
                 fontWeight="bold"
               >
                 Complete Fees Payment

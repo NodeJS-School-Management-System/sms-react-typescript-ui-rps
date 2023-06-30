@@ -7,7 +7,7 @@ import {
   Text,
   WrapItem,
 } from "@chakra-ui/react";
-import {  useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,7 +25,7 @@ const AddStudentDetails = () => {
   const addScheme = async () => {
     setAdding(true);
     try {
-      const res = await myAPIClient.post(
+      await myAPIClient.post(
         "/feesmanager/newpaymentscheme",
         { scheme },
         {
@@ -34,11 +34,9 @@ const AddStudentDetails = () => {
           },
         }
       );
-      console.log(res.data);
       setAdding(false);
       toast.success("Success, payment scheme has been added!");
     } catch (err) {
-      console.log(err);
       setAdding(false);
       toast.error("Something went wrong adding payment scheme!");
     }
@@ -49,7 +47,7 @@ const AddStudentDetails = () => {
     setAddingBank(true);
 
     try {
-      const res = await myAPIClient.post(
+      await myAPIClient.post(
         "/feesmanager/newbank",
         { bankname: bank },
         {
@@ -58,12 +56,11 @@ const AddStudentDetails = () => {
           },
         }
       );
-      console.log(res.data);
       setAddingBank(false);
 
       toast.success("Success, bank has been added!");
     } catch (err) {
-      console.log(err);
+   
       setAddingBank(false);
 
       toast.error("Something went wrong adding bank!");
@@ -122,7 +119,7 @@ const AddStudentDetails = () => {
               justifyContent={"center"}
             >
               <Text
-                fontSize={20}
+                fontSize={16}
                 fontWeight="bold"
                 alignSelf={"flex-start"}
                 color={"gray"}
@@ -174,7 +171,7 @@ const AddStudentDetails = () => {
                 color="white"
                 textAlign="center"
                 p={1}
-                fontSize={18}
+                fontSize={16}
                 fontWeight="bold"
               >
                 Add Banks
@@ -192,7 +189,7 @@ const AddStudentDetails = () => {
               justifyContent={"center"}
             >
               <Text
-                fontSize={20}
+                fontSize={16}
                 fontWeight="bold"
                 alignSelf={"flex-start"}
                 color={"gray"}

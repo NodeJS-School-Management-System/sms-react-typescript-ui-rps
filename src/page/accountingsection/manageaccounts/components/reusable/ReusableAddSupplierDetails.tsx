@@ -42,7 +42,7 @@ const ReusableAddSupplierDetails = ({ creditorobject, itemname }: any) => {
               justifyContent={"center"}
             >
               <FormLabel
-                fontSize={20}
+                fontSize={16}
                 fontWeight="bold"
                 alignSelf={"flex-start"}
                 color={"gray"}
@@ -68,7 +68,7 @@ const ReusableAddSupplierDetails = ({ creditorobject, itemname }: any) => {
               justifyContent={"center"}
             >
               <FormLabel
-                fontSize={20}
+                fontSize={16}
                 fontWeight="bold"
                 alignSelf={"flex-start"}
                 color={"gray"}
@@ -96,7 +96,7 @@ const ReusableAddSupplierDetails = ({ creditorobject, itemname }: any) => {
               justifyContent={"center"}
             >
               <FormLabel
-                fontSize={20}
+                fontSize={16}
                 fontWeight="bold"
                 alignSelf={"flex-start"}
                 color={"gray"}
@@ -124,7 +124,7 @@ const ReusableAddSupplierDetails = ({ creditorobject, itemname }: any) => {
               justifyContent={"center"}
             >
               <FormLabel
-                fontSize={20}
+                fontSize={16}
                 fontWeight="bold"
                 alignSelf={"flex-start"}
                 color={"gray"}
@@ -151,7 +151,7 @@ const ReusableAddSupplierDetails = ({ creditorobject, itemname }: any) => {
               justifyContent={"center"}
             >
               <FormLabel
-                fontSize={20}
+                fontSize={16}
                 fontWeight="bold"
                 alignSelf={"flex-start"}
                 color={"gray"}

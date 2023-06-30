@@ -380,7 +380,7 @@ export const ManageLibrary = () => {
               borderRadius={2}
               pb={4}
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Flex
@@ -615,7 +615,7 @@ export const ManageLibrary = () => {
                     p={2}
                     color="white"
                     textAlign="center"
-                    fontSize={22}
+                    fontSize={16}
                     fontWeight="bold"
                   >
                     Lend Library Book

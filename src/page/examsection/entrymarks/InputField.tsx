@@ -66,6 +66,7 @@ function InputField(props: any) {
       examname: exam,
       marks: Number(formValues[data._id]),
       studentname: `${data.firstname} ${data.lastname}`,
+      studentimage: data.profileimage,
       classname: clas,
       subjectname: subject,
       termname: term,

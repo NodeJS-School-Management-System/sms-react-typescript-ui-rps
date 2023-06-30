@@ -49,28 +49,38 @@ export function UserLogin() {
 
     try {
       const res = await myAPIClient.post("/auth/loginuser", user);
-      console.log(res.data);
+      console.log(res?.data);
 
       // teacher
-      res.data?.user?.isTeacher &&
-        localStorage.setItem("isTeacher", res.data.user.isTeacher);
-      res.data?.user?.isTeacher &&
-        localStorage.setItem("id", res.data.user._id);
+      res?.data?.user?.isTeacher &&
+        localStorage.setItem("isTeacher", res?.data?.user?.isTeacher);
+      res?.data?.user?.isTeacher &&
+        localStorage.setItem("id", res?.data?.user?._id);
 
       // student
-      res.data?.user?.isStudent &&
-        localStorage.setItem("isStudent", res.data?.user?.isStudent);
-      res.data?.user?.isStudent &&
-        localStorage.setItem("id", res.data?.user?._id);
+      res?.data?.user?.isStudent &&
+        localStorage.setItem("isStudent", res?.data?.user?.isStudent);
+      res?.data?.user?.isStudent &&
+        localStorage.setItem("id", res?.data?.user?._id);
 
       // non teaching staff
-      res.data?.user?.isMember &&
-        localStorage.setItem("isNonteachingstaff", res.data.user.isMember);
-      res.data?.user?.isMember && localStorage.setItem("id", res.data.user._id);
+      res?.data?.user?.isMember &&
+        localStorage.setItem("isMember", res?.data?.user?.isMember);
+      res?.data?.user?.isMember &&
+        localStorage.setItem("id", res?.data?.user?._id);
+
+      // HANDLE OTHER MEMBER PREVILAGES HERE
+      res?.data?.user?.isMember &&
+        localStorage.setItem("isBursar", res?.data?.user?.isBursar);
+      res?.data?.user?.isMember &&
+        localStorage.setItem("isLibrarian", res?.data?.user?.isLibrarian);
+      res?.data?.user?.isMember &&
+        localStorage.setItem("isStoreKeeper", res?.data?.user?.isStoreKeeper);
 
       // Both
-      res.data && localStorage.setItem("username", res.data?.user?.username);
-      localStorage.setItem("token", res.data.token);
+      res?.data && localStorage.setItem("username", res?.data?.user?.username);
+      res?.data && localStorage.setItem("isAdmin", res?.data?.user?.isAdmin);
+      localStorage.setItem("token", res?.data?.token);
 
       // Call toast for a success alert*********************************
       setIsLoading(false);
@@ -78,7 +88,15 @@ export function UserLogin() {
       setPassword("");
       toast.success("Login successful, redirecting...");
       setTimeout(() => {
-        navigate("/dashboards/crm/");
+        res?.data?.user?.isBursar
+          ? navigate("/accountingsection/manageaccounts/")
+          : res?.data?.user?.isStudent
+          ? navigate("/student/list/")
+          : res?.data?.user?.isBursar
+          ? navigate("/library/manage/")
+          : res?.data?.user?.isStoreKeeper
+          ? navigate("/storemanager/managestore/")
+          : navigate("/dashboards/crm/");
         window.location.reload();
       }, 3000);
     } catch (err) {
@@ -194,7 +212,15 @@ export function UserLogin() {
                   isDisabled={!username || !password}
                   onClick={handleSubmit}
                 >
-                  {isLoading ? <CircularProgress size="24px" color='white' /> : " Sign In"}
+                  {isLoading ? (
+                    <CircularProgress
+                      isIndeterminate
+                      size="24px"
+                      color="white"
+                    />
+                  ) : (
+                    " Sign In"
+                  )}
                 </Button>
               </Stack>
             </Stack>

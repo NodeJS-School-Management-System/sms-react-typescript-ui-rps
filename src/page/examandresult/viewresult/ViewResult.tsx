@@ -172,19 +172,26 @@ export const ViewResult = () => {
 
   // ********************************************************************
 
+  const filterInfo = () => {
+    const requiredIndex = results.findIndex((student: any) => {
+      const markIndex = student.marks.findIndex((mark: any) => {
+        return (
+          mark.subjectname === subject &&
+          mark.examname === exam &&
+          student.termname.toLowerCase() === termname.toLowerCase()
+        );
+      });
+      return markIndex !== -1;
+    });
+
+    console.log(subject, exam, termname);
+    console.log(requiredIndex);
+
+    return requiredIndex;
+  };
+
   return (
     <Box overflow={"hidden"}>
-      {/* <Flex justifyContent={"space-between"} pr={10}>
-        <Text fontSize={25} fontWeight="bold" ml={3}>
-          View Marks
-        </Text>
-        <Flex flexDirection={"row"} gap={2} alignItems="center">
-          <Text fontSize={14}>Home</Text>
-          <FaAngleRight />
-          <Text fontSize={14}>View Result</Text>
-        </Flex>
-      </Flex> */}
-
       <Flex
         w={"100%"}
         display={"flex"}
@@ -247,16 +254,14 @@ export const ViewResult = () => {
               boxShadow={"lg"}
               borderRadius={2}
               pb={4}
-              borderTop="3px solid #ccc"
-              // bg={"white"}
+              borderTop={`3px solid ${primaryColor.color}`}
               height="auto"
-              w="90%"
+              w="100%"
               h="100%"
             >
               <Box w={"100%"}>
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -264,7 +269,7 @@ export const ViewResult = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -275,7 +280,6 @@ export const ViewResult = () => {
                   <Select
                     placeholder="Select Class"
                     onChange={(e) => {
-                      // console.log(e.target.value);
                       setClas(e.target.value);
                       setShowReport(false);
                     }}
@@ -292,7 +296,6 @@ export const ViewResult = () => {
 
                 <Flex
                   p={3}
-                  // bg={"white"}
                   w={"100%"}
                   h={"100%"}
                   flexDirection="column"
@@ -300,7 +303,7 @@ export const ViewResult = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -311,7 +314,6 @@ export const ViewResult = () => {
                   <Select
                     placeholder="Select Term"
                     onChange={(e) => {
-                      // console.log(e.target.value);
                       setTermname(e.target.value);
                     }}
                     w={"100%"}
@@ -333,7 +335,7 @@ export const ViewResult = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -367,7 +369,7 @@ export const ViewResult = () => {
                   justifyContent={"center"}
                 >
                   <Text
-                    fontSize={20}
+                    fontSize={16}
                     fontWeight="bold"
                     alignSelf={"flex-start"}
                     color={"gray"}
@@ -392,7 +394,10 @@ export const ViewResult = () => {
                 </Flex>
 
                 <Button
-                  onClick={() => setInsertClicked(true)}
+                  onClick={() => {
+                    setInsertClicked(true);
+                    filterInfo();
+                  }}
                   variant={"solid"}
                   w="50%"
                   mx={3}
@@ -453,7 +458,12 @@ export const ViewResult = () => {
                   {exam} {subject} Results - For {clas}
                 </Text>
                 <Box m="auto">
-                  <CustomTable results={results} />
+                  <CustomTable
+                    subject={subject}
+                    exam={exam}
+                    termname={termname}
+                    results={results}
+                  />
                 </Box>
 
                 <Flex

@@ -50,6 +50,7 @@ export function CustomLogin() {
 
       if (res.data.user.isAdmin === true) {
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("isSuperAdmin", res.data.user.isSuperAdmin);
         localStorage.setItem("isAdmin", res.data.user.isAdmin);
         localStorage.setItem("id", res.data.user._id);
         localStorage.setItem("username", res.data.user.username);
@@ -198,7 +199,7 @@ export function CustomLogin() {
               isDisabled={!username || !password}
             >
               {isLoading ? (
-                <CircularProgress isIndeterminate color="teal" size="24px" />
+                <CircularProgress isIndeterminate color="white" size="24px" />
               ) : (
                 " Sign In"
               )}
