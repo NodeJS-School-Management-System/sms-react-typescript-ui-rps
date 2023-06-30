@@ -15,7 +15,7 @@ const ProfileDropdown = () => {
   const username = localStorage.getItem("username");
   const student = localStorage.getItem("isStudent");
   const teacher = localStorage.getItem("isTeacher");
-  const member = localStorage.getItem("isNonteachingstaff");
+  const member = localStorage.getItem("isMember");
   const admin = localStorage.getItem("isAdmin");
   const route = useNavigate();
   const logout = useLogout();
@@ -36,13 +36,13 @@ const ProfileDropdown = () => {
               {username}
             </Text>
             <Text varient="caption" weight="medium" secondary>
-              {student
+              {student === "true"
                 ? "Student"
-                : admin
+                : admin === "true"
                 ? "Admin"
-                : teacher
+                : teacher === "true"
                 ? "Teacher"
-                : member
+                : member === "true"
                 ? "Member"
                 : "N/A"}
             </Text>
