@@ -38,7 +38,7 @@ export const StudentList = ({
           <Spinner style={{ margin: "auto" }} color="teal" />
         </Flex>
       ) : (
-        <TableContainer overflowY={"auto"}>
+        <TableContainer overflowY={"auto"} w="100%">
           <Table variant="simple">
             <TableCaption>Student's List</TableCaption>
             <Thead>

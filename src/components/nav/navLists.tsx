@@ -73,16 +73,22 @@ const navList: NavOptions[] = [
   },
   {
     parent: formatGroupButton("Classroom", <Class />, "/classroom/"),
-    childrens: [
-      format("Manage Class", "/classroom/manageclass/"),
-      format("Manage Syllabus", "/classroom/managesyllabus/"),
-      format("Manage Subjects", "/classroom/managesubjects/"),
-    ],
+    childrens:
+      isStudent !== "true" || isMember !== "true"
+        ? [
+            format("Manage Class", "/classroom/manageclass/"),
+            format("Manage Syllabus", "/classroom/managesyllabus/"),
+            format("Manage Subjects", "/classroom/managesubjects/"),
+          ]
+        : [
+            format("Manage Syllabus", "/classroom/managesyllabus/"),
+            format("Manage Subjects", "/classroom/managesubjects/"),
+          ],
   },
   {
     parent: formatGroupButton("Exam Section", <Note />, "/examsection/"),
     childrens:
-      isStudent !== "true" || isMember !== true
+      isStudent !== "true" || isMember !== "true"
         ? [
             format("Manage Exam", "/examsection/manageexam/"),
             format("Entry Marks", "/examsection/entrymarks/"),
