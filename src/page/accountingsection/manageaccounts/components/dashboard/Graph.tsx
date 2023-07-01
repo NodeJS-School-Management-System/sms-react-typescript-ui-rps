@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import SideGraphAnalytics from "./SideGraphAnalytics";
+// import SideGraphAnalytics from "./SideGraphAnalytics";
 const data = [
   { name: "Jan", uv: 400, pv: 2400, amt: 2400 },
   {
@@ -101,7 +101,7 @@ const Graph = () => {
         Working Capital Trend
       </Box>
       {shouldDisplayComponent && (
-        <BarChart style={{}} width={600} height={350} data={data}>
+        <BarChart style={{}} width={650} height={500} data={data}>
           <XAxis dataKey="name" stroke="#8884d8" />
           <YAxis />
           <Tooltip />
@@ -121,9 +121,9 @@ const Graph = () => {
         <Box fontWeight="bold" fontSize={13}>
           Selected Income & Expense Measures Vs Previous Period
         </Box>
-        {[1, 2, 3, 4].map((sideanalytic: any) => (
-          <SideGraphAnalytics key={sideanalytic} />
-        ))}
+        {/* {[1, 2, 3, 4].map((sideanalytic: any) => ( */}
+          {/* <SideGraphAnalytics /> */}
+        {/* ))} */}
       </Flex>
     </Box>
   );
