@@ -31,7 +31,6 @@ const ManageStore = () => {
   } = useTheme();
 
   const [itemName, setItemName] = useState("");
-  const [itemCostPrice, setItemCostPrice] = useState("");
   const [itemQuantity, setItemQuantity] = useState("");
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -91,7 +90,6 @@ const ManageStore = () => {
       itemName,
       itemQuantity: Number(itemQuantity),
       itemCategory: category,
-      itemCostPrice: Number(itemCostPrice),
       dateAdded: formattedDate,
     };
     setIsLoading(true);
@@ -102,7 +100,6 @@ const ManageStore = () => {
         },
       });
 
-      setItemCostPrice("");
       setItemName("");
       setItemQuantity("");
       setCategory("");
@@ -447,31 +444,6 @@ const ManageStore = () => {
                   />
                 </Flex>
 
-                <Flex
-                  p={3}
-                  w={"100%"}
-                  h={"100%"}
-                  flexDirection="column"
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  <FormLabel
-                    fontSize={16}
-                    fontWeight="bold"
-                    alignSelf={"flex-start"}
-                    color={"gray"}
-                    mb={3}
-                  >
-                    Item Cost Price <span style={{ color: "red" }}>*</span>
-                  </FormLabel>
-                  <Input
-                    value={itemCostPrice}
-                    onChange={(e) => setItemCostPrice(e.target.value)}
-                    isRequired
-                    type="number"
-                    placeholder="Item Cost Price"
-                  />
-                </Flex>
                 {error && (
                   <Alert p={6} w={"90%"} status="error">
                     <AlertIcon />
@@ -494,9 +466,7 @@ const ManageStore = () => {
                   onClick={createStore}
                   backgroundColor={primaryColor.color}
                   color="white"
-                  disabled={
-                    !itemName || !itemCostPrice || !itemQuantity || !category
-                  }
+                  disabled={!itemName || !itemQuantity || !category}
                 >
                   {isLoading ? <Spinner color="white" /> : "Create Store"}
                 </Button>
@@ -646,7 +616,7 @@ const ManageStore = () => {
                         </Text>
 
                         <Input
-                          value={availableItem?.itemCostPrice}
+                          value={availableItem?.itemCostPrice || "N/A"}
                           fontWeight={"bold"}
                           disabled
                           style={{ cursor: "default" }}

@@ -27,6 +27,8 @@ const Employees = () => {
   // TOKEN FROM LOCAL STORAGE
   const token = localStorage.getItem("token");
 
+  const [refetch, setRefetch] = useState(false);
+
   // GET TEACHERS' PAYMENTS
   const [teachers, setTeachers] = useState([]);
   useEffect(() => {
@@ -44,7 +46,7 @@ const Employees = () => {
       }
     };
     getTeachers();
-  }, []);
+  }, [refetch]);
 
   // GET MEMBERS' PAYMENTS
   const [members, setMembers] = useState([]);
@@ -63,7 +65,7 @@ const Employees = () => {
       }
     };
     getMembers();
-  }, []);
+  }, [refetch]);
 
   const employees = [...teachers, ...members];
 
@@ -98,6 +100,8 @@ const Employees = () => {
           renderSelectClass={false}
           setQuery={setQuery}
           isEmployee={false}
+          setRefetch={setRefetch}
+          refetch={refetch}
         />
       </Box>
       <DataTable

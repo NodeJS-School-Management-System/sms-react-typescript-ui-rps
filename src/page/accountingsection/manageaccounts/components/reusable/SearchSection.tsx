@@ -2,11 +2,13 @@ import {
   Box,
   Center,
   Flex,
+  IconButton,
   Input,
   InputGroup,
   Select,
   Text,
 } from "@chakra-ui/react";
+import { Refresh } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { myAPIClient } from "../../../../auth/axiosInstance";
 import { SearchProps } from "./types/Reusable.type";
@@ -19,6 +21,8 @@ const SearchSection = ({
   headingText,
   setClassNumeral,
   isEmployee,
+  setRefetch,
+  refetch,
 }: SearchProps) => {
   //   SEARCH BY QUERY
 
@@ -123,6 +127,13 @@ const SearchSection = ({
         my={3}
         gap={2}
       >
+        <IconButton
+          colorScheme="blue"
+          onClick={() => setRefetch(!refetch)}
+          aria-label="View database"
+          icon={<Refresh />}
+          size="xs"
+        />
         {renderSelectClass && (
           <Center
             flexDirection={"column"}

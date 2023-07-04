@@ -128,18 +128,21 @@ const navList: NavOptions[] = [
     childrens: [format("Pay Fees", "/feespayments/payfees/")],
   },
   {
-    parent:
-      isStoreKeeper === "true" || isSuperAdmin === "true"
-        ? formatGroupButton(
-            "Store Manager",
-            <StoreMallDirectory />,
-            "/storemanager/"
-          )
-        : undefined,
-    childrens: [
-      format("Manage Store", "/storemanager/managestore/"),
-      format("View Store", "/storemanager/viewstoreitems/"),
-    ],
+    parent: isStudent
+      ? undefined
+      : formatGroupButton(
+          "Store Manager",
+          <StoreMallDirectory />,
+          "/storemanager/"
+        ),
+
+    childrens:
+      isStoreKeeper === "true" || isSuperAdmin === "true" || isBursar === "true"
+        ? [
+            format("Manage Store", "/storemanager/managestore/"),
+            format("View Store", "/storemanager/viewstoreitems/"),
+          ]
+        : [format("View Store", "/storemanager/viewstoreitems/")],
   },
   {
     parent: formatGroupButton("Notice Board", <Upcoming />, "/noticeboard/"),

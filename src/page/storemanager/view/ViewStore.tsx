@@ -36,7 +36,6 @@ export const ViewStore = () => {
     "Item Name",
     "Item Category",
     "Item quantity",
-    "Item Cost Price",
     "Date Added",
     "Remaining Items",
     "Items Released",
@@ -63,7 +62,7 @@ export const ViewStore = () => {
   const [query, setQuery] = useState("");
 
   // Filter students with search
-  const keys = ["itemName", "itemCategory", "itemQuantity", "itemCostPrice"];
+  const keys = ["itemName", "itemCategory", "itemQuantity"];
 
   // FILTER STUDENTS
   const filterLib = (libs: any) => {

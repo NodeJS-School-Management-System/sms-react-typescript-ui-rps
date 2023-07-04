@@ -41,6 +41,7 @@ const Creditors = () => {
 
   // GET CREDITORS
   const [creditors, setCreditors] = useState([]);
+  const [refetch, setRefetch] = useState(false);
   useEffect(() => {
     const getCreditors = async () => {
       try {
@@ -49,14 +50,14 @@ const Creditors = () => {
             token: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        
+
         setCreditors(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getCreditors();
-  }, [deleting]);
+  }, [deleting, refetch]);
 
   // Filter students with search
   const keys = [
@@ -83,6 +84,8 @@ const Creditors = () => {
     <Box w="100%">
       <Box px={2}>
         <SearchSection
+          refetch={refetch}
+          setRefetch={setRefetch}
           headingText="All Creditors"
           query={query}
           renderSelectClass={false}

@@ -8,6 +8,8 @@ export interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
   classnumeral?: string;
   setClassNumeral?: React.Dispatch<React.SetStateAction<string>>;
   isEmployee?: boolean;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: boolean;
 }
 
 export type DataTableProps = {

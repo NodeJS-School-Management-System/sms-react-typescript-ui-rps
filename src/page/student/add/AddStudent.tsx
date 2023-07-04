@@ -625,7 +625,8 @@ export const AddStudent = () => {
 
               <Center flexDirection={"column"} w="90%" h="100%">
                 <FormLabel alignSelf={"flex-start"}>
-                  Parent NIN<span style={{ color: "red" }}>*</span>
+                  Parent NIN
+                  <OptionalMaker />
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement

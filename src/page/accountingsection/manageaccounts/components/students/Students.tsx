@@ -28,6 +28,7 @@ const Students = () => {
 
   // GET STUDENTS WITH FEES DETAILS
   const [students, setStudents] = useState([]);
+  const [refetch, setRefetch] = useState(false);
   useEffect(() => {
     const getStudents = async () => {
       try {
@@ -43,7 +44,7 @@ const Students = () => {
       }
     };
     getStudents();
-  }, []);
+  }, [refetch]);
 
   // Filter students with search
   const keys = [
@@ -95,6 +96,8 @@ const Students = () => {
     <Box w="100%">
       <Box px={2}>
         <SearchSection
+          refetch={refetch}
+          setRefetch={setRefetch}
           headingText="Students' Fees Collection Table"
           query={query}
           renderSelectClass={true}

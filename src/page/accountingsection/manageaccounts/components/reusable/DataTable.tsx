@@ -12,6 +12,7 @@ import {
   IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import { Edit } from "@mui/icons-material";
 import { useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
 import { BsEye, BsDownload } from "react-icons/bs";
@@ -124,13 +125,7 @@ const DataTable = ({
                 <Td fontSize={11}>
                   {employee.firstname} {employee.lastname}
                 </Td>
-                {/* <Td fontSize={11}>
-                  {employee.isTeacher
-                    ? "Teacher"
-                    : employee.isMember
-                    ? "Member"
-                    : null}
-                </Td> */}
+               
                 <Td fontSize={11}>
                   {employee.isMember
                     ? employee.role
@@ -171,7 +166,7 @@ const DataTable = ({
                       colorScheme="red"
                       aria-label="Delete database"
                       // onClick={() => deleteStudent(user.studentId)}
-                      icon={<BiTrashAlt />}
+                      icon={<Edit />}
                       size="xs"
                     />
                     <IconButton
