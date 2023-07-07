@@ -26,6 +26,10 @@ export const StudentList = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clickedId, setClickedId] = useState("");
 
+  const isAdmin = localStorage.getItem("isAdmin");
+
+  console.log(isAdmin);
+
   const openModal = (id: any) => {
     setClickedId(id);
     onOpen();
@@ -87,6 +91,7 @@ export const StudentList = ({
                         <IconButton
                           colorScheme="red"
                           aria-label="Delete database"
+                          disabled={isAdmin === null || isAdmin !== "true"}
                           onClick={() => deleteStudent(user._id)}
                           icon={<BiTrashAlt />}
                           size="sm"

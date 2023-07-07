@@ -9,6 +9,7 @@ import {
 import useTheme from "../../../../../../theme/useTheme";
 import FeesDetails from "./StudentFees/FeesDetails";
 import Requirements from "./StudentFees/Requirements";
+import StudentPaymentHistory from "./StudentFees/StudentPaymentHistory";
 
 const StudentDetails = ({ student }: any) => {
   const {
@@ -45,13 +46,27 @@ const StudentDetails = ({ student }: any) => {
           fontSize={13}
           borderRadius={0}
         >
-          Requirements Tracker
+          Payment History
+        </Tab>
+        <Tab
+          _selected={{
+            color: "white",
+            bg: primaryColor.color,
+            borderRadius: 0,
+          }}
+          fontSize={13}
+          borderRadius={0}
+        >
+          Requirements
         </Tab>
       </TabList>
 
       <TabPanels>
         <TabPanel>
           <FeesDetails student={student} />
+        </TabPanel>
+        <TabPanel>
+          <StudentPaymentHistory student={student} />
         </TabPanel>
         <TabPanel>
           <Requirements student={student} />

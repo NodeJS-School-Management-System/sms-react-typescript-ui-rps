@@ -476,7 +476,8 @@ const AddFees = () => {
                   >
                     {banks.map((bank: any) => (
                       <option value={bank.bankname}>{bank.bankname}</option>
-                    ))}
+                      ))}
+                      <option value={"Cash"}>Cash</option>
                   </Select>
                 </Flex>
               </Flex>

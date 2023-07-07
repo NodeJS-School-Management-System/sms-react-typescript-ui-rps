@@ -14,26 +14,7 @@ const Requirements = ({ student }: any) => {
   const [revealDetails, setRevealDetails] = useState(false);
   //   const [details, setDetails] = useState({});
   const getDetails = async () => {
-    // setIsFetching(true);
-    // try {
-    //   const res = await myAPIClient.get(
-    //     `/users/students/details/${termname}/${year}`,
-    //     {
-    //       headers: {
-    //         token: `Bearer ${token}`,
-    //       },
-    //     }
-    //   );
-    //   console.log(res.data);
-    //   //   setDetails(res.data);
     setRevealDetails(!revealDetails);
-    //   setIsFetching(false);
-    //   toast.success("Request processed successfully!");
-    // } catch (err) {
-    //   console.log(err);
-    //   setIsFetching(false);
-    //   toast.error("Error processing your request!");
-    // }
   };
 
   const {
@@ -96,7 +77,6 @@ const Requirements = ({ student }: any) => {
           color="white"
           w="50%"
         >
-          {/* {isFetching ? "" : "Get Details"} */}
           Get Details
         </Button>
       </Box>

@@ -75,8 +75,6 @@ const AddPayments = () => {
   // Format the date
   const formattedDate = `${month}/${day}/${year}`;
 
-  console.log(formattedDate);
-
   // ****************************************************************************************************
 
   // UPDATE employee WITH PAYMENT INFO FROM RECEIPT
