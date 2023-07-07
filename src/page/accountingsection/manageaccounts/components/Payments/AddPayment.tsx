@@ -18,7 +18,9 @@ import { myAPIClient } from "../../../../auth/axiosInstance";
 
 const AddPayments = () => {
   const token = localStorage.getItem("token");
-  const [deductions, setDeductions] = useState("");
+  const [nssf, setNssf] = useState("");
+  const [advancce1, setAdvance1] = useState("");
+  const [advancce2, setAdvance2] = useState("");
   const [amount, setAmount] = useState("");
   const [paymentReference, setPaymentReference] = useState("");
 
@@ -88,7 +90,9 @@ const AddPayments = () => {
           paymentmethod: bank,
           payment_reference: paymentReference,
           dateofpayment: formattedDate,
-          deductions: Number(deductions),
+          nssf: Number(nssf),
+          advance1: Number(advancce1),
+          advance2: Number(advancce2),
         },
         {
           headers: {
@@ -100,7 +104,9 @@ const AddPayments = () => {
       setIsLoading(false);
       setBank("");
       setAmount("");
-      setDeductions("");
+      setNssf("");
+      setAdvance2("");
+      setAdvance1("");
       setPaymentReference("");
       toast.success("Success, employee payments have been updated!");
     } catch (err) {
@@ -414,15 +420,16 @@ const AddPayments = () => {
                     color={"gray"}
                     mb={3}
                   >
-                    Deductions <OptionalMaker />
+                    NSSF <OptionalMaker />
                   </Text>
                   <Input
-                    placeholder="Deductions"
-                    value={deductions}
+                    placeholder="Enter NSSF"
+                    value={nssf}
                     type="number"
-                    onChange={(e) => setDeductions(e.target.value)}
+                    onChange={(e) => setNssf(e.target.value)}
                   />
                 </Flex>
+
                 <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
                   <Text
                     fontSize={16}
@@ -443,6 +450,54 @@ const AddPayments = () => {
                     <option value={"Cash"}>Cash</option>
                     <option value={"Mobile Money"}>Mobile Money</option>
                   </Select>
+                </Flex>
+              </Flex>
+            )}
+
+            {detailsRevealed && (
+              <Flex
+                py={3}
+                w={"100%"}
+                h={"100%"}
+                flexDirection={{ base: "column", md: "row" }}
+                alignItems={"center"}
+                justifyContent={"center"}
+                gap={3}
+              >
+                <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                  <Text
+                    fontSize={16}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Advance1 <OptionalMaker />
+                  </Text>
+                  <Input
+                    placeholder="Enter Advance 1"
+                    value={advancce1}
+                    type="number"
+                    onChange={(e) => setAdvance1(e.target.value)}
+                  />
+                </Flex>
+
+                <Flex w={{ base: "100%", md: "50%" }} flexDir={"column"}>
+                  <Text
+                    fontSize={16}
+                    fontWeight="bold"
+                    alignSelf={"flex-start"}
+                    color={"gray"}
+                    mb={3}
+                  >
+                    Advance2 <OptionalMaker />
+                  </Text>
+                  <Input
+                    placeholder="Enter Advance 2"
+                    value={advancce2}
+                    type="number"
+                    onChange={(e) => setAdvance2(e.target.value)}
+                  />
                 </Flex>
               </Flex>
             )}

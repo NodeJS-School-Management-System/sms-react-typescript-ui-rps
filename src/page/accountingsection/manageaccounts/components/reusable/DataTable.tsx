@@ -92,7 +92,6 @@ const DataTable = ({
                     <IconButton
                       colorScheme="red"
                       aria-label="Delete database"
-                      // onClick={() => deleteStudent(user.studentId)}
                       icon={<BsDownload />}
                       disabled
                       size="xs"
@@ -125,7 +124,7 @@ const DataTable = ({
                 <Td fontSize={11}>
                   {employee.firstname} {employee.lastname}
                 </Td>
-               
+
                 <Td fontSize={11}>
                   {employee.isMember
                     ? employee.role
@@ -136,14 +135,35 @@ const DataTable = ({
                 <Td fontSize={11}>
                   {employee.salary_and_payment_info.salary_amount}
                 </Td>
+
                 <Td fontSize={11}>
                   {employee.salary_and_payment_info.salary_balance || "N/A"}
                 </Td>
+
+                <Td fontSize={11}>
+                  {employee.salary_and_payment_info.payment_details[
+                    employee.salary_and_payment_info.payment_details.length - 1
+                  ]?.nssf || "N/A"}
+                </Td>
+
+                <Td fontSize={11}>
+                  {employee.salary_and_payment_info.payment_details[
+                    employee.salary_and_payment_info.payment_details.length - 1
+                  ]?.advance1 || "N/A"}
+                </Td>
+
+                <Td fontSize={11}>
+                  {employee.salary_and_payment_info.payment_details[
+                    employee.salary_and_payment_info.payment_details.length - 1
+                  ]?.advance2 || "N/A"}
+                </Td>
+
                 <Td fontSize={11}>
                   {employee.salary_and_payment_info.payment_details[
                     employee.salary_and_payment_info.payment_details.length - 1
                   ]?.deductions || "N/A"}
                 </Td>
+
                 <Td fontSize={11}>
                   {" "}
                   {employee.salary_and_payment_info.salary_amount -
@@ -157,6 +177,7 @@ const DataTable = ({
                         ]?.deductions
                       : 0)}
                 </Td>
+
                 <Td fontSize={11}>
                   {employee.salary_and_payment_info.allowance_amount || "N/A"}
                 </Td>
@@ -165,7 +186,6 @@ const DataTable = ({
                     <IconButton
                       colorScheme="red"
                       aria-label="Delete database"
-                      // onClick={() => deleteStudent(user.studentId)}
                       icon={<Edit />}
                       size="xs"
                     />
