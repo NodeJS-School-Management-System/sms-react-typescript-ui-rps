@@ -113,7 +113,9 @@ const PaymentHistory = ({ user }: any) => {
                 <Flex flex={1} justifyContent="space-between" fontSize={13}>
                   <Box>
                     Advance2:{" "}
-                    <span style={{ fontWeight: "bold" }}>{item?.advance2}</span>
+                    <span style={{ fontWeight: "bold" }}>
+                      {item?.advance2 || "N/A"}
+                    </span>
                   </Box>
                   <IconButton
                     colorScheme="blue"
