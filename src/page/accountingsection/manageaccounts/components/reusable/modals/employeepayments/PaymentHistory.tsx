@@ -5,6 +5,7 @@ import { useReactToPrint } from "react-to-print";
 import numberToWords from "number-to-words";
 import Logo from "../../../../../../../assets/logou.png";
 import useTheme from "../../../../../../../theme/useTheme";
+import Sign from "../../../../../../../assets/rpssign.png";
 
 const PaymentHistory = ({ user }: any) => {
   const {
@@ -22,7 +23,7 @@ const PaymentHistory = ({ user }: any) => {
 
   const handlePrint = useReactToPrint({
     content: () => receiptRef.current,
-    documentTitle: `${user.username}'s Receipt`,
+    documentTitle: `${user.username}'s Payment Voucher`,
   });
 
   const handlePrintReceipt = (
@@ -162,18 +163,26 @@ const PaymentHistory = ({ user }: any) => {
             <Box flex={1} fontSize={13}>
               <Image src={Logo} alt="" w={115} />
             </Box>
-            <Flex flex={1} flexDir="column" gap={6}>
+            <Flex align="center" flex={1} flexDir="column" gap={6}>
               <Box fontStyle={"italic"} fontSize={10}>
                 "We care, we share, we learn together"
               </Box>
               <Box
                 fontWeight={"bold"}
-                fontSize={20}
+                fontSize={18}
                 border={"2px solid black"}
                 borderRadius={30}
+                px={5}
+                py={1}
                 textAlign="center"
+                w="100%"
+                display="flex"
+                gap={2}
+                alignItems="center"
+                justifyContent={"center"}
               >
-                RECEIPT
+                <Text>PAYMENT</Text>
+                <Text>VOUCHER</Text>
               </Box>
             </Flex>
             <Flex flex={1} gap={1} flexDirection={"column"}>
@@ -200,7 +209,7 @@ const PaymentHistory = ({ user }: any) => {
                 </Text>
               </Box>
             </Flex>
-            <Flex flex={1}>
+            <Flex flex={1} justify="center">
               <Text fontSize={14}>
                 Date:{" "}
                 <span
@@ -270,9 +279,13 @@ const PaymentHistory = ({ user }: any) => {
                 {balance || "N/L"}/=
               </span>
             </Text>
-            <Flex>
-              <Flex flex={1} flexDir="column">
-                <Flex gap={2}>
+            <Flex align={"center"}>
+              <Flex
+                flex={1}
+                justify={"flex-start"}
+                flexDir="column"
+              >
+                <Flex gap={2} justify="flex-start" align="center">
                   <Text fontSize={14}>SHS</Text>
                   <Box
                     fontWeight={"bold"}
@@ -292,10 +305,19 @@ const PaymentHistory = ({ user }: any) => {
                   Thank you
                 </Text>
               </Flex>
-              <Box flex={1} fontSize={13}>
-                <Text fontSize={14}>
-                  Signature: ..................................
-                </Text>
+              <Box
+                flex={1}
+                fontSize={13}
+                display="flex"
+                justifyContent={"center"}
+                flexDir="column"
+              >
+                <Box display="flex" fontSize={14} alignItems="center" gap={2}>
+                  <Text>Signature:</Text>{" "}
+                  <span>
+                    <Image src={Sign} w={45} />
+                  </span>{" "}
+                </Box>
                 <Text fontSize={12}>(RWEBIITA PREPARATORY SCHOOL)</Text>
               </Box>
             </Flex>

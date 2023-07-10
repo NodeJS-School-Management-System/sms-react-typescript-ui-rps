@@ -4,6 +4,7 @@ import Logo from "../../../../../../../assets/logou.png";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import numberToWords from "number-to-words";
+import Sign from "../../../../../../../assets/rpssign.png";
 
 const StudentPaymentHistory = ({ student }: any) => {
   const [balance, setBalance] = useState("");
@@ -134,16 +135,18 @@ const StudentPaymentHistory = ({ student }: any) => {
               <Box flex={1}>
                 <Image src={Logo} alt="" w={115} />
               </Box>
-              <Flex flex={1} flexDir="column" gap={6}>
+              <Flex flex={1} align="center" flexDir="column" gap={6}>
                 <Box fontStyle={"italic"} fontSize={10}>
                   "We care, we share, we learn together"
                 </Box>
                 <Box
                   fontWeight={"bold"}
-                  fontSize={20}
+                  fontSize={18}
                   border={"2px solid black"}
                   borderRadius={30}
                   textAlign="center"
+                  px={4}
+                  py={1}
                 >
                   RECEIPT
                 </Box>
@@ -172,7 +175,7 @@ const StudentPaymentHistory = ({ student }: any) => {
                   </Text>
                 </Box>
               </Flex>
-              <Flex flex={1}>
+              <Flex flex={1} justifyContent="center">
                 <Text fontSize={14}>
                   Date:{" "}
                   <span
@@ -242,9 +245,9 @@ const StudentPaymentHistory = ({ student }: any) => {
                   {balance || "N/L"}/=
                 </span>
               </Text>
-              <Flex>
-                <Flex flex={1} flexDir="column">
-                  <Flex gap={2}>
+              <Flex align={"center"}>
+                <Flex flex={1} justify="flex-start" flexDir="column">
+                  <Flex gap={2} align='center'>
                     <Text fontSize={14}>SHS</Text>
                     <Box
                       fontWeight={"bold"}
@@ -264,10 +267,13 @@ const StudentPaymentHistory = ({ student }: any) => {
                     Thank you
                   </Text>
                 </Flex>
-                <Box flex={1}>
-                  <Text fontSize={14}>
-                    Signature: ..................................
-                  </Text>
+                <Box flex={1} fontSize={13}>
+                  <Box display="flex" fontSize={14} alignItems="center" gap={2}>
+                    <Text> Signature:</Text>{" "}
+                    <span>
+                      <Image src={Sign} w={45} />
+                    </span>{" "}
+                  </Box>
                   <Text fontSize={12}>(RWEBIITA PREPARATORY SCHOOL)</Text>
                 </Box>
               </Flex>
