@@ -16,6 +16,7 @@ import { Edit } from "@mui/icons-material";
 import { useState } from "react";
 import { BiTrashAlt } from "react-icons/bi";
 import { BsEye, BsDownload } from "react-icons/bs";
+import CreditorsModal from "./modals/creditors/CreditorsModal";
 import EmployeeModal from "./modals/employeepayments/EmployeeModal";
 import StudentModal from "./modals/StudentModal";
 import { DataTableProps } from "./types/Reusable.type";
@@ -30,13 +31,20 @@ const DataTable = ({
 }: DataTableProps) => {
   const studentModal = useDisclosure();
   const employeeModal = useDisclosure();
+  const creditorModal = useDisclosure();
 
   const [clickedId, setClickedId] = useState("");
   const [user, setUser] = useState<any>({});
+  const [creditor, setCreditor] = useState<any>([]);
 
   const openModal = (id: any) => {
     setClickedId(id);
     studentModal.onOpen();
+  };
+
+  const openCreditorModal = (creditorr: any) => {
+    setCreditor(creditorr);
+    creditorModal.onOpen();
   };
 
   const openUserModal = (userr: any) => {
@@ -205,16 +213,22 @@ const DataTable = ({
           <Tbody>
             {creditors.map((creditor: any) => (
               <Tr key={creditor._id}>
-                <Td fontSize={11}>#{creditor?.invoicenumber}</Td>
                 <Td fontSize={11}>{creditor?.itemname}</Td>
-                <Td fontSize={11}>{creditor?.amountpaid}</Td>
-                <Td fontSize={11}>{creditor?.totalamount}</Td>
+                <Td fontSize={11}>{creditor?.total_amount}</Td>
+                <Td fontSize={11}>{creditor?.latest_payment_amount}</Td>
                 <Td fontSize={11}>
-                  {creditor?.totalamount - creditor?.amountpaid}
+                  {creditor?.creditor_payments[
+                    creditor?.creditor_payments?.length - 1
+                  ]?.balance || "N/A"}
                 </Td>
+                <Td fontSize={11}>
+                  {creditor?.total_quantity_initially_supplied}{" "}
+                  {creditor?.item_unit_of_measurement || "N/A"}
+                </Td>
+
                 <Td fontSize={11}>{creditor?.suppliername}</Td>
                 <Td fontSize={11}>{creditor?.supplieraddress}</Td>
-                <Td fontSize={11}>{creditor?.supplieremail}</Td>
+                <Td fontSize={11}>{creditor?.supplieremail || "N/A"}</Td>
                 <Td fontSize={11}>{creditor?.suppliercontact}</Td>
                 <Td fontSize={11}>{creditor?.dateofpurchase}</Td>
                 <Td>
@@ -228,7 +242,7 @@ const DataTable = ({
                     />
                     <IconButton
                       colorScheme="blue"
-                      // onClick={() => openUserModal(creditor)}
+                      onClick={() => openCreditorModal(creditor)}
                       aria-label="View database"
                       icon={<BsEye />}
                       size="xs"
@@ -247,6 +261,14 @@ const DataTable = ({
         onClose={studentModal.onClose}
         isOpen={studentModal.isOpen}
         id={clickedId}
+      />
+
+      {/* CREDITORS MODAL */}
+      <CreditorsModal
+        onOpen={creditorModal.onOpen}
+        onClose={creditorModal.onClose}
+        isOpen={creditorModal.isOpen}
+        user={creditor}
       />
 
       {/* EMPLOYEE MODAL */}

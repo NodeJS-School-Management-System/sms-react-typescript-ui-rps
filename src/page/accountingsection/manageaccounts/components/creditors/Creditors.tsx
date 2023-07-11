@@ -10,11 +10,12 @@ const Creditors = () => {
 
   // HEADINGS
   const headerData = [
-    "Inoive No.",
+    // "Inoive No.",
     "Itemname",
-    "Amount Paid",
     "Total Amount",
+    "Amount Paid",
     "Balance",
+    "Quantity",
     "Supplier Name",
     "Supplier Address",
     "Supplier Email",
@@ -62,7 +63,6 @@ const Creditors = () => {
   // Filter students with search
   const keys = [
     "suppliername",
-    "invoicenumber",
     "suppliercontact",
     "supplieremail",
     "dateofpurchase",

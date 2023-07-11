@@ -1,13 +1,27 @@
-import { Box, Button, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { Download } from "@mui/icons-material";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
+import useTheme from "../../../../../../../theme/useTheme";
 import numberToWords from "number-to-words";
 import Logo from "../../../../../../../assets/logou.png";
-import useTheme from "../../../../../../../theme/useTheme";
 import Sign from "../../../../../../../assets/rpssign.png";
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Image,
+  Text,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+} from "@chakra-ui/react";
 
-const PaymentHistory = ({ user }: any) => {
+const CreditorPaymentHistory = ({ user }: { user: any }) => {
   const {
     theme: { primaryColor },
   } = useTheme();
@@ -15,27 +29,23 @@ const PaymentHistory = ({ user }: any) => {
   const [balance, setBalance] = useState("");
   const [amount, setAmount] = useState("");
   const [dateofpayment, setDateofPayment] = useState("");
-  const [ref, setRef] = useState("");
-
   const [revealReceipt, setRevealReceipt] = useState(false);
 
   const receiptRef = useRef<any>();
 
   const handlePrint = useReactToPrint({
     content: () => receiptRef.current,
-    documentTitle: `${user.username}'s Payment Voucher`,
+    documentTitle: `${user.suppliername}'s Payment Voucher`,
   });
 
   const handlePrintReceipt = (
     balancee: any,
     amountpaid: any,
-    dateofpayment: any,
-    ref: any
+    dateofpayment: any
   ) => {
     setBalance(balancee);
     setAmount(amountpaid);
     setDateofPayment(dateofpayment);
-    setRef(ref);
 
     setRevealReceipt(true);
     setTimeout(() => {
@@ -47,13 +57,12 @@ const PaymentHistory = ({ user }: any) => {
     <Box>
       <Box>
         <Text>
-          Last Payment on{" "}
+          Last Payment on:{" "}
           <span style={{ fontWeight: "bold" }}>
             {" "}
             {
-              user.salary_and_payment_info.payment_details[
-                user.salary_and_payment_info.payment_details.length - 1
-              ]?.dateofpayment
+              user?.creditor_payments[user?.creditor_payments?.length - 1]
+                ?.date_of_payment
             }
           </span>
         </Text>
@@ -61,71 +70,32 @@ const PaymentHistory = ({ user }: any) => {
 
       <Flex flexDir={"column"} gap={2} mt={3}>
         <Flex flexDir={"column"} gap={3}>
-          {user?.salary_and_payment_info?.payment_details?.map((item: any) => (
+          {user?.creditor_payments?.map((item: any) => (
             <Box borderTop={"1px solid #eee"}>
               <Flex>
                 <Box flex={1} fontSize={13}>
-                  Payment Method:{" "}
-                  <span style={{ fontWeight: "bold" }}>
-                    {item?.paymentmethod}
-                  </span>
-                </Box>
-                <Box flex={1} fontSize={13}>
-                  Payment Ref:{" "}
-                  <span style={{ fontWeight: "bold" }}>
-                    {item?.payment_reference}
-                  </span>
-                </Box>
-              </Flex>
-
-              <Flex>
-                <Box flex={1} fontSize={13}>
                   Amount:{" "}
-                  <span style={{ fontWeight: "bold" }}>{item?.amount}</span>
+                  <span style={{ fontWeight: "bold" }}>
+                    {item?.amount_paid}
+                  </span>
                 </Box>
                 <Box flex={1} fontSize={13}>
                   Date of Payment:{" "}
                   <span style={{ fontWeight: "bold" }}>
-                    {item.dateofpayment}
+                    {item.date_of_payment}
                   </span>
                 </Box>
               </Flex>
 
               <Flex>
-                <Box flex={1} fontSize={13}>
-                  NSSF:{" "}
-                  <span style={{ fontWeight: "bold" }}>
-                    {item?.nssf || "N/A"}
-                  </span>
-                </Box>
-                <Box flex={1} fontSize={13}>
-                  Advance1:{" "}
-                  <span style={{ fontWeight: "bold" }}>
-                    {item?.advance1 || "N/A"}
-                  </span>
-                </Box>
-              </Flex>
-              <Flex>
-                <Box flex={1} fontSize={13}>
-                  Deductions:{" "}
-                  <span style={{ fontWeight: "bold" }}>{item.deductions}</span>
-                </Box>
-
-                <Flex flex={1} justifyContent="space-between" fontSize={13}>
-                  <Box>
-                    Advance2:{" "}
-                    <span style={{ fontWeight: "bold" }}>
-                      {item?.advance2 || "N/A"}
-                    </span>
-                  </Box>
+                <Flex flex={1} justifyContent="flex-end" fontSize={13}>
                   <IconButton
                     colorScheme="blue"
                     onClick={() =>
                       handlePrintReceipt(
-                        item?.salary_balance || 0,
-                        item?.amount,
-                        item?.dateofpayment,
-                        item?.payment_reference
+                        item?.balance || 0,
+                        item?.amount_paid,
+                        item?.date_of_payment
                       )
                     }
                     aria-label="Download Receipt"
@@ -161,7 +131,7 @@ const PaymentHistory = ({ user }: any) => {
             justifyContent={"space-between"}
           >
             <Box flex={1} fontSize={13}>
-              <Image src={Logo} alt="" w={115} />
+              <Image src={Logo} alt="" w={145} />
             </Box>
             <Flex align="center" flex={1} flexDir="column" gap={6}>
               <Box fontStyle={"italic"} fontSize={10}>
@@ -205,7 +175,7 @@ const PaymentHistory = ({ user }: any) => {
               <Box display={"flex"} gap={4} fontWeight={"bold"} fontSize={20}>
                 No.{" "}
                 <Text color="red" fontSize={22}>
-                  {user?.username?.length * 1000}
+                  {(user?.suppliername?.length - 3) * 1000}
                 </Text>
               </Box>
             </Flex>
@@ -224,61 +194,143 @@ const PaymentHistory = ({ user }: any) => {
             </Flex>
           </Flex>
 
+          <Flex mb={1}>
+            <Box>Payee's Name/ Address:</Box>
+            <span
+              style={{
+                borderBottom: "1px dotted black",
+                fontWeight: "bold",
+              }}
+            >
+              {user?.suppliername || "N/L"}
+            </span>
+          </Flex>
+
+          {/* TABLE */}
+          <TableContainer>
+            <Table border={"1px solid gray"}>
+              <Thead>
+                <Tr borderBottom={"1px solid gray"}>
+                  <Th borderRight={"1px solid gray"}>O & E</Th>
+                  <Th borderRight={"1px solid gray"}>DESCRIPTION</Th>
+                  <Th borderRight={"1px solid gray"}>AMOUNT</Th>
+                  <Th>SIGNATURE</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr borderBottom={"1px solid gray"}>
+                  <Td borderRight={"1px solid gray"}></Td>
+                  <Td borderRight={"1px solid gray"}></Td>
+                  <Td borderRight={"1px solid gray"}>{amount}</Td>
+                  <Td>
+                    <Box visibility={"hidden"}>P</Box>
+                  </Td>
+                </Tr>
+                {[1, 2, 3, 4].map((row: any) => (
+                  <Tr key={row} borderBottom={"1px solid gray"}>
+                    <Td borderRight={"1px solid gray"}></Td>
+                    <Td borderRight={"1px solid gray"}></Td>
+                    <Td borderRight={"1px solid gray"}></Td>
+                    <Td>
+                      <Box visibility={"hidden"}>P</Box>
+                    </Td>
+                  </Tr>
+                ))}
+                <Tr borderBottom={"1px solid gray"}>
+                  <Td borderRight={"1px solid gray"}></Td>
+                  <Td borderRight={"1px solid gray"}>Total</Td>
+                  <Td fontWeight="bold" borderRight={"1px solid gray"}>
+                    {amount}/=
+                  </Td>
+                  <Td></Td>
+                </Tr>
+                <Tr>
+                  <Td borderRight={"1px solid gray"}></Td>
+                  <Td borderRight={"1px solid gray"}>Balance</Td>
+                  <Td borderRight={"1px solid gray"} fontWeight="bold">
+                    {balance}/=
+                  </Td>
+                  <Td></Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
+
           <Flex flexDir={"column"} gap={2}>
-            <Text fontSize={14}>
-              Payment with thanks to{" "}
+            <Text>
+              Amount in words{" "}
               <span
                 style={{
                   borderBottom: "1px dotted black",
                   fontWeight: "bold",
                 }}
               >
-                {user.firstname} {user.lastname}
+                {amount
+                  ? `${numberToWords.toWords(amount)} shillings only`
+                  : "............................................................................................"}
               </span>
             </Text>
-            <Text fontSize={14}>
-              The sum of shillings{" "}
-              <span
-                style={{
-                  borderBottom: "1px dotted black",
-                  fontWeight: "bold",
-                }}
-              >
-                {numberToWords.toWords(amount) || "N/L"} shillings only
-              </span>
-            </Text>
-            <Text fontSize={14}>
-              Being payment of{" "}
-              <span
-                style={{
-                  borderBottom: "1px dotted black",
-                  fontWeight: "bold",
-                }}
-              >
-                {"Monthly Salary"}
-              </span>
-            </Text>
-            <Text fontSize={14}>
-              Cash/cheque No.{" "}
-              <span
-                style={{
-                  borderBottom: "1px dotted black",
-                  fontWeight: "bold",
-                }}
-              >
-                {" "}
-                {ref || "N/L"}
-              </span>{" "}
-              Balance:{" "}
-              <span
-                style={{
-                  borderBottom: "1px dotted black",
-                  fontWeight: "bold",
-                }}
-              >
-                {balance || "N/L"}/=
-              </span>
-            </Text>
+
+            <Flex>
+              <Text flex={1} fontSize={14}>
+                Prepared By:{" "}
+                <span>
+                  ............................................................
+                </span>{" "}
+              </Text>
+              <Text flex={1}>
+                Checked By:{" "}
+                <span>
+                  ...............................................................
+                </span>
+              </Text>
+            </Flex>
+
+            <Flex>
+              <Text flex={1} fontSize={14}>
+                Signature:{" "}
+                <span>
+                  ............................................................
+                </span>{" "}
+              </Text>
+              <Text flex={1}>
+                Signature:{" "}
+                <span>
+                  ...............................................................
+                </span>
+              </Text>
+            </Flex>
+
+            <Flex>
+              <Text flex={1} fontSize={14}>
+                Received By:{" "}
+                <span>
+                  ............................................................
+                </span>{" "}
+              </Text>
+              <Text flex={1}>
+                Authorised By:{" "}
+                <span>
+                  ...............................................................
+                </span>
+              </Text>
+            </Flex>
+
+            <Flex>
+              <Text flex={1} fontSize={14}>
+                Signature:{" "}
+                <span>
+                  ............................................................
+                </span>{" "}
+              </Text>
+              <Text flex={1}>
+                Signature:{" "}
+                <span>
+                  ...............................................................
+                </span>
+              </Text>
+            </Flex>
+
             <Flex align={"center"}>
               <Flex flex={1} justify={"flex-start"} flexDir="column">
                 <Flex gap={2} justify="flex-start" align="center">
@@ -324,4 +376,4 @@ const PaymentHistory = ({ user }: any) => {
   );
 };
 
-export default PaymentHistory;
+export default CreditorPaymentHistory;

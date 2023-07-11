@@ -7,6 +7,7 @@ import {
   FormLabel,
   CircularProgress,
 } from "@chakra-ui/react";
+import { OptionalMaker } from "../../../../../components/student/add/AddStudent";
 
 import useTheme from "../../../../../theme/useTheme";
 
@@ -130,7 +131,7 @@ const ReusableAddSupplierDetails = ({ creditorobject, itemname }: any) => {
                 color={"gray"}
                 mb={3}
               >
-                Supplier Email <span style={{ color: "red" }}>*</span>
+                Supplier Email <OptionalMaker />
               </FormLabel>
               <Input
                 value={creditorobject?.supplieremail}
@@ -177,10 +178,7 @@ const ReusableAddSupplierDetails = ({ creditorobject, itemname }: any) => {
               onClick={creditorobject?.addCreditor}
               isDisabled={
                 !creditorobject?.itemname ||
-                !creditorobject?.itemimage ||
-                !creditorobject?.invoicenumber ||
                 !creditorobject?.supplieraddress ||
-                !creditorobject?.supplieremail ||
                 !creditorobject?.suppliercontact ||
                 !creditorobject?.dateofpurchase ||
                 !creditorobject?.suppliername ||

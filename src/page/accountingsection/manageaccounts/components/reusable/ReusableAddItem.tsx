@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Button,
 } from "@chakra-ui/react";
+import { OptionalMaker } from "../../../../../components/student/add/AddStudent";
 
 import useTheme from "../../../../../theme/useTheme";
 
@@ -180,59 +181,6 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                   placeholder="Item Name"
                 />
               </Flex>
-              <Flex
-                p={3}
-                w={"100%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <FormLabel
-                  fontSize={16}
-                  fontWeight="bold"
-                  alignSelf={"flex-start"}
-                  color={"gray"}
-                  mb={3}
-                >
-                  Invoice Number <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <Input
-                  required
-                  type="text"
-                  value={creditorobject?.invoicenumber}
-                  onChange={(e) => {
-                    creditorobject?.setInvoiceNumber(e.target.value);
-                  }}
-                  placeholder="Invoice Number"
-                />
-              </Flex>
-
-              <Flex
-                p={3}
-                w={"100%"}
-                h={"100%"}
-                flexDirection="column"
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <FormLabel
-                  fontSize={16}
-                  fontWeight="bold"
-                  alignSelf={"flex-start"}
-                  color={"gray"}
-                  mb={3}
-                >
-                  Payment Voucher <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <Input
-                  required
-                  type="file"
-                  // value={creditorobject?.itemimage}
-                  onChange={creditorobject?.onUploadImage}
-                  placeholder=""
-                />
-              </Flex>
 
               <Flex
                 p={3}
@@ -286,6 +234,58 @@ const ReusableAddItem = ({ itemname, grantObj, creditorobject }: any) => {
                     creditorobject?.setTotalAmount(e.target.value);
                   }}
                   placeholder="Total Amount"
+                />
+              </Flex>
+              <Flex
+                p={3}
+                w={"100%"}
+                h={"100%"}
+                flexDirection="column"
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <FormLabel
+                  fontSize={16}
+                  fontWeight="bold"
+                  alignSelf={"flex-start"}
+                  color={"gray"}
+                  mb={3}
+                >
+                  Quantity Supplied <span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <Input
+                  value={creditorobject?.quantity_supplied}
+                  type="number"
+                  onChange={(e) => {
+                    creditorobject?.setQuantity(e.target.value);
+                  }}
+                  placeholder="Total Quantity Supplied"
+                />
+              </Flex>
+              <Flex
+                p={3}
+                w={"100%"}
+                h={"100%"}
+                flexDirection="column"
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <FormLabel
+                  fontSize={16}
+                  fontWeight="bold"
+                  alignSelf={"flex-start"}
+                  color={"gray"}
+                  mb={3}
+                >
+                  Item Unit <OptionalMaker />
+                </FormLabel>
+                <Input
+                  value={creditorobject?.item_unit_of_measurement}
+                  type="text"
+                  onChange={(e) => {
+                    creditorobject?.setUnit(e.target.value);
+                  }}
+                  placeholder="Enter unit e.g Kgs"
                 />
               </Flex>
             </Box>
